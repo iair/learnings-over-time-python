@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12.3 Economics: Desigualdad del Riesgo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.4;
+            font-size: 12px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        header {
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        h1 {
+            color: #0d47a1;
+            font-size: 1.3em;
+            margin-bottom: 3px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .toc {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .toc h2 {
+            color: #0d47a1;
+            font-size: 0.95em;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 5px;
+        }
+
+        .toc li {
+            margin: 2px 0;
+            font-size: 11px;
+        }
+
+        .toc a {
+            color: #0d47a1;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .section {
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            color: white;
+            padding: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #1565c0 0%, #1a73e8 100%);
+        }
+
+        .section-header h3 {
+            font-size: 0.9em;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .toggle-btn {
+            width: 18px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 0.75em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .section-content {
+            padding: 10px;
+            display: none;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .definition-box, .analogy-box, .example-box, .interpretation-box {
+            padding: 8px;
+            margin: 6px 0;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+
+        .definition-box {
+            background: #e3f2fd;
+            border-left: 3px solid #0d47a1;
+        }
+
+        .analogy-box {
+            background: #fff3e0;
+            border-left: 3px solid #ff9800;
+        }
+
+        .example-box {
+            background: #e8f5e9;
+            border-left: 3px solid #4caf50;
+        }
+
+        .interpretation-box {
+            background: #f3e5f5;
+            border-left: 3px solid #7b1fa2;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .svg-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+            min-height: 300px;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 8px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+
+        th {
+            background: #0d47a1;
+            color: white;
+            padding: 5px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 5px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .reference {
+            background: #eceff1;
+            padding: 8px;
+            border-left: 3px solid #0d47a1;
+            border-radius: 3px;
+            margin: 8px 0;
+            font-size: 11px;
+        }
+
+        .reference code {
+            background: #f0f0f0;
+            padding: 2px 3px;
+            border-radius: 2px;
+            font-size: 10px;
+        }
+
+        ul {
+            margin-left: 15px;
+            margin-top: 4px;
+        }
+
+        li {
+            margin: 2px 0;
+            font-size: 11px;
+        }
+
+        p {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 35px;
+            height: 35px;
+            background: #0d47a1;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 5px;
+            }
+            .svg-container {
+                min-height: 250px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sección 12.3: Economics - Desigualdad del Riesgo</h1>
+            <p class="subtitle">Lorenz Curve, Gini Coefficient y Gini Impurity Index</p>
+        </header>
+
+        <div class="toc">
+            <h2>Contenidos</h2>
+            <ul>
+                <li><a href="#section-lorenz">12.3.1 Lorenz Curve</a></li>
+                <li><a href="#section-gini">12.3.2 Gini Coefficient</a></li>
+                <li><a href="#section-gini-impurity">12.3.3 Gini Impurity Index</a></li>
+                <li><a href="#section-comparison">Comparación</a></li>
+            </ul>
+        </div>
+
+        <div class="section" id="section-lorenz">
+            <div class="section-header">
+                <h3>12.3.1 Lorenz Curve</h3>
+                <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+            </div>
+            <div class="section-content">
+                <div class="definition-box">
+                    <strong>Definición:</strong> La <strong>curva de Lorenz</strong> es una herramienta gráfica que visualiza cómo se distribuye (o concentra) el riesgo entre la población de clientes. Técnicamente, muestra la relación acumulativa entre el porcentaje de clientes (ordenados de mayor a menor riesgo) en el eje X y el porcentaje acumulado de defaults (o pérdidas crediticias) en el eje Y. Si el riesgo fuera aleatorio, la curva sería una diagonal de 45°. Cuanto más se aleja la curva de esta diagonal, mayor es la concentración: significa que pocos clientes "malos" generan la mayoría de los defaults, lo que permite segmentar y gestionar el riesgo de forma más eficiente.
+                </div>
+
+                <div class="analogy-box">
+                    <strong>Analogía:</strong> Imagina que clasificas 1,000 clientes de una empresa de seguros de menor a mayor confiabilidad. Luego te haces esta pregunta: "¿Qué porcentaje del total de accidentes (claims) reportados provienen solo del 10% de los clientes más riesgosos?" Si la respuesta es 40%, significa que apenas 100 clientes generan el 40% de los accidentes, indicando una concentración muy alta de riesgo. La curva de Lorenz visualiza exactamente esto: cómo está concentrado (o disperso) un evento negativo (defaults, accidentes, fraudes) en una población. Es como descubrir que el 80% de tus problemas vienen del 20% de tus clientes, lo que permite enfocarse donde realmente importa.
+                </div>
+
+                <div class="example-box">
+                    <strong>Ejemplo:</strong>
+                    <div class="table-container">
+                        <table>
+                            <tr><th>Decil</th><th>% Clientes</th><th>% Defaults</th></tr>
+                            <tr><td>1 (Peor)</td><td>10%</td><td>35%</td></tr>
+                            <tr><td>2</td><td>20%</td><td>60%</td></tr>
+                            <tr><td>3</td><td>30%</td><td>80%</td></tr>
+                            <tr><td>4-10</td><td>100%</td><td>100%</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="svg-container">
+                    <svg viewBox="0 0 400 400" width="320" height="320" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="400" height="400" fill="#fafafa"/>
+                        <line x1="30" y1="370" x2="380" y2="370" stroke="#333" stroke-width="1"/>
+                        <line x1="30" y1="370" x2="30" y2="20" stroke="#333" stroke-width="1"/>
+                        <line x1="30" y1="370" x2="380" y2="30" stroke="#999" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+                        <polyline points="30,370 80,260 155,110 230,30 380,30" stroke="#ff9800" stroke-width="2" fill="none"/>
+                        <circle cx="30" cy="370" r="2" fill="#0d47a1"/>
+                        <circle cx="80" cy="260" r="2" fill="#ff9800"/>
+                        <circle cx="155" cy="110" r="2" fill="#ff9800"/>
+                        <circle cx="380" cy="30" r="2" fill="#0d47a1"/>
+                    </svg>
+                </div>
+
+                <div class="interpretation-box">
+                    <strong>Interpretación:</strong> Curva alejada de la diagonal indica riesgo concentrado. El 10% de peores clientes = 35% de defaults.
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-gini">
+            <div class="section-header">
+                <h3>12.3.2 Gini Coefficient</h3>
+                <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+            </div>
+            <div class="section-content">
+                <div class="definition-box">
+                    <strong>Definición:</strong> El <strong>coeficiente de Gini</strong> es un número único (de 0 a 1) que cuantifica el nivel de desigualdad o concentración mostrado por la curva de Lorenz. Técnicamente, es el doble del área que se forma entre la diagonal de igualdad (45°) y la curva de Lorenz. Matemáticamente: G = 1 - 2 × (Área bajo la curva de Lorenz). Un Gini de 0 significa que el riesgo está perfectamente distribuido (azar puro), mientras que un Gini de 1 sería discriminación perfecta (todo el riesgo en un único cliente). En el contexto bancario, valores altos (>0.50) indican que el modelo o portfolio tiene excelente capacidad para diferenciar entre clientes buenos y malos, concentrando el riesgo identificable en pocos clientes problemáticos.
+                </div>
+
+                <div class="analogy-box">
+                    <strong>Analogía:</strong> Imagina dos reglas idénticas. La primera está perfectamente recta (G=0): representa un sistema donde el riesgo se distribuye al azar, sin patrones predecibles. La segunda está severamente doblada, casi tocando el suelo (G→1): representa un sistema donde el riesgo está altamente concentrado y predecible. En crédito, un Gini bajo (0.20-0.30) significa que tu modelo no puede distinguir bien entre clientes buenos y malos (es como adivinar). Un Gini alto (0.60-0.80) significa que tu modelo es muy efectivo: puede identificar claramente quiénes son los riesgosos, permitiéndote tomar decisiones de precio, aprobación o reservas mucho más precisas. Es la diferencia entre "no sé quién fallará" y "puedo predecir bastante bien quién fallará".
+                </div>
+
+                <div class="example-box">
+                    <strong>Datos - Tabla:</strong>
+                    <div class="table-container">
+                        <table>
+                            <tr><th>X Clientes</th><th>Y Defaults</th></tr>
+                            <tr><td>0.0</td><td>0.00</td></tr>
+                            <tr><td>0.2</td><td>0.35</td></tr>
+                            <tr><td>0.3</td><td>0.60</td></tr>
+                            <tr><td>0.4</td><td>0.80</td></tr>
+                            <tr><td>1.0</td><td>1.00</td></tr>
+                        </table>
+                    </div>
+                    <p><strong>Cálculo:</strong> Área = 0.55, entonces G = 1 - 2(0.55) = <strong>0.51</strong></p>
+                </div>
+
+                <div class="svg-container">
+                    <svg viewBox="0 0 350 350" width="280" height="280" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="350" height="350" fill="#fafafa"/>
+                        <line x1="25" y1="325" x2="325" y2="325" stroke="#333" stroke-width="1"/>
+                        <line x1="25" y1="325" x2="25" y2="25" stroke="#333" stroke-width="1"/>
+                        <line x1="25" y1="325" x2="325" y2="25" stroke="#999" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+                        <polyline points="25,325 70,260 120,160 170,80 325,25" stroke="#ff9800" stroke-width="1.5" fill="none"/>
+                        <circle cx="25" cy="325" r="1.5" fill="#0d47a1"/>
+                        <circle cx="70" cy="260" r="1.5" fill="#ff9800"/>
+                        <circle cx="120" cy="160" r="1.5" fill="#ff9800"/>
+                        <circle cx="325" cy="25" r="1.5" fill="#0d47a1"/>
+                    </svg>
+                </div>
+
+                <div class="interpretation-box">
+                    <strong>Interpretación:</strong> G = 0.51 → discriminación fuerte. Criterios: &lt;0.30 = Pobre; 0.30-0.50 = Aceptable; &gt;0.50 = Fuerte.
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-gini-impurity">
+            <div class="section-header">
+                <h3>12.3.3 Gini Impurity Index</h3>
+                <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+            </div>
+            <div class="section-content">
+                <div class="definition-box">
+                    <strong>Definición:</strong> El <strong>Gini Impurity Index</strong> es una medida de heterogeneidad usada en algoritmos de árboles de decisión. Se calcula como: Gini Impurity = 1 - Σ(p_i²), donde p_i es la proporción de cada clase. Un valor de 0 indica "pureza perfecta" (todos los elementos pertenecen a una sola clase: todos buenos o todos malos). Un valor de 0.5 indica "máxima mezcla" (50% de una clase y 50% de otra). A diferencia del coeficiente de Gini que mide desigualdad en una población completa, el Gini Impurity mide la mezcla dentro de un nodo específico de un árbol. Es fundamental para entrenar árboles de decisión: el algoritmo busca particiones (splits) que "purifiquen" los nodos, es decir, que reduzcan al máximo el Gini Impurity, separando efectivamente los riesgos buenos de los malos.
+                </div>
+
+                <div class="analogy-box">
+                    <strong>Analogía:</strong> Imagina que tienes una canasta con 100 frutas. Si contiene 100% manzanas (0 naranjas), la "pureza" es máxima y el Gini Impurity = 0. Si contiene 50 manzanas y 50 naranjas, la mezcla es máxima y Gini Impurity = 0.50 (la peor situación para clasificar). Si tienes 75 manzanas y 25 naranjas, entonces Gini Impurity = 0.375 (bastante puro). En crédito, imagina un nodo de un árbol que contiene 200 clientes: 150 pagadores (buenos) y 50 que incumplieron (malos). Ese nodo tiene Gini Impurity = 0.375, lo que significa que aún hay mezcla. El árbol buscará una regla (como "edad < 30" o "ingreso > $50k") que divida ese nodo en dos subnodos más puros: uno con 90% buenos y otro con 70% malos. Ese proceso repetido recursivamente construye el árbol, usando el Gini Impurity como brújula para saber cuándo parar de dividir (cuando el nodo es lo suficientemente puro).
+                </div>
+
+                <div class="example-box">
+                    <strong>Escenarios Comparativos - Tabla (4x5):</strong>
+                    <div class="table-container">
+                        <table>
+                            <tr><th>Composición</th><th>p_good</th><th>p_bad</th><th>Gini</th></tr>
+                            <tr><td>200 buenos</td><td>1.0</td><td>0.0</td><td>0.000</td></tr>
+                            <tr><td>150 buenos, 50 malos</td><td>0.75</td><td>0.25</td><td>0.375</td></tr>
+                            <tr><td>100 buenos, 100 malos</td><td>0.50</td><td>0.50</td><td>0.500</td></tr>
+                            <tr><td>200 malos</td><td>0.0</td><td>1.0</td><td>0.000</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="svg-container">
+                    <svg viewBox="0 0 350 280" width="280" height="220" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="350" height="280" fill="#fafafa"/>
+                        <line x1="35" y1="240" x2="320" y2="240" stroke="#333" stroke-width="1"/>
+                        <line x1="35" y1="240" x2="35" y2="30" stroke="#333" stroke-width="1"/>
+                        <path d="M 35 80 Q 100 240 177.5 240 Q 255 240 320 80" stroke="#7b1fa2" stroke-width="1.5" fill="none"/>
+                        <circle cx="35" cy="80" r="1.5" fill="#4caf50"/>
+                        <circle cx="177.5" cy="240" r="1.5" fill="#ff9800"/>
+                        <circle cx="320" cy="80" r="1.5" fill="#4caf50"/>
+                    </svg>
+                </div>
+
+                <div class="interpretation-box">
+                    <strong>Interpretación:</strong> Gini = 0.375 es relativamente limpio. En árboles, se buscan particiones que reduzcan impureza máximamente.
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="section-comparison">
+            <div class="section-header">
+                <h3>Comparación de Conceptos</h3>
+                <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+            </div>
+            <div class="section-content">
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Métrica</th>
+                            <th>Contexto</th>
+                            <th>Rango</th>
+                            <th>Uso</th>
+                        </tr>
+                        <tr>
+                            <td>Lorenz</td>
+                            <td>Visualización</td>
+                            <td>Curva</td>
+                            <td>Ver concentración riesgo</td>
+                        </tr>
+                        <tr>
+                            <td>Gini Coef.</td>
+                            <td>Medida resumen</td>
+                            <td>[0, 1]</td>
+                            <td>Cuantificar discriminación</td>
+                        </tr>
+                        <tr>
+                            <td>Gini Impurity</td>
+                            <td>Árboles decisión</td>
+                            <td>[0, 0.5]</td>
+                            <td>Elegir particiones</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <button class="back-to-top" onclick="backToTop()">▲</button>
+    </div>
+
+    <script>
+        function toggleSection(e) {
+            const content = e.target.closest('.section').querySelector('.section-content');
+            const btn = e.target;
+            if (content.style.display === 'none' || !content.style.display) {
+                content.style.display = 'block';
+                btn.textContent = '▲';
+            } else {
+                content.style.display = 'none';
+                btn.textContent = '▼';
+            }
+        }
+
+        document.querySelectorAll('.toc a').forEach(link => {
+            link.onclick = (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                const content = target.querySelector('.section-content');
+                content.style.display = 'block';
+                target.querySelector('.toggle-btn').textContent = '▲';
+                target.scrollIntoView({behavior: 'smooth'});
+            };
+        });
+
+        window.addEventListener('scroll', () => {
+            document.querySelector('.back-to-top').style.display = window.pageYOffset > 200 ? 'flex' : 'none';
+        });
+
+        function backToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Expand all on load
+        document.querySelectorAll('.section-content').forEach(c => c.style.display = 'block');
+        document.querySelectorAll('.toggle-btn').forEach(b => b.textContent = '▲');
+    </script>
+</body>
+</html>

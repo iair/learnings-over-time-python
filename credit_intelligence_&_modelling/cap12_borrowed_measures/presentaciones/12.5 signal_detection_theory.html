@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal Detection Theory - Credit Scoring</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --galgo-purple: #6B4B9A;
+            --galgo-light-purple: #8B6BB8;
+            --galgo-dark: #2D1B4E;
+            --galgo-accent: #00A8E8;
+            --text-dark: #1A1A1A;
+            --text-light: #555555;
+            --bg-light: #F8F7FB;
+            --bg-white: #FFFFFF;
+            --border-color: #E0D9F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 24px rgba(107, 75, 154, 0.15);
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .table-of-contents {
+            background: var(--bg-white);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .table-of-contents h2 {
+            font-size: 18px;
+            color: var(--galgo-purple);
+            margin-bottom: 16px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 12px;
+        }
+
+        .toc-list a {
+            color: var(--galgo-accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .toc-list a:hover {
+            color: var(--galgo-purple);
+            text-decoration: underline;
+        }
+
+        .expand-all-btn {
+            background: var(--galgo-purple);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-all-btn:hover {
+            background: var(--galgo-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 75, 154, 0.3);
+        }
+
+        .section {
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--bg-white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, var(--galgo-light-purple) 0%, var(--galgo-accent) 100%);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .toggle-btn {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .section-content {
+            padding: 24px;
+            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .section-content.expanded {
+            display: block;
+            max-height: 10000px;
+        }
+
+        .subsection {
+            margin-bottom: 20px;
+        }
+
+        .subsection h3 {
+            font-size: 15px;
+            color: var(--galgo-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subsection-badge {
+            background: var(--galgo-accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .definition-box, .analogy-box, .example-box {
+            padding: 16px;
+            margin: 12px 0;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .definition-box {
+            background: #F0F8FF;
+            border-left: 4px solid var(--galgo-accent);
+        }
+
+        .analogy-box {
+            background: #FFF8E1;
+            border-left: 4px solid #FF9800;
+        }
+
+        .example-box {
+            background: #F1F8E9;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .formula {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: center;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+
+        table th {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table tr:hover {
+            background: var(--bg-light);
+        }
+
+        .interpretation-box {
+            background: #E8F5E9;
+            border-left: 4px solid #2E7D32;
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+
+        .visualization-container {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .roc-tooltip {
+            position: absolute;
+            background: rgba(45, 27, 78, 0.95);
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            pointer-events: none;
+            display: none;
+            z-index: 1000;
+            max-width: 180px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            font-size: 13px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        p {
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        strong {
+            color: var(--galgo-purple);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 12px;
+            }
+
+            header {
+                padding: 28px 16px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .section-title {
+                font-size: 14px;
+            }
+
+            .section-content {
+                padding: 16px;
+            }
+
+            .definition-box, .analogy-box, .example-box {
+                padding: 12px;
+                font-size: 13px;
+            }
+
+            table {
+                font-size: 11px;
+            }
+
+            table th, table td {
+                padding: 8px;
+            }
+
+            .visualization-container {
+                min-height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Signal Detection Theory</h1>
+            <p>Evaluando la capacidad discriminante de modelos de crédito mediante detección de señales, matriz de confusión, curvas ROC y AUC.</p>
+        </header>
+
+        <div class="table-of-contents">
+            <h2>Índice de contenidos</h2>
+            <ul class="toc-list">
+                <li><a href="#section1">12.5.1 Confusion Matrix — el mapa de aciertos y errores</a></li>
+                <li><a href="#section2">12.5.2 ROC Curve — visualizando la sensibilidad y el costo del error</a></li>
+                <li><a href="#section3">12.5.3 AUC — el resumen numérico del poder de discriminación</a></li>
+                <li><a href="#section4">12.5.4 Interpretación conjunta: detección, error y negocio</a></li>
+            </ul>
+        </div>
+
+        <button class="expand-all-btn" onclick="toggleAllSections()">Expandir todo</button>
+
+        <!-- SECTION 1: CONFUSION MATRIX -->
+        <div class="section" id="section1">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.5.1 Confusion Matrix — el mapa de aciertos y errores</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>Una confusion matrix</strong> muestra el conteo de predicciones correctas e incorrectas del modelo, organizadas en cuatro categorías fundamentales. Cada celda representa un resultado posible de la clasificación: verdaderos positivos (TP), verdaderos negativos (TN), falsos positivos (FP) y falsos negativos (FN).
+                    </div>
+                    <p>Desde esta matriz se derivan métricas clave de desempeño que cuantifican diferentes aspectos de la capacidad del modelo para discriminar entre clientes buenos y malos.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">FÓRMULAS</span>Métricas derivadas</h3>
+                    <div class="formula">
+                        $$\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$$
+                    </div>
+                    <div class="formula">
+                        $$\text{Precision} = \frac{TP}{TP + FP}$$
+                    </div>
+                    <div class="formula">
+                        $$\text{Recall (Sensitivity)} = \frac{TP}{TP + FN}$$
+                    </div>
+                    <div class="formula">
+                        $$\text{Specificity} = \frac{TN}{TN + FP}$$
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>Comprendiendo los tipos de error</h3>
+                    <div class="analogy-box">
+                        <strong>Como un detector de incendios:</strong> Si no suena cuando hay fuego → falso negativo (peligroso). Si suena sin fuego → falso positivo (molesto pero inofensivo). Si detecta el fuego correctamente → verdadero positivo (correcto). Si guarda silencio cuando todo está bien → verdadero negativo (correcto).
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">VISUALIZACIÓN</span>Tabla interactiva</h3>
+                    <div class="visualization-container">
+                        <svg width="100%" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Title -->
+                            <text x="200" y="25" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Confusion Matrix (1000 clientes)</text>
+                            
+                            <!-- Grid lines and borders -->
+                            <rect x="80" y="60" width="320" height="200" fill="none" stroke="#E0D9F0" stroke-width="2"/>
+                            
+                            <!-- Column headers -->
+                            <rect x="80" y="60" width="160" height="40" fill="#6B4B9A" opacity="0.1" stroke="none"/>
+                            <rect x="240" y="60" width="160" height="40" fill="#6B4B9A" opacity="0.1" stroke="none"/>
+                            
+                            <text x="160" y="90" font-size="12" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Predicho Malo</text>
+                            <text x="320" y="90" font-size="12" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Predicho Bueno</text>
+                            
+                            <!-- Row headers -->
+                            <rect x="80" y="100" width="80" height="60" fill="#00A8E8" opacity="0.1" stroke="none"/>
+                            <rect x="80" y="160" width="80" height="60" fill="#00A8E8" opacity="0.1" stroke="none"/>
+                            
+                            <text x="100" y="132" font-size="11" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Real</text>
+                            <text x="100" y="147" font-size="11" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Malo</text>
+                            
+                            <text x="100" y="192" font-size="11" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Real</text>
+                            <text x="100" y="207" font-size="11" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Bueno</text>
+                            
+                            <!-- Grid divisions -->
+                            <line x1="160" y1="100" x2="160" y2="220" stroke="#E0D9F0" stroke-width="1"/>
+                            <line x1="240" y1="100" x2="240" y2="220" stroke="#E0D9F0" stroke-width="1"/>
+                            <line x1="80" y1="160" x2="400" y2="160" stroke="#E0D9F0" stroke-width="1"/>
+                            
+                            <!-- Values -->
+                            <!-- TP -->
+                            <rect x="160" y="100" width="80" height="60" fill="#4CAF50" opacity="0.2" stroke="none"/>
+                            <text x="200" y="125" font-size="14" font-weight="bold" text-anchor="middle" fill="#1B5E20">160</text>
+                            <text x="200" y="142" font-size="10" text-anchor="middle" fill="#1B5E20">TP</text>
+                            
+                            <!-- FN -->
+                            <rect x="240" y="100" width="160" height="60" fill="#FF6B6B" opacity="0.2" stroke="none"/>
+                            <text x="320" y="125" font-size="14" font-weight="bold" text-anchor="middle" fill="#C62828">40</text>
+                            <text x="320" y="142" font-size="10" text-anchor="middle" fill="#C62828">FN</text>
+                            
+                            <!-- FP -->
+                            <rect x="160" y="160" width="80" height="60" fill="#FF6B6B" opacity="0.2" stroke="none"/>
+                            <text x="200" y="185" font-size="14" font-weight="bold" text-anchor="middle" fill="#C62828">80</text>
+                            <text x="200" y="202" font-size="10" text-anchor="middle" fill="#C62828">FP</text>
+                            
+                            <!-- TN -->
+                            <rect x="240" y="160" width="160" height="60" fill="#4CAF50" opacity="0.2" stroke="none"/>
+                            <text x="320" y="185" font-size="14" font-weight="bold" text-anchor="middle" fill="#1B5E20">720</text>
+                            <text x="320" y="202" font-size="10" text-anchor="middle" fill="#1B5E20">TN</text>
+                            
+                            <!-- Totals -->
+                            <text x="200" y="245" font-size="11" text-anchor="middle" fill="#555">Total Predicho Malo: 240</text>
+                            <text x="320" y="245" font-size="11" text-anchor="middle" fill="#555">Total Predicho Bueno: 760</text>
+                            <text x="200" y="265" font-size="11" text-anchor="middle" fill="#555">Total Real Malo: 200</text>
+                            <text x="320" y="265" font-size="11" text-anchor="middle" fill="#555">Total Real Bueno: 800</text>
+                            
+                            <!-- Legend -->
+                            <rect x="20" y="280" width="360" height="15" fill="none" stroke="none"/>
+                            <rect x="20" y="280" width="6" height="6" fill="#4CAF50" opacity="0.4"/>
+                            <text x="30" y="285" font-size="9" fill="#555">Clasificación correcta</text>
+                            <rect x="200" y="280" width="6" height="6" fill="#FF6B6B" opacity="0.4"/>
+                            <text x="210" y="285" font-size="9" fill="#555">Clasificación incorrecta</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Cálculo paso a paso</h3>
+                    <div class="example-box">
+                        Supón un modelo aplicado a 1000 clientes con los resultados mostrados en la matriz anterior:
+                    </div>
+                    
+                    <p><strong>1. Accuracy (Exactitud general):</strong></p>
+                    <div class="formula">
+                        $$\text{Accuracy} = \frac{160 + 720}{1000} = \frac{880}{1000} = 0.88 = 88\%$$
+                    </div>
+                    
+                    <p><strong>2. Precision (Confiabilidad de predicciones positivas):</strong></p>
+                    <div class="formula">
+                        $$\text{Precision} = \frac{160}{160 + 80} = \frac{160}{240} = 0.667 = 66.7\%$$
+                    </div>
+                    
+                    <p><strong>3. Recall (Sensibilidad - Detección de malos):</strong></p>
+                    <div class="formula">
+                        $$\text{Recall} = \frac{160}{160 + 40} = \frac{160}{200} = 0.80 = 80\%$$
+                    </div>
+                    
+                    <p><strong>4. Specificity (Tasa de verdaderos negativos):</strong></p>
+                    <div class="formula">
+                        $$\text{Specificity} = \frac{720}{720 + 80} = \frac{720}{800} = 0.90 = 90\%$$
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Interpretación:</strong> El modelo identifica correctamente el 88% de los clientes. Detecta el 80% de los clientes malos (recall), pero comete errores: rechaza al 10% de clientes buenos (1 - especificidad). Cada FN (malo aprobado) implica pérdida directa; cada FP (bueno rechazado) implica pérdida de oportunidad.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: ROC CURVE -->
+        <div class="section" id="section2">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.5.2 ROC Curve — visualizando sensibilidad vs. costo del error</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>La ROC (Receiver Operating Characteristic)</strong> es una curva que traza la Tasa de Verdaderos Positivos (TPR) contra la Tasa de Falsos Positivos (FPR) al variar el umbral de decisión del modelo. Cada punto representa un posible umbral de score (ej: 0.2, 0.4, 0.6).
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">FÓRMULAS</span>Tasas fundamentales</h3>
+                    <div class="formula">
+                        $$TPR = \frac{TP}{TP + FN} \quad ; \quad FPR = \frac{FP}{FP + TN}$$
+                    </div>
+                    <p>El TPR representa la capacidad de detectar casos positivos (sensibilidad), mientras que FPR mide la tasa de falsas alarmas.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>El radar y el equilibrio</h3>
+                    <div class="analogy-box">
+                        Imagina un radar de seguridad: si ajustas la sensibilidad muy baja, no detectas los aviones pequeños (falsos negativos); si la subes demasiado, detectas hasta pájaros (falsos positivos). La ROC muestra todos los equilibrios posibles entre ambos extremos.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">VISUALIZACIÓN</span>ROC Curve Interactivo</h3>
+                    <div class="visualization-container" style="position: relative; overflow: hidden;">
+                        <svg id="rocChart" width="100%" height="350" viewBox="0 0 450 400" xmlns="http://www.w3.org/2000/svg" style="background: white; border-radius: 8px;">
+                            <!-- Background -->
+                            <defs>
+                                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E0D9F0" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="450" height="400" fill="url(#grid)" opacity="0.3"/>
+                            
+                            <!-- Axes -->
+                            <line x1="60" y1="340" x2="420" y2="340" stroke="#2D1B4E" stroke-width="2"/>
+                            <line x1="60" y1="340" x2="60" y2="20" stroke="#2D1B4E" stroke-width="2"/>
+                            
+                            <!-- Axis labels -->
+                            <text x="240" y="375" font-size="12" text-anchor="middle" fill="#2D1B4E" font-weight="bold">False Positive Rate (FPR)</text>
+                            <text x="20" y="180" font-size="12" text-anchor="middle" fill="#2D1B4E" font-weight="bold" transform="rotate(-90 20 180)">True Positive Rate (TPR)</text>
+                            
+                            <!-- Axis ticks and labels -->
+                            <line x1="60" y1="340" x2="60" y2="345" stroke="#2D1B4E" stroke-width="1"/>
+                            <text x="60" y="360" font-size="10" text-anchor="middle" fill="#555">0.0</text>
+                            
+                            <line x1="150" y1="340" x2="150" y2="345" stroke="#2D1B4E" stroke-width="1"/>
+                            <text x="150" y="360" font-size="10" text-anchor="middle" fill="#555">0.25</text>
+                            
+                            <line x1="240" y1="340" x2="240" y2="345" stroke="#2D1B4E" stroke-width="1"/>
+                            <text x="240" y="360" font-size="10" text-anchor="middle" fill="#555">0.5</text>
+                            
+                            <line x1="330" y1="340" x2="330" y2="345" stroke="#2D1B4E" stroke-width="1"/>
+                            <text x="330" y="360" font-size="10" text-anchor="middle" fill="#555">0.75</text>
+                            
+                            <line x1="420" y1="340" x2="420" y2="345" stroke="#2D1B4E" stroke-width="1"/>
+                            <text x="420" y="360" font-size="10" text-anchor="middle" fill="#555">1.0</text>
+                            
+                            <line x1="55" y1="340" x2="60" y2="340" stroke="#2D1B4E" stroke-width="1"/>
+                            <text x="45" y="345" font-size="10" text-anchor="end" fill="#555">0.0</text>
+                            
+                            <line x1="55" y1="250" x2="60" y2="250" stroke="#2D1B4E" stroke-width="1"/>
+                            <text x="45" y="255" font-size="10" text-anchor="end" fill="#555">0.25</text>
+                            
+                            <line x1="55" y1="160" x2="60" y2="160" stroke="#2D1B4E" stroke-width="1"/>
+                            <text x="45" y="165" font-size="10" text-anchor="end" fill="#555">0.5</text>
+                            
+                            <line x1="55" y1="70" x2="60" y2="70" stroke="#2D1B4E" stroke-width="1"/>
+                            <text x="45" y="75" font-size="10" text-anchor="end" fill="#555">1.0</text>
+                            
+                            <!-- Diagonal (random classifier) -->
+                            <line x1="60" y1="340" x2="420" y2="20" stroke="#CCCCCC" stroke-width="2" stroke-dasharray="5,5"/>
+                            <text x="370" y="45" font-size="11" fill="#999">Azar (AUC=0.5)</text>
+                            
+                            <!-- ROC Curve -->
+                            <path id="rocCurve" d="M 60 340 Q 120 310 150 250 Q 200 180 240 130 Q 280 70 330 50 Q 360 40 420 20" 
+                                  stroke="#6B4B9A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            
+                            <!-- AUC Area -->
+                            <path d="M 60 340 Q 120 310 150 250 Q 200 180 240 130 Q 280 70 330 50 Q 360 40 420 20 L 420 340 Z" 
+                                  fill="#6B4B9A" opacity="0.15"/>
+                            
+                            <!-- Interactive points -->
+                            <circle id="point1" cx="150" cy="250" r="5" fill="#00A8E8" stroke="white" stroke-width="2" cursor="pointer" onmouseover="showROCTooltip(event, '0.30', '0.90', '0.1875')" onmouseout="hideROCTooltip()"/>
+                            <circle id="point2" cx="240" cy="130" r="5" fill="#00A8E8" stroke="white" stroke-width="2" cursor="pointer" onmouseover="showROCTooltip(event, '0.50', '0.80', '0.10')" onmouseout="hideROCTooltip()"/>
+                            <circle id="point3" cx="330" cy="50" r="5" fill="#00A8E8" stroke="white" stroke-width="2" cursor="pointer" onmouseover="showROCTooltip(event, '0.70', '0.50', '0.05')" onmouseout="hideROCTooltip()"/>
+                            
+                            <!-- Title -->
+                            <text x="225" y="30" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D1B4E">ROC Curve (Interactivo)</text>
+                            <text x="225" y="45" font-size="11" text-anchor="middle" fill="#666">Pasa el mouse sobre los puntos para ver detalles</text>
+                            
+                            <!-- Legend -->
+                            <rect x="20" y="320" width="30" height="15" fill="#6B4B9A"/>
+                            <text x="55" y="332" font-size="10" fill="#555">Modelo: AUC = 0.89</text>
+                        </svg>
+                        <div id="rocTooltip" class="roc-tooltip"></div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Cálculo de puntos ROC</h3>
+                    <div class="example-box">
+                        Usando tres umbrales diferentes para generar la curva:
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Umbral</th>
+                                <th>TP</th>
+                                <th>FP</th>
+                                <th>FN</th>
+                                <th>TN</th>
+                                <th>TPR</th>
+                                <th>FPR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0.30</td>
+                                <td>180</td>
+                                <td>150</td>
+                                <td>20</td>
+                                <td>650</td>
+                                <td>0.90</td>
+                                <td>0.1875</td>
+                            </tr>
+                            <tr>
+                                <td>0.50</td>
+                                <td>160</td>
+                                <td>80</td>
+                                <td>40</td>
+                                <td>720</td>
+                                <td>0.80</td>
+                                <td>0.10</td>
+                            </tr>
+                            <tr>
+                                <td>0.70</td>
+                                <td>100</td>
+                                <td>40</td>
+                                <td>100</td>
+                                <td>760</td>
+                                <td>0.50</td>
+                                <td>0.05</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="interpretation-box">
+                        <strong>Interpretación:</strong> Una ROC más alejada de la diagonal (azar) indica mayor poder discriminante. Si los puntos están cerca del eje izquierdo y superior, el modelo distingue bien entre buenos y malos. Este modelo es excelente porque la curva está significativamente por encima de la diagonal.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: AUC -->
+        <div class="section" id="section3">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.5.3 AUC — el resumen numérico del poder de discriminación</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>El AUC (Area Under the Curve)</strong> cuantifica el área bajo la curva ROC. Puede interpretarse como la <strong>probabilidad de que el modelo asigne un score más alto a un cliente bueno que a uno malo</strong> elegido al azar.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">FÓRMULA</span>Cálculo del AUC</h3>
+                    <div class="formula">
+                        $$AUC = \int_0^1 TPR(FPR) \, dFPR$$
+                    </div>
+                    <p>En la práctica, se calcula usando la regla trapezoidal: dividiendo la curva en segmentos y sumando el área de cada trapecio.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">TABLA</span>Interpretación de valores AUC</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>AUC</th>
+                                <th>Interpretación</th>
+                                <th>Clasificación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0.5</td>
+                                <td>Sin poder predictivo (aleatorio)</td>
+                                <td>Rechazado</td>
+                            </tr>
+                            <tr>
+                                <td>0.6 – 0.7</td>
+                                <td>Débil</td>
+                                <td>Marginal</td>
+                            </tr>
+                            <tr>
+                                <td>0.7 – 0.8</td>
+                                <td>Aceptable</td>
+                                <td>Aceptado</td>
+                            </tr>
+                            <tr>
+                                <td>0.8 – 0.9</td>
+                                <td>Bueno</td>
+                                <td>Aceptado</td>
+                            </tr>
+                            <tr>
+                                <td>&gt; 0.9</td>
+                                <td>Excelente</td>
+                                <td>Aceptado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>La comprensión probabilística</h3>
+                    <div class="analogy-box">
+                        Si comparas un cliente bueno y uno malo con los ojos vendados, el AUC es la probabilidad de que el modelo "adivine" correctamente cuál es el bueno según su score. Un AUC de 0.89 significa una probabilidad del 89% de clasificar correctamente al comparar dos clientes al azar.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Cálculo paso a paso</h3>
+                    <div class="example-box">
+                        Usando los puntos ROC anteriores, calculamos el área con la regla trapezoidal:
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>FPR</th>
+                                <th>TPR</th>
+                                <th>Diferencia FPR</th>
+                                <th>Altura promedio</th>
+                                <th>Área trapecio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0.00</td>
+                                <td>0.00</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                            <tr>
+                                <td>0.05</td>
+                                <td>0.50</td>
+                                <td>0.05</td>
+                                <td>0.25</td>
+                                <td>0.0125</td>
+                            </tr>
+                            <tr>
+                                <td>0.10</td>
+                                <td>0.80</td>
+                                <td>0.05</td>
+                                <td>0.65</td>
+                                <td>0.0325</td>
+                            </tr>
+                            <tr>
+                                <td>0.1875</td>
+                                <td>0.90</td>
+                                <td>0.0875</td>
+                                <td>0.85</td>
+                                <td>0.0744</td>
+                            </tr>
+                            <tr>
+                                <td>1.00</td>
+                                <td>1.00</td>
+                                <td>0.8125</td>
+                                <td>0.95</td>
+                                <td>0.7719</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="formula">
+                        $$A = 0.0125 + 0.0325 + 0.0744 + 0.7719 = 0.891$$
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Interpretación:</strong> AUC = 0.89 → Modelo excelente. Tiene un 89% de probabilidad de asignar un score más alto al cliente bueno que al malo cuando se comparan dos clientes elegidos al azar.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: JOINT INTERPRETATION -->
+        <div class="section" id="section4">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.5.4 Interpretación conjunta: detección, error y negocio</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">SÍNTESIS</span>Matriz de decisión: métricas y aplicación</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Métrica</th>
+                                <th>Qué mide</th>
+                                <th>Aplicación crediticia</th>
+                                <th>Riesgo asociado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Confusion Matrix</strong></td>
+                                <td>Clasificación puntual</td>
+                                <td>Determinar aciertos y errores para un umbral específico</td>
+                                <td>Evalúa trade-off entre riesgo y oportunidad</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ROC Curve</strong></td>
+                                <td>Sensibilidad vs. error</td>
+                                <td>Comparar modelos o umbrales visualmente</td>
+                                <td>Evalúa discriminación general</td>
+                            </tr>
+                            <tr>
+                                <td><strong>AUC</strong></td>
+                                <td>Área bajo ROC</td>
+                                <td>Medida única de performance global</td>
+                                <td>AUC bajo indica modelo cercano al azar</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">DECISIÓN</span>Criterios prácticos</h3>
+                    <div class="interpretation-box">
+                        <strong>Un buen modelo debe:</strong>
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li>Tener ROC por encima de la diagonal (azar)</li>
+                            <li>Alcanzar AUC &gt; 0.75 (preferiblemente &gt; 0.80)</li>
+                            <li>El umbral de corte se elige equilibrando el costo financiero de FN (defaults no detectados) y FP (clientes rechazados)</li>
+                            <li>En validación regulatoria, K–S y AUC suelen presentarse juntos: ambos miden capacidad discriminante desde perspectivas distintas</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>El guardia y la puerta</h3>
+                    <div class="analogy-box">
+                        Imagina un guardia de seguridad (el modelo) que deja pasar personas según un detector.
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li>Si el detector es muy sensible, detiene inocentes (FP)</li>
+                            <li>Si es muy laxo, deja pasar culpables (FN)</li>
+                            <li>El arte está en calibrar el umbral para minimizar la pérdida total</li>
+                        </ul>
+                        Las métricas de la teoría de detección son, en esencia, las herramientas para decidir <strong>dónde fijar esa puerta.</strong>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">APLICACIÓN</span>Trade-off entre métricas</h3>
+                    <div class="example-box">
+                        En decisiones crediticias reales, el trade-off depende de la institución:
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li><strong>Banco conservador:</strong> Prefiere Specificity alta (rechaza más malos), tolera más FP</li>
+                            <li><strong>Fintech agresiva:</strong> Busca Recall alto (aprueba más buenos), tolera más FN para volumen</li>
+                            <li><strong>Regulación:</strong> Requiere equilibrio mediante umbral que minimize pérdida total regulatoria</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Presentación: Signal Detection Theory en Credit Scoring</p>
+            <p>Basado en "Credit Intelligence & Modelling" - Raymond Anderson, Oxford University Press</p>
+            <p>Referencia: Capítulo 12.5 - Borrowed Measures</p>
+            <p style="margin-top: 20px; color: #999; font-size: 12px;">Para código Python ejecutable, ver documento: <strong>signal_detection_python.md</strong></p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const btn = header.querySelector('.toggle-btn');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                btn.textContent = '+';
+            } else {
+                content.classList.add('expanded');
+                btn.textContent = '−';
+            }
+        }
+
+        function toggleAllSections() {
+            const sections = document.querySelectorAll('.section');
+            const allExpanded = Array.from(sections).every(s => 
+                s.querySelector('.section-content').classList.contains('expanded')
+            );
+
+            sections.forEach(section => {
+                const content = section.querySelector('.section-content');
+                const btn = section.querySelector('.toggle-btn');
+                
+                if (allExpanded) {
+                    content.classList.remove('expanded');
+                    btn.textContent = '+';
+                } else {
+                    content.classList.add('expanded');
+                    btn.textContent = '−';
+                }
+            });
+        }
+
+        function showROCTooltip(event, umbral, tpr, fpr) {
+            const tooltip = document.getElementById('rocTooltip');
+            tooltip.innerHTML = `
+                <strong>Punto en la ROC</strong><br/>
+                Umbral: ${umbral}<br/>
+                TPR: ${tpr}<br/>
+                FPR: ${fpr}
+            `;
+            tooltip.style.display = 'block';
+            tooltip.style.left = (event.clientX + 10) + 'px';
+            tooltip.style.top = (event.clientY - 30) + 'px';
+        }
+
+        function hideROCTooltip() {
+            document.getElementById('rocTooltip').style.display = 'none';
+        }
+
+        // Ensure MathJax renders after page load
+        window.addEventListener('load', function() {
+            if (window.MathJax) {
+                MathJax.contentDocument.dispatchEvent(new Event('DOMContentLoaded'));
+            }
+        });
+    </script>
+</body>
+</html>

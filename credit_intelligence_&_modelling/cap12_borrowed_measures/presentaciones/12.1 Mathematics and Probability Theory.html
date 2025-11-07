@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics and Probability Theory - Credit Scoring</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --galgo-purple: #6B4B9A;
+            --galgo-light-purple: #8B6BB8;
+            --galgo-dark: #2D1B4E;
+            --galgo-accent: #00A8E8;
+            --text-dark: #1A1A1A;
+            --text-light: #555555;
+            --bg-light: #F8F7FB;
+            --bg-white: #FFFFFF;
+            --border-color: #E0D9F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 24px rgba(107, 75, 154, 0.15);
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .table-of-contents {
+            background: var(--bg-white);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-of-contents h2 {
+            color: var(--galgo-purple);
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: var(--galgo-accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 8px 12px;
+            border-left: 3px solid transparent;
+        }
+
+        .toc-list a:hover {
+            color: var(--galgo-purple);
+            border-left-color: var(--galgo-purple);
+            background: rgba(107, 75, 154, 0.05);
+        }
+
+        .section {
+            background: var(--bg-white);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, rgba(107, 75, 154, 0.08) 0%, rgba(0, 168, 232, 0.05) 100%);
+            padding: 24px;
+            border-bottom: 2px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, rgba(107, 75, 154, 0.12) 0%, rgba(0, 168, 232, 0.08) 100%);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--galgo-purple);
+            margin: 0;
+        }
+
+        .toggle-btn {
+            width: 32px;
+            height: 32px;
+            background: var(--galgo-accent);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .toggle-btn:hover {
+            background: var(--galgo-purple);
+            transform: scale(1.1);
+        }
+
+        .section-content {
+            padding: 24px;
+            max-height: 2000px;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .section-content.collapsed {
+            max-height: 0;
+            padding: 0 24px;
+        }
+
+        .subsection {
+            margin-bottom: 28px;
+        }
+
+        .subsection:last-child {
+            margin-bottom: 0;
+        }
+
+        .subsection h3 {
+            color: var(--galgo-purple);
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .subsection-badge {
+            display: inline-block;
+            background: var(--galgo-accent);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, rgba(107, 75, 154, 0.06) 0%, rgba(0, 168, 232, 0.04) 100%);
+            border-left: 4px solid var(--galgo-purple);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+        }
+
+        .definition-box strong {
+            color: var(--galgo-purple);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .analogy-box {
+            background: linear-gradient(135deg, rgba(0, 168, 232, 0.06) 0%, rgba(107, 75, 154, 0.04) 100%);
+            border-left: 4px solid var(--galgo-accent);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        .example-box {
+            background: #F0F8FF;
+            border: 2px solid var(--galgo-accent);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--galgo-accent);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            background: var(--bg-white);
+        }
+
+        table th {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table tr:hover {
+            background: rgba(107, 75, 154, 0.04);
+        }
+
+        .formula {
+            background: #F5F5F5;
+            border-left: 3px solid var(--galgo-accent);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        svg {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .interpretation {
+            background: rgba(107, 75, 154, 0.08);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            border-left: 4px solid var(--galgo-purple);
+        }
+
+        .interpretation strong {
+            color: var(--galgo-purple);
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        ol, ul {
+            margin-left: 24px;
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-reference {
+            background: #F0F0F0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #D84E1F;
+            display: inline-block;
+        }
+
+        .source-link {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--galgo-accent);
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .source-link:hover {
+            background: var(--galgo-purple);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            font-size: 13px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 12px;
+            }
+
+            header {
+                padding: 28px 16px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .section-content {
+                padding: 16px;
+            }
+
+            .definition-box, .analogy-box, .example-box {
+                padding: 12px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            table th, table td {
+                padding: 8px;
+            }
+        }
+
+        .expand-all-btn {
+            background: var(--galgo-purple);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-all-btn:hover {
+            background: var(--galgo-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 75, 154, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Mathematics and Probability Theory</h1>
+            <p>Fundamentos matemáticos para modelos de credit scoring. Una introducción conceptual rigurosa con analogías intuitivas y aplicaciones prácticas.</p>
+        </header>
+
+        <div class="table-of-contents">
+            <h2>Índice de contenidos</h2>
+            <ul class="toc-list">
+                <li><a href="#section1">12.1.1 Logarithms — la escala oculta de la probabilidad</a></li>
+                <li><a href="#section2">12.1.2 Law of Large Numbers — cuando la incertidumbre se estabiliza</a></li>
+                <li><a href="#section3">12.1.3 Bayes' Theorem — aprender de la evidencia</a></li>
+                <li><a href="#section4">12.1.4 Laplace — Expected Values y la lógica del valor esperado</a></li>
+                <li><a href="#section5">12.1.5 Kolmogorov–Smirnov — la distancia entre dos mundos</a></li>
+                <li><a href="#section6">12.1.6 Gradient Descent — aprender bajando la colina del error</a></li>
+                <li><a href="#section7">12.4 Information and Cryptography — medir el poder predictivo de las variables</a></li>
+            </ul>
+        </div>
+
+        <button class="expand-all-btn" onclick="toggleAllSections()">Expandir todo</button>
+
+        <!-- SECTION 1: LOGARITHMS -->
+        <div class="section" id="section1">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.1.1 Logarithms — la escala oculta de la probabilidad</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>El logaritmo natural</strong> transforma la razón de dos probabilidades (odds) en una escala lineal. En regresión logística, se usa para expresar la relación entre la probabilidad de incumplimiento (P) y de cumplimiento (1-P):
+                    </div>
+                    <div class="formula">
+                        $$\text{log-odds} = \ln\left(\frac{P}{1 - P}\right)$$
+                    </div>
+                    <p>Así, una relación no lineal entre riesgo y variables se vuelve lineal en el espacio del log-odds, lo que facilita el análisis y la interpretación del modelo.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>Comprendiendo logaritmos</h3>
+                    <div class="analogy-box">
+                        Piensa en una escala musical: las notas no están separadas linealmente por frecuencia, sino logarítmicamente. Un cambio de una octava duplica la frecuencia, pero suena como "el mismo salto". En scoring, un aumento constante en log-odds representa el mismo salto en riesgo relativo, independientemente del nivel inicial.
+                    </div>
+                    <svg width="100%" height="300" viewBox="0 0 400 300" style="margin: 20px 0;">
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#6B4B9A;stop-opacity:0.2" />
+                                <stop offset="100%" style="stop-color:#00A8E8;stop-opacity:0.1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Title -->
+                        <text x="200" y="25" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Escala Lineal vs Logarítmica</text>
+                        
+                        <!-- Left side: Lineal -->
+                        <text x="100" y="55" font-size="12" font-weight="bold" fill="#6B4B9A">Escala Lineal (Riesgo)</text>
+                        <line x1="50" y1="70" x2="150" y2="70" stroke="#E0D9F0" stroke-width="2"/>
+                        <circle cx="60" cy="70" r="3" fill="#6B4B9A"/>
+                        <text x="60" y="88" font-size="11" text-anchor="middle" fill="#555">0.01</text>
+                        
+                        <circle cx="90" cy="70" r="3" fill="#6B4B9A"/>
+                        <text x="90" y="88" font-size="11" text-anchor="middle" fill="#555">0.05</text>
+                        
+                        <circle cx="120" cy="70" r="3" fill="#6B4B9A"/>
+                        <text x="120" y="88" font-size="11" text-anchor="middle" fill="#555">0.10</text>
+                        
+                        <circle cx="150" cy="70" r="3" fill="#6B4B9A"/>
+                        <text x="150" y="88" font-size="11" text-anchor="middle" fill="#555">0.15</text>
+                        
+                        <!-- Right side: Logarítmica -->
+                        <text x="280" y="55" font-size="12" font-weight="bold" fill="#00A8E8">Escala Logarítmica (Log-odds)</text>
+                        <line x1="230" y1="70" x2="330" y2="70" stroke="#E0D9F0" stroke-width="2"/>
+                        <circle cx="235" cy="70" r="3" fill="#00A8E8"/>
+                        <text x="235" y="88" font-size="11" text-anchor="middle" fill="#555">-4.6</text>
+                        
+                        <circle cx="270" cy="70" r="3" fill="#00A8E8"/>
+                        <text x="270" y="88" font-size="11" text-anchor="middle" fill="#555">-3.0</text>
+                        
+                        <circle cx="295" cy="70" r="3" fill="#00A8E8"/>
+                        <text x="295" y="88" font-size="11" text-anchor="middle" fill="#555">-2.2</text>
+                        
+                        <circle cx="330" cy="70" r="3" fill="#00A8E8"/>
+                        <text x="330" y="88" font-size="11" text-anchor="middle" fill="#555">-1.6</text>
+                        
+                        <!-- Spacing indicators -->
+                        <g stroke="#D0D0D0" stroke-width="1" stroke-dasharray="3,3">
+                            <line x1="70" y1="110" x2="70" y2="160"/>
+                            <line x1="100" y1="110" x2="100" y2="160"/>
+                            <line x1="130" y1="110" x2="130" y2="160"/>
+                            <line x1="160" y1="110" x2="160" y2="160"/>
+                            
+                            <line x1="250" y1="110" x2="250" y2="160"/>
+                            <line x1="285" y1="110" x2="285" y2="160"/>
+                            <line x1="310" y1="110" x2="310" y2="160"/>
+                            <line x1="330" y1="110" x2="330" y2="160"/>
+                        </g>
+                        <text x="200" y="190" font-size="12" text-anchor="middle" fill="#555">Los espacios en escala lineal son uniformes</text>
+                        <text x="200" y="210" font-size="12" text-anchor="middle" fill="#555">pero en log-odds representan cambios iguales en riesgo relativo</text>
+                        
+                        <rect x="20" y="230" width="360" height="60" fill="url(#grad1)" stroke="#6B4B9A" stroke-width="1" rx="6"/>
+                        <text x="30" y="250" font-size="11" fill="#2D1B4E" font-weight="bold">Ventaja:</text>
+                        <text x="30" y="265" font-size="10" fill="#555">Los cambios proporcionales en riesgo se ven como cambios lineales en log-odds,</text>
+                        <text x="30" y="280" font-size="10" fill="#555">lo que facilita el modelado y la interpretación en regresión logística.</text>
+                    </svg>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Comparación de probabilidades de incumplimiento</h3>
+                    <div class="example-box">
+                        <strong>Escenario:</strong> Queremos comparar dos clientes con distintas probabilidades de incumplir.
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>PD (Probability of Default)</th>
+                        </tr>
+                        <tr>
+                            <td>A</td>
+                            <td>0.03 (3%)</td>
+                        </tr>
+                        <tr>
+                            <td>B</td>
+                            <td>0.12 (12%)</td>
+                        </tr>
+                    </table>
+                    
+                    <p><strong>Paso 1: Calcular odds</strong></p>
+                    <div class="formula">
+                        $$\text{odds}_A = \frac{0.03}{0.97} = 0.0309$$
+                        $$\text{odds}_B = \frac{0.12}{0.88} = 0.1364$$
+                    </div>
+
+                    <p><strong>Paso 2: Aplicar logaritmo natural</strong></p>
+                    <div class="formula">
+                        $$\ln(0.0309) = -3.476$$
+                        $$\ln(0.1364) = -1.991$$
+                    </div>
+
+                    <p><strong>Paso 3: Calcular diferencia</strong></p>
+                    <div class="formula">
+                        $$-1.991 - (-3.476) = 1.485$$
+                    </div>
+
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> Un cambio de 1 punto en log-odds corresponde aproximadamente a multiplicar el riesgo relativo por e ≈ 2.71. En este caso, con 1.485 puntos de diferencia, el Cliente B tiene e^1.485 ≈ 4.41 veces más riesgo de incumplimiento que el Cliente A.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: LAW OF LARGE NUMBERS -->
+        <div class="section" id="section2">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.1.2 Law of Large Numbers — cuando la incertidumbre se estabiliza</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>La Ley de los Grandes Números</strong> establece que a medida que el tamaño de la muestra aumenta, la media observada converge al valor esperado real. En crédito, asegura que las tasas de incumplimiento estimadas se estabilizan con carteras grandes, reduciendo la volatilidad de las métricas de riesgo.
+                    </div>
+                    <p>Esta ley es fundamental para validar modelos: pequeñas muestras pueden ser engañosas, pero con datos suficientes, los patrones reales emergen.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>Comprendiendo la convergencia</h3>
+                    <div class="analogy-box">
+                        Como medir la temperatura de una ciudad: una medición aislada puede ser engañosa (podría tomar la temperatura en la hora más calurosa del día), pero el promedio de miles de lecturas distribuidas a lo largo del año describe fielmente el clima real de esa región.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Convergencia de tasas de default</h3>
+                    <div class="example-box">
+                        <strong>Supuesto:</strong> Una población donde la verdadera PD (Probability of Default) = 5%. Tomamos diferentes muestras de clientes y observamos sus tasas de incumplimiento.
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Tamaño de muestra</th>
+                            <th>Defaults observados</th>
+                            <th>Tasa observada</th>
+                            <th>Error vs Real (5%)</th>
+                        </tr>
+                        <tr>
+                            <td>20</td>
+                            <td>2</td>
+                            <td>10.0%</td>
+                            <td>+5.0%</td>
+                        </tr>
+                        <tr>
+                            <td>200</td>
+                            <td>9</td>
+                            <td>4.5%</td>
+                            <td>-0.5%</td>
+                        </tr>
+                        <tr>
+                            <td>2,000</td>
+                            <td>98</td>
+                            <td>4.9%</td>
+                            <td>-0.1%</td>
+                        </tr>
+                        <tr>
+                            <td>20,000</td>
+                            <td>1,021</td>
+                            <td>5.1%</td>
+                            <td>+0.1%</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Análisis de variabilidad:</strong> La desviación estándar de una proporción binomial es:</p>
+                    <div class="formula">
+                        $$\sigma = \sqrt{\frac{p(1-p)}{n}}$$
+                    </div>
+
+                    <p>Para p = 0.05 y n = 20,000:</p>
+                    <div class="formula">
+                        $$\sigma = \sqrt{\frac{0.05 \times 0.95}{20,000}} = \sqrt{\frac{0.0475}{20,000}} \approx 0.0049$$
+                    </div>
+
+                    <div class="interpretation">
+                        <strong>Resultado:</strong> Con 20,000 clientes, la tasa observada se concentra en el intervalo [4.5%, 5.5%]. La variabilidad disminuye drásticamente. A mayor muestra, menor volatilidad en las métricas de riesgo y mayor confianza en las estimaciones.
+                    </div>
+                </div>
+
+                <svg width="100%" height="280" viewBox="0 0 400 280" style="margin: 20px 0;">
+                    <defs>
+                        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00A8E8;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <text x="200" y="25" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Convergencia a la verdadera PD (5%)</text>
+                    
+                    <!-- Axes -->
+                    <line x1="50" y1="220" x2="370" y2="220" stroke="#000" stroke-width="2"/>
+                    <line x1="50" y1="50" x2="50" y2="220" stroke="#000" stroke-width="2"/>
+                    
+                    <!-- Grid lines -->
+                    <line x1="50" y1="180" x2="370" y2="180" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="3,3"/>
+                    <line x1="50" y1="140" x2="370" y2="140" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="3,3"/>
+                    <line x1="50" y1="100" x2="370" y2="100" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="3,3"/>
+                    
+                    <!-- Y-axis labels -->
+                    <text x="40" y="225" font-size="10" text-anchor="end" fill="#555">0%</text>
+                    <text x="40" y="185" font-size="10" text-anchor="end" fill="#555">5%</text>
+                    <text x="40" y="145" font-size="10" text-anchor="end" fill="#555">10%</text>
+                    
+                    <!-- X-axis labels -->
+                    <text x="70" y="240" font-size="10" text-anchor="middle" fill="#555">20</text>
+                    <text x="150" y="240" font-size="10" text-anchor="middle" fill="#555">200</text>
+                    <text x="230" y="240" font-size="10" text-anchor="middle" fill="#555">2k</text>
+                    <text x="310" y="240" font-size="10" text-anchor="middle" fill="#555">20k</text>
+                    
+                    <!-- Data points with error bars -->
+                    <g stroke="#FF6B6B" stroke-width="2" fill="none">
+                        <!-- n=20 -->
+                        <line x1="70" y1="130" x2="70" y2="170"/>
+                        <circle cx="70" cy="150" r="4" fill="#FF6B6B"/>
+                        
+                        <!-- n=200 -->
+                        <line x1="150" y1="172" x2="150" y2="188"/>
+                        <circle cx="150" cy="180" r="4" fill="#FF6B6B"/>
+                        
+                        <!-- n=2000 -->
+                        <line x1="230" y1="176" x2="230" y2="184"/>
+                        <circle cx="230" cy="180" r="4" fill="#FF6B6B"/>
+                        
+                        <!-- n=20000 -->
+                        <line x1="310" y1="178" x2="310" y2="182"/>
+                        <circle cx="310" cy="180" r="4" fill="#FF6B6B"/>
+                    </g>
+                    
+                    <!-- True value line -->
+                    <line x1="50" y1="180" x2="370" y2="180" stroke="#00A8E8" stroke-width="2" stroke-dasharray="5,5"/>
+                    <text x="375" y="183" font-size="10" fill="#00A8E8" font-weight="bold">PD Real (5%)</text>
+                    
+                    <!-- Axes labels -->
+                    <text x="200" y="260" font-size="11" text-anchor="middle" fill="#555">Tamaño de muestra (n)</text>
+                    <text x="20" y="130" font-size="11" text-anchor="middle" fill="#555" transform="rotate(-90 20 130)">Tasa de Default</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- SECTION 3: BAYES' THEOREM -->
+        <div class="section" id="section3">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.1.3 Bayes' Theorem — aprender de la evidencia</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>El Teorema de Bayes</strong> describe cómo actualizar una probabilidad a medida que se incorpora nueva información. Es la herramienta fundamental para aprender de los datos de manera rigurosa.
+                    </div>
+                    <div class="formula">
+                        $$P(H|E) = \frac{P(E|H) \cdot P(H)}{P(E|H) \cdot P(H) + P(E|\neg H) \cdot P(\neg H)}$$
+                    </div>
+                    <p>Donde:<br>
+                    • P(H|E) = Probabilidad posterior (hipótesis dado evidencia)<br>
+                    • P(E|H) = Verosimilitud (probabilidad de evidencia si hipótesis es verdadera)<br>
+                    • P(H) = Probabilidad a priori (creencia inicial)<br>
+                    • P(E) = Probabilidad total de evidencia</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>Actualizando creencias</h3>
+                    <div class="analogy-box">
+                        Como una revisión médica: tener tos (evidencia) cambia la probabilidad de tener gripe (hipótesis), pero depende de cuán frecuente sea la gripe en la población y cuán típica sea la tos de esa enfermedad. Un síntoma raro pero típico de una enfermedad específica es más indicativo que un síntoma común.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Evaluación de riesgo crediticio</h3>
+                    <div class="example-box">
+                        <strong>Datos de la cartera:</strong><br>
+                        • 4% de los clientes incumplen → P(D) = 0.04<br>
+                        • 10% del total muestra atrasos recientes → P(E) = 0.10<br>
+                        • 60% de los incumplidores presentan atrasos → P(E|D) = 0.60
+                    </div>
+
+                    <p><strong>Pregunta:</strong> ¿Cuál es la probabilidad de incumplimiento (PD) para un cliente que presenta atrasos?</p>
+
+                    <p><strong>Solución:</strong> Primero necesitamos P(E|¬D), la probabilidad de atrasos entre clientes que NO incumplen:</p>
+                    <div class="formula">
+                        $$P(E|\neg D) = \frac{P(E) - P(E|D) \cdot P(D)}{P(\neg D)} = \frac{0.10 - 0.60 \times 0.04}{0.96} = \frac{0.076}{0.96} \approx 0.0792$$
+                    </div>
+
+                    <p><strong>Aplicar Bayes:</strong></p>
+                    <div class="formula">
+                        $$P(D|E) = \frac{P(E|D) \cdot P(D)}{P(E)} = \frac{0.60 \times 0.04}{0.10} = \frac{0.024}{0.10} = 0.24$$
+                    </div>
+
+                    <div class="interpretation">
+                        <strong>Resultado:</strong> Un cliente con atrasos tiene 24% de PD a posteriori, <strong>seis veces</strong> la media poblacional (4%). El modelo ajusta nuestra creencia inicial (4%) con base en la evidencia observable (atrasos), reflejando que este indicador es una señal fuerte de riesgo de incumplimiento.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: LAPLACE / EXPECTED VALUES -->
+        <div class="section" id="section4">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.1.4 Laplace — Expected Values y la lógica del valor esperado</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>El Valor Esperado (E[X])</strong> es la media ponderada de los posibles resultados según sus probabilidades. Representa el "promedio teórico" de lo que se gana o pierde en el largo plazo cuando se repite un evento muchas veces.
+                    </div>
+                    <div class="formula">
+                        $$E[X] = \sum_i P(x_i) \cdot x_i$$
+                    </div>
+                    <p>Es la herramienta fundamental para tomar decisiones racionales bajo incertidumbre.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>Promedio a largo plazo</h3>
+                    <div class="analogy-box">
+                        Como el promedio de kilómetros recorridos por litro en miles de viajes: cada trayecto individual puede variar significativamente (algunos en ciudad, otros en carretera), pero el promedio de todos esos viajes refleja la eficiencia real del auto a largo plazo.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Valor esperado de un crédito</h3>
+                    <div class="example-box">
+                        <strong>Crédito de 5,000 USD</strong> con tres posibles desenlaces y sus probabilidades:
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Escenario</th>
+                            <th>Probabilidad</th>
+                            <th>Resultado ($)</th>
+                            <th>Contribución a E[X]</th>
+                        </tr>
+                        <tr>
+                            <td>Pago total</td>
+                            <td>0.94</td>
+                            <td>+5,000</td>
+                            <td>0.94 × 5,000 = 4,700</td>
+                        </tr>
+                        <tr>
+                            <td>Mora parcial</td>
+                            <td>0.04</td>
+                            <td>+3,000</td>
+                            <td>0.04 × 3,000 = 120</td>
+                        </tr>
+                        <tr>
+                            <td>Incumplimiento total</td>
+                            <td>0.02</td>
+                            <td>0</td>
+                            <td>0.02 × 0 = 0</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Cálculo:</strong></p>
+                    <div class="formula">
+                        $$E[X] = 0.94(5000) + 0.04(3000) + 0.02(0) = 4700 + 120 + 0 = 4,820$$
+                    </div>
+
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> Se espera recuperar 4,820 USD de este crédito. Por lo tanto, la pérdida esperada = 5,000 – 4,820 = 180 USD. Este monto promedio es exactamente lo que el banco debería provisionar (reservar) por cada operación de esta naturaleza para cubrir las pérdidas esperadas a largo plazo.
+                    </div>
+                </div>
+
+                <svg width="100%" height="300" viewBox="0 0 400 300" style="margin: 20px 0;">
+                    <defs>
+                        <linearGradient id="grad3" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:0.3" />
+                            <stop offset="100%" style="stop-color:#FFA500;stop-opacity:0.3" />
+                        </linearGradient>
+                    </defs>
+                    <text x="200" y="25" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Descomposición del Valor Esperado</text>
+                    
+                    <!-- Axes -->
+                    <line x1="60" y1="240" x2="380" y2="240" stroke="#000" stroke-width="2"/>
+                    <line x1="60" y1="50" x2="60" y2="240" stroke="#000" stroke-width="2"/>
+                    
+                    <!-- Y-axis scale -->
+                    <text x="50" y="245" font-size="10" text-anchor="end" fill="#555">0</text>
+                    <text x="50" y="165" font-size="10" text-anchor="end" fill="#555">$1k</text>
+                    <text x="50" y="85" font-size="10" text-anchor="end" fill="#555">$5k</text>
+                    
+                    <!-- Grid -->
+                    <line x1="60" y1="160" x2="380" y2="160" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="3,3"/>
+                    
+                    <!-- Bars for each scenario -->
+                    <!-- Pago total -->
+                    <rect x="80" y="60" width="60" height="180" fill="url(#grad3)"/>
+                    <text x="110" y="260" font-size="10" text-anchor="middle" fill="#555">Pago total</text>
+                    <text x="110" y="35" font-size="11" text-anchor="middle" fill="#00A8E8" font-weight="bold">$4,700</text>
+                    <text x="110" y="250" font-size="9" text-anchor="middle" fill="#888">(94% × $5k)</text>
+                    
+                    <!-- Mora parcial -->
+                    <rect x="180" y="180" width="60" height="60" fill="url(#grad3)"/>
+                    <text x="210" y="260" font-size="10" text-anchor="middle" fill="#555">Mora parcial</text>
+                    <text x="210" y="155" font-size="11" text-anchor="middle" fill="#00A8E8" font-weight="bold">$120</text>
+                    <text x="210" y="250" font-size="9" text-anchor="middle" fill="#888">(4% × $3k)</text>
+                    
+                    <!-- Incumplimiento -->
+                    <rect x="280" y="240" width="60" height="0" fill="url(#grad3)"/>
+                    <text x="310" y="260" font-size="10" text-anchor="middle" fill="#555">Incumple</text>
+                    <text x="310" y="225" font-size="11" text-anchor="middle" fill="#00A8E8" font-weight="bold">$0</text>
+                    <text x="310" y="250" font-size="9" text-anchor="middle" fill="#888">(2% × $0)</text>
+                    
+                    <!-- Total line and value -->
+                    <line x1="60" y1="185" x2="350" y2="185" stroke="#6B4B9A" stroke-width="3" stroke-dasharray="5,5"/>
+                    <rect x="350" y="175" width="30" height="20" fill="#6B4B9A" rx="3"/>
+                    <text x="365" y="187" font-size="10" text-anchor="middle" fill="white" font-weight="bold">E[X]</text>
+                    <text x="200" y="280" font-size="11" text-anchor="middle" fill="#2D1B4E" font-weight="bold">Valor Esperado (E[X]) = $4,820</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- SECTION 5: KOLMOGOROV-SMIRNOV -->
+        <div class="section" id="section5">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.1.5 Kolmogorov–Smirnov — la distancia entre dos mundos</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>El estadístico K–S</strong> mide la máxima diferencia vertical entre las funciones de distribución acumulada (CDF) de dos poblaciones. En scoring, compara los buenos vs. los malos, evaluando cuánto se separan y cuánto poder discriminante tiene el modelo.
+                    </div>
+                    <div class="formula">
+                        $$D = \max |F_1(x) - F_2(x)|$$
+                    </div>
+                    <p>Donde F₁ y F₂ son las funciones de distribución acumulada de los buenos y malos, respectivamente.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>Dos grupos divergentes</h3>
+                    <div class="analogy-box">
+                        Imagina dos corredores partiendo al mismo tiempo: uno representa a los buenos y otro a los malos. Cada paso acumula clientes ordenados por score de riesgo. El punto donde más se distancian verticalmente entre ellos muestra dónde el modelo separa mejor a ambos grupos. Una distancia grande indica un modelo discriminante; una pequeña, un modelo débil.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Poder discriminante de un modelo</h3>
+                    <div class="example-box">
+                        <strong>Datos:</strong> Se tiene un modelo que produce scores para 1,400 clientes: 1,000 buenos y 400 malos. Los buenos tienen scores distribuidos alrededor de 710 (desv. est. 40), los malos alrededor de 630 (desv. est. 40).
+                    </div>
+
+                    <p><strong>Para ejecutar este ejemplo:</strong> Consulta el archivo <span class="code-reference">python_examples.md</span> en la sección "Kolmogorov–Smirnov".</p>
+
+                    <p>El resultado típico de este análisis es un K–S ≈ 0.62, lo que significa:</p>
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> En el punto de máxima separación, el 82% de los buenos ya se encuentra por debajo de cierto score, mientras que solo el 20% de los malos lo ha alcanzado. El 62% de diferencia es el poder discriminante del modelo. Un K–S de 0.62 es considerado un modelo de buena calidad. (K–S < 0.30: malo; 0.30-0.50: aceptable; 0.50-0.70: bueno; > 0.70: excelente)
+                    </div>
+                </div>
+
+                <svg width="100%" height="350" viewBox="0 0 400 350" style="margin: 20px 0;">
+                    <defs>
+                        <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#00A8E8;stop-opacity:0.3" />
+                            <stop offset="100%" style="stop-color:#6B4B9A;stop-opacity:0.3" />
+                        </linearGradient>
+                    </defs>
+                    <text x="200" y="25" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Función de Distribución Acumulada: Buenos vs Malos</text>
+                    
+                    <!-- Axes -->
+                    <line x1="50" y1="280" x2="370" y2="280" stroke="#000" stroke-width="2"/>
+                    <line x1="50" y1="50" x2="50" y2="280" stroke="#000" stroke-width="2"/>
+                    
+                    <!-- Y-axis (CDF) -->
+                    <text x="35" y="285" font-size="10" text-anchor="end" fill="#555">0%</text>
+                    <text x="35" y="210" font-size="10" text-anchor="end" fill="#555">50%</text>
+                    <text x="35" y="55" font-size="10" text-anchor="end" fill="#555">100%</text>
+                    
+                    <!-- X-axis (Score) -->
+                    <text x="55" y="300" font-size="10" fill="#555">500</text>
+                    <text x="155" y="300" font-size="10" fill="#555">600</text>
+                    <text x="255" y="300" font-size="10" fill="#555">700</text>
+                    <text x="355" y="300" font-size="10" fill="#555">800</text>
+                    
+                    <!-- Grid -->
+                    <line x1="50" y1="210" x2="370" y2="210" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="3,3"/>
+                    
+                    <!-- Curve for BUENOS (blue) -->
+                    <path d="M 50 260 Q 80 220 120 170 T 200 90 T 310 50" fill="none" stroke="#00A8E8" stroke-width="3"/>
+                    
+                    <!-- Curve for MALOS (red) -->
+                    <path d="M 50 280 Q 90 250 140 200 T 240 120 T 350 80" fill="none" stroke="#FF6B6B" stroke-width="3"/>
+                    
+                    <!-- K-S distance marker (at maximum separation) -->
+                    <line x1="200" y1="120" x2="200" y2="160" stroke="#6B4B9A" stroke-width="2" stroke-dasharray="3,3"/>
+                    <circle cx="200" cy="120" r="3" fill="#6B4B9A"/>
+                    <circle cx="200" cy="160" r="3" fill="#6B4B9A"/>
+                    <text x="210" y="142" font-size="11" font-weight="bold" fill="#6B4B9A">K-S = 0.62</text>
+                    <text x="210" y="155" font-size="9" fill="#6B4B9A">(máxima distancia)</text>
+                    
+                    <!-- Legend -->
+                    <line x1="60" y1="320" x2="80" y2="320" stroke="#00A8E8" stroke-width="3"/>
+                    <text x="85" y="323" font-size="11" fill="#00A8E8" font-weight="bold">Clientes Buenos</text>
+                    
+                    <line x1="200" y1="320" x2="220" y2="320" stroke="#FF6B6B" stroke-width="3"/>
+                    <text x="225" y="323" font-size="11" fill="#FF6B6B" font-weight="bold">Clientes Malos</text>
+                    
+                    <!-- Axis labels -->
+                    <text x="200" y="330" font-size="11" text-anchor="middle" fill="#555">Score de Riesgo</text>
+                    <text x="35" y="160" font-size="11" text-anchor="middle" fill="#555" transform="rotate(-90 35 160)">CDF (Probabilidad acumulada)</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- SECTION 6: GRADIENT DESCENT -->
+        <div class="section" id="section6">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.1.6 Gradient Descent — aprender bajando la colina del error</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>Gradient Descent</strong> es un algoritmo de optimización que ajusta iterativamente los parámetros de un modelo para minimizar una función de pérdida. Se mueve en la dirección opuesta al gradiente (la pendiente) del error.
+                    </div>
+                    <div class="formula">
+                        $$w_{t+1} = w_t - \alpha \frac{\partial L}{\partial w}$$
+                    </div>
+                    <p>Donde:<br>
+                    • w = parámetro (peso) del modelo<br>
+                    • α = tasa de aprendizaje (learning rate)<br>
+                    • ∂L/∂w = gradiente (derivada parcial de la función de pérdida)</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>Descendiendo en la niebla</h3>
+                    <div class="analogy-box">
+                        Imagina que estás en una montaña neblinosa y quieres llegar al valle más bajo (el mínimo del error). Solo puedes saber hacia dónde descender tocando el suelo bajo tus pies: das pasos pequeños (determinados por la tasa de aprendizaje) siempre en la dirección en que el terreno baja más rápido (el gradiente negativo). Eventualmente, llegas al fondo.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Ajuste iterativo de un parámetro</h3>
+                    <div class="example-box">
+                        <strong>Modelo simple:</strong> Queremos ajustar el peso w en una regresión simple donde:
+                    </div>
+                    <div class="formula">
+                        $$\hat{y} = w \cdot x$$
+                        $$L = (y - \hat{y})^2$$
+                    </div>
+
+                    <p><strong>Datos:</strong> x = 2, y = 6, tasa de aprendizaje α = 0.1</p>
+
+                    <p><strong>Inicialización:</strong> w₀ = 0</p>
+
+                    <p><strong>Derivada de la pérdida:</strong></p>
+                    <div class="formula">
+                        $$\frac{\partial L}{\partial w} = 2x(xw - y)$$
+                    </div>
+
+                    <p><strong>Iteraciones:</strong></p>
+
+                    <table>
+                        <tr>
+                            <th>Iteración</th>
+                            <th>w</th>
+                            <th>Predicción (ŷ)</th>
+                            <th>Gradiente</th>
+                            <th>Error</th>
+                        </tr>
+                        <tr>
+                            <td>0 (inicial)</td>
+                            <td>0.000</td>
+                            <td>0</td>
+                            <td>2(2)(0–6) = –24</td>
+                            <td>36.00</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0 – 0.1(–24) = 2.400</td>
+                            <td>4.8</td>
+                            <td>2(2)(4.8–6) = –4.8</td>
+                            <td>1.44</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2.4 – 0.1(–4.8) = 2.880</td>
+                            <td>5.76</td>
+                            <td>2(2)(5.76–6) = 0.96</td>
+                            <td>0.058</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>2.88 – 0.1(0.96) = 2.784</td>
+                            <td>5.568</td>
+                            <td>2(2)(5.568–6) = –0.346</td>
+                            <td>0.187</td>
+                        </tr>
+                    </table>
+
+                    <div class="interpretation">
+                        <strong>Convergencia:</strong> Después de pocas iteraciones, w ≈ 3 (el valor óptimo, donde ŷ = 3 × 2 = 6). El error disminuye drásticamente con cada paso. En modelos de crédito reales, este proceso ajusta miles de pesos (coeficientes para cada variable) simultáneamente hasta minimizar la pérdida logarítmica entre la PD predicha y observada, logrando un modelo que discrimina bien entre buenos y malos.
+                    </div>
+                </div>
+
+                <svg width="100%" height="330" viewBox="0 0 400 330" style="margin: 20px 0;">
+                    <defs>
+                        <linearGradient id="grad5" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:0.5" />
+                            <stop offset="50%" style="stop-color:#FFA500;stop-opacity:0.3" />
+                            <stop offset="100%" style="stop-color:#00A8E8;stop-opacity:0.2" />
+                        </linearGradient>
+                    </defs>
+                    <text x="200" y="25" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Gradient Descent: Descenso hacia el mínimo</text>
+                    
+                    <!-- Parabola (loss function) -->
+                    <path d="M 50 60 Q 200 240 350 80" fill="url(#grad5)" opacity="0.6"/>
+                    <path d="M 50 60 Q 200 240 350 80" fill="none" stroke="#6B4B9A" stroke-width="2"/>
+                    
+                    <!-- Valley bottom (minimum) -->
+                    <circle cx="200" cy="240" r="6" fill="#00A8E8"/>
+                    <text x="200" y="270" font-size="10" text-anchor="middle" fill="#00A8E8" font-weight="bold">Mínimo (w ≈ 3)</text>
+                    
+                    <!-- Iteration points -->
+                    <!-- w0 = 0 -->
+                    <circle cx="50" cy="60" r="5" fill="#FF6B6B"/>
+                    <text x="50" y="35" font-size="10" text-anchor="middle" fill="#FF6B6B" font-weight="bold">w₀ = 0</text>
+                    <line x1="50" y1="60" x2="90" y2="140" stroke="#FF6B6B" stroke-width="2" marker-end="url(#arrowred)"/>
+                    
+                    <!-- w1 = 2.4 -->
+                    <circle cx="90" cy="140" r="5" fill="#FFA500"/>
+                    <text x="90" y="115" font-size="10" text-anchor="middle" fill="#FFA500" font-weight="bold">w₁ = 2.4</text>
+                    <line x1="90" y1="140" x2="160" y2="210" stroke="#FFA500" stroke-width="2" marker-end="url(#arroworange)"/>
+                    
+                    <!-- w2 = 2.88 -->
+                    <circle cx="160" cy="210" r="5" fill="#8B6BB8"/>
+                    <text x="160" y="185" font-size="10" text-anchor="middle" fill="#8B6BB8" font-weight="bold">w₂ = 2.88</text>
+                    <line x1="160" y1="210" x2="190" y2="235" stroke="#8B6BB8" stroke-width="2" marker-end="url(#arrowpurple)"/>
+                    
+                    <!-- w3 = 2.784 (near optimum) -->
+                    <circle cx="190" cy="235" r="5" fill="#00A8E8"/>
+                    <text x="190" y="250" font-size="10" text-anchor="middle" fill="#00A8E8" font-weight="bold">w₃</text>
+                    
+                    <!-- Arrow markers -->
+                    <defs>
+                        <marker id="arrowred" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#FF6B6B" />
+                        </marker>
+                        <marker id="arroworange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#FFA500" />
+                        </marker>
+                        <marker id="arrowpurple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#8B6BB8" />
+                        </marker>
+                    </defs>
+                    
+                    <!-- X-axis label -->
+                    <text x="200" y="310" font-size="11" text-anchor="middle" fill="#555">Parámetro w</text>
+                    <!-- Y-axis label -->
+                    <text x="20" y="160" font-size="11" text-anchor="middle" fill="#555" transform="rotate(-90 20 160)">Función de Pérdida L</text>
+                    
+                    <!-- Info box -->
+                    <rect x="20" y="275" width="360" height="50" fill="rgba(255,255,255,0.9)" stroke="#6B4B9A" stroke-width="1" rx="6"/>
+                    <text x="30" y="293" font-size="10" fill="#2D1B4E" font-weight="bold">Cada paso reduce la pérdida con tamaño proporcional al gradiente.</text>
+                    <text x="30" y="308" font-size="10" fill="#555">Tasa de aprendizaje (α) controla qué tan rápido bajamos: muy alta = inestable, muy baja = lento.</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- SECTION 7: INFORMATION AND CRYPTOGRAPHY -->
+        <div class="section" id="section7">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.4 Information and Cryptography — medir el poder predictivo de las variables</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">INTRO</span>Teoría de la información en credit scoring</h3>
+                    <div class="definition-box">
+                        <strong>Objetivo:</strong> Medir cuánta información aporta una variable al modelo de riesgo. Las ideas provienen de la teoría de la información (Shannon, 1948), adaptadas al credit scoring para cuantificar el poder discriminante de las variables.
+                    </div>
+                    <p>En esencia: la <strong>entropía</strong> mide incertidumbre, el <strong>Weight of Evidence (WoE)</strong> traduce categorías en valores comparables, y el <strong>Information Value (IV)</strong> mide cuánta información separa buenos de malos.</p>
+                </div>
+
+                <!-- SUBSECTION 12.4.1 -->
+                <div class="subsection">
+                    <h3><span class="subsection-badge">12.4.1</span>Shannon's Entropy — medir el desorden de la información</h3>
+                    <div class="definition-box">
+                        <strong>Entropía:</strong> Cuantifica la incertidumbre o desorden en un sistema. Se define como:
+                    </div>
+                    <div class="formula">
+                        $$H = -\sum_{i=1}^{n} p_i \log_2(p_i)$$
+                    </div>
+                    <p>donde $p_i$ es la probabilidad de cada categoría. Es máxima cuando todas las categorías son igualmente probables, y mínima (0) cuando hay certeza total.</p>
+
+                    <div class="analogy-box">
+                        <strong>Analogía:</strong> Piensa en una ruleta: si tiene un solo color, no hay sorpresa (entropía baja). Si cada color tiene igual probabilidad, hay máxima incertidumbre. En credit scoring, una variable con valores muy predecibles aporta poca información; una más variada, más.
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> Variable "tipo de empleo" en una muestra de clientes.
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Probabilidad p_i</th>
+                        </tr>
+                        <tr>
+                            <td>Público</td>
+                            <td>0.5</td>
+                        </tr>
+                        <tr>
+                            <td>Privado</td>
+                            <td>0.3</td>
+                        </tr>
+                        <tr>
+                            <td>Independiente</td>
+                            <td>0.2</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Cálculo de entropía:</strong></p>
+                    <div class="formula">
+                        $$H = -[0.5\log_2(0.5) + 0.3\log_2(0.3) + 0.2\log_2(0.2)]$$
+                        $$H = -[0.5(-1) + 0.3(-1.737) + 0.2(-2.322)] = 0.5 + 0.521 + 0.464 = 1.485$$
+                    </div>
+
+                    <p>La entropía máxima posible con tres categorías es $\log_2(3) = 1.585$ bits.</p>
+
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> La variable tiene 1.485/1.585 = 93.6% de entropía máxima → alto nivel de incertidumbre, potencialmente informativa. Si una categoría dominara el 90% de casos, H sería cercana a 0, indicando escaso poder predictivo.
+                    </div>
+                </div>
+
+                <!-- SUBSECTION 12.4.2 -->
+                <div class="subsection">
+                    <h3><span class="subsection-badge">12.4.2</span>Weight of Evidence (WoE) — traducir evidencia en números</h3>
+                    <div class="definition-box">
+                        <strong>WoE:</strong> Mide la fuerza con la que una categoría apoya la hipótesis de ser "buen cliente" frente a "mal cliente". Matemáticamente:
+                    </div>
+                    <div class="formula">
+                        $$WoE_i = \ln\left(\frac{p_i^{good}}{p_i^{bad}}\right)$$
+                    </div>
+                    <p>Se expresa en log-odds, igual que el modelo logístico.</p>
+
+                    <div class="analogy-box">
+                        <strong>Analogía:</strong> Cada variable es un "testigo" en un juicio. El WoE indica cuán fuerte es el testimonio de esa categoría a favor o en contra del acusado (el cliente).
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> Variable "tenencia de vivienda".
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Buenos</th>
+                            <th>Malos</th>
+                            <th>Total</th>
+                        </tr>
+                        <tr>
+                            <td>Propietario</td>
+                            <td>800</td>
+                            <td>100</td>
+                            <td>900</td>
+                        </tr>
+                        <tr>
+                            <td>Inquilino</td>
+                            <td>200</td>
+                            <td>100</td>
+                            <td>300</td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td>1,000</td>
+                            <td>200</td>
+                            <td>1,200</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Paso 1: Proporciones dentro de cada grupo</strong></p>
+                    <div class="formula">
+                        $$p_{prop}^{good}=800/1000=0.8 \quad ; \quad p_{prop}^{bad}=100/200=0.5$$
+                        $$p_{inq}^{good}=0.2 \quad ; \quad p_{inq}^{bad}=0.5$$
+                    </div>
+
+                    <p><strong>Paso 2: Calcular WoE</strong></p>
+                    <div class="formula">
+                        $$WoE_{prop}=\ln(0.8/0.5)=\ln(1.6)=0.470$$
+                        $$WoE_{inq}=\ln(0.2/0.5)=\ln(0.4)=-0.916$$
+                    </div>
+
+                    <svg width="100%" height="160" viewBox="0 0 400 160" style="margin: 16px 0;">
+                        <text x="200" y="18" font-size="13" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Weight of Evidence por Categoría</text>
+                        
+                        <!-- Axes -->
+                        <line x1="50" y1="120" x2="370" y2="120" stroke="#000" stroke-width="2"/>
+                        <line x1="50" y1="30" x2="50" y2="120" stroke="#000" stroke-width="2"/>
+                        
+                        <!-- Grid -->
+                        <line x1="50" y1="75" x2="370" y2="75" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="2,2"/>
+                        
+                        <!-- Y-axis labels -->
+                        <text x="42" y="125" font-size="10" text-anchor="end" fill="#555">-1.0</text>
+                        <text x="42" y="80" font-size="10" text-anchor="end" fill="#555">0.0</text>
+                        <text x="42" y="35" font-size="10" text-anchor="end" fill="#555">+1.0</text>
+                        
+                        <!-- Zero line -->
+                        <line x1="50" y1="75" x2="370" y2="75" stroke="#00A8E8" stroke-width="2" stroke-dasharray="3,3"/>
+                        
+                        <!-- Propietario bar -->
+                        <rect x="100" y="42" width="50" height="33" fill="#00A8E8" opacity="0.8"/>
+                        <text x="125" y="130" font-size="11" font-weight="bold" fill="#00A8E8" text-anchor="middle">Propietario</text>
+                        <text x="125" y="25" font-size="10" fill="#00A8E8" font-weight="bold" text-anchor="middle">WoE=+0.47</text>
+                        
+                        <!-- Inquilino bar -->
+                        <rect x="250" y="95" width="50" height="25" fill="#FF6B6B" opacity="0.8"/>
+                        <text x="275" y="130" font-size="11" font-weight="bold" fill="#FF6B6B" text-anchor="middle">Inquilino</text>
+                        <text x="275" y="145" font-size="10" fill="#FF6B6B" font-weight="bold" text-anchor="middle">WoE=-0.92</text>
+                        
+                        <!-- Axis label -->
+                        <text x="200" y="155" font-size="10" text-anchor="middle" fill="#555">WoE (log-odds)</text>
+                    </svg>
+
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> El WoE positivo indica evidencia a favor del buen comportamiento (propietarios tienden a pagar). El negativo indica mayor riesgo (inquilinos tienen más defaults). En un scorecard, el modelo asignará pesos proporcionales a estos WoE.
+                    </div>
+                </div>
+
+                <!-- SUBSECTION 12.4.3 -->
+                <div class="subsection">
+                    <h3><span class="subsection-badge">12.4.3</span>Information Value (IV) — medir el poder predictivo total</h3>
+                    <div class="definition-box">
+                        <strong>IV:</strong> Resume cuánta información total aporta una variable al modelo.
+                    </div>
+                    <div class="formula">
+                        $$IV = \sum_i (p_i^{good} - p_i^{bad}) \times WoE_i$$
+                    </div>
+
+                    <p><strong>Clasificación de poder predictivo:</strong></p>
+                    <ul>
+                        <li>IV < 0.02: variable no predictiva</li>
+                        <li>0.02 ≤ IV < 0.10: débil</li>
+                        <li>0.10 ≤ IV < 0.30: moderada</li>
+                        <li>0.30 ≤ IV < 0.50: fuerte</li>
+                        <li>IV ≥ 0.50: sospechosa (posible sobreajuste)</li>
+                    </ul>
+
+                    <div class="analogy-box">
+                        <strong>Analogía:</strong> IV es el "poder de persuasión" total del testigo. Una cosa es lo que dice cada categoría (WoE), otra cuánto cambia eso el veredicto global (IV).
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> Continuar con caso anterior de "tenencia de vivienda".
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>p_i^{good}</th>
+                            <th>p_i^{bad}</th>
+                            <th>WoE</th>
+                            <th>Contribución a IV</th>
+                        </tr>
+                        <tr>
+                            <td>Propietario</td>
+                            <td>0.8</td>
+                            <td>0.5</td>
+                            <td>0.470</td>
+                            <td>(0.3)(0.470)=0.141</td>
+                        </tr>
+                        <tr>
+                            <td>Inquilino</td>
+                            <td>0.2</td>
+                            <td>0.5</td>
+                            <td>-0.916</td>
+                            <td>(-0.3)(-0.916)=0.275</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total IV</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong>0.416</strong></td>
+                        </tr>
+                    </table>
+
+                    <svg width="100%" height="180" viewBox="0 0 400 180" style="margin: 16px 0;">
+                        <text x="200" y="18" font-size="13" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Contribución al Information Value</text>
+                        
+                        <!-- Axes -->
+                        <line x1="50" y1="130" x2="370" y2="130" stroke="#000" stroke-width="2"/>
+                        <line x1="50" y1="30" x2="50" y2="130" stroke="#000" stroke-width="2"/>
+                        
+                        <!-- Grid -->
+                        <line x1="50" y1="80" x2="370" y2="80" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="2,2"/>
+                        
+                        <!-- Y-axis labels -->
+                        <text x="42" y="135" font-size="10" text-anchor="end" fill="#555">0.00</text>
+                        <text x="42" y="85" font-size="10" text-anchor="end" fill="#555">0.20</text>
+                        <text x="42" y="35" font-size="10" text-anchor="end" fill="#555">0.40</text>
+                        
+                        <!-- Propietario contribution -->
+                        <rect x="90" y="88" width="50" height="42" fill="#00A8E8" opacity="0.8"/>
+                        <text x="115" y="25" font-size="10" fill="#00A8E8" font-weight="bold" text-anchor="middle">Prop.</text>
+                        <text x="115" y="118" font-size="9" fill="#555" text-anchor="middle">0.141</text>
+                        
+                        <!-- Inquilino contribution -->
+                        <rect x="200" y="56" width="50" height="74" fill="#FF6B6B" opacity="0.8"/>
+                        <text x="225" y="25" font-size="10" fill="#FF6B6B" font-weight="bold" text-anchor="middle">Inq.</text>
+                        <text x="225" y="118" font-size="9" fill="#555" text-anchor="middle">0.275</text>
+                        
+                        <!-- Total bar -->
+                        <rect x="280" y="15" width="60" height="115" fill="#6B4B9A" opacity="0.7"/>
+                        <text x="310" y="25" font-size="10" fill="white" font-weight="bold" text-anchor="middle">Total</text>
+                        <text x="310" y="100" font-size="11" fill="white" font-weight="bold" text-anchor="middle">IV=0.416</text>
+                        
+                        <!-- Axis label -->
+                        <text x="200" y="155" font-size="10" text-anchor="middle" fill="#555">Categorías</text>
+                    </svg>
+
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> IV = 0.416 → variable con poder predictivo fuerte. Ser propietario o no distingue marcadamente el comportamiento crediticio. Si IV > 0.5, se revisa por posible duplicación con otra variable o segmentación excesiva.
+                    </div>
+                </div>
+
+                <!-- SUBSECTION 12.4.4 -->
+                <div class="subsection">
+                    <h3><span class="subsection-badge">12.4.4</span>Conexión conceptual: Entropy, WoE e IV</h3>
+                    <div class="example-box">
+                        <strong>Tabla resumen de conceptos:</strong>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Qué mide</th>
+                            <th>Nivel</th>
+                            <th>Interpretación práctica</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Entropía</strong></td>
+                            <td>Incertidumbre global</td>
+                            <td>Variable sin clases</td>
+                            <td>Cuánto desorden hay en los datos (máxima cuando equiprobable)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>WoE</strong></td>
+                            <td>Evidencia de clase</td>
+                            <td>Por categoría</td>
+                            <td>Cuán fuertemente predice el resultado (+positiva o -negativa)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IV</strong></td>
+                            <td>Poder predictivo total</td>
+                            <td>Variable completa</td>
+                            <td>Cuánto aporta la variable a discriminar entre buenos y malos</td>
+                        </tr>
+                    </table>
+
+                    <div class="interpretation">
+                        <strong>Aplicación en credit scoring:</strong> Durante el preprocesamiento, las variables categóricas se transforman con WoE para facilitar interpretación y garantizar monotonicidad con riesgo. En selección de variables, se filtran las de IV bajo (<0.02) porque no agregan valor. En validación regulatoria, los bancos reportan variables clave y su IV para demostrar solidez del modelo.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <footer>
+            <p>Documento de referencia sobre fundamentos matemáticos para credit scoring.</p>
+            <p>Para código Python ejecutable, consulta <span class="code-reference">python_examples.md</span></p>
+            <p style="margin-top: 16px; font-size: 12px; color: #999;">© 2025 | Optimizado para navegación en dispositivos móviles</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const btn = header.querySelector('.toggle-btn');
+            
+            content.classList.toggle('collapsed');
+            btn.textContent = content.classList.contains('collapsed') ? '+' : '−';
+        }
+
+        function toggleAllSections() {
+            const sections = document.querySelectorAll('.section-content');
+            const btn = document.querySelector('.expand-all-btn');
+            const allCollapsed = Array.from(sections).every(s => s.classList.contains('collapsed'));
+            
+            sections.forEach(content => {
+                const header = content.previousElementSibling;
+                const toggleBtn = header.querySelector('.toggle-btn');
+                
+                if (allCollapsed) {
+                    content.classList.remove('collapsed');
+                    toggleBtn.textContent = '−';
+                } else {
+                    content.classList.add('collapsed');
+                    toggleBtn.textContent = '+';
+                }
+            });
+            
+            btn.textContent = allCollapsed ? 'Contraer todo' : 'Expandir todo';
+        }
+
+        // Smooth scroll to section
+        document.querySelectorAll('.toc-list a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
