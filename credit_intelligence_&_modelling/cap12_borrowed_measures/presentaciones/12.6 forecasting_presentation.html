@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forecasting - Credit Scoring</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --galgo-purple: #6B4B9A;
+            --galgo-light-purple: #8B6BB8;
+            --galgo-dark: #2D1B4E;
+            --galgo-accent: #00A8E8;
+            --text-dark: #1A1A1A;
+            --text-light: #555555;
+            --bg-light: #F8F7FB;
+            --bg-white: #FFFFFF;
+            --border-color: #E0D9F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 24px rgba(107, 75, 154, 0.15);
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .table-of-contents {
+            background: var(--bg-white);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .table-of-contents h2 {
+            font-size: 18px;
+            color: var(--galgo-purple);
+            margin-bottom: 16px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 12px;
+        }
+
+        .toc-list a {
+            color: var(--galgo-accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .toc-list a:hover {
+            color: var(--galgo-purple);
+            text-decoration: underline;
+        }
+
+        .expand-all-btn {
+            background: var(--galgo-purple);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-all-btn:hover {
+            background: var(--galgo-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 75, 154, 0.3);
+        }
+
+        .section {
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--bg-white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, var(--galgo-light-purple) 0%, var(--galgo-accent) 100%);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .toggle-btn {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .toggle-btn:hover {
+            background: var(--galgo-purple);
+            transform: scale(1.1);
+        }
+
+        .section-content {
+            padding: 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .section-content.expanded {
+            max-height: 3000px;
+        }
+
+        .subsection {
+            margin-bottom: 28px;
+        }
+
+        .subsection:last-child {
+            margin-bottom: 0;
+        }
+
+        .subsection h3 {
+            color: var(--galgo-purple);
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .subsection-badge {
+            display: inline-block;
+            background: var(--galgo-accent);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, rgba(107, 75, 154, 0.06) 0%, rgba(0, 168, 232, 0.04) 100%);
+            border-left: 4px solid var(--galgo-purple);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+        }
+
+        .definition-box strong {
+            color: var(--galgo-purple);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .analogy-box {
+            background: linear-gradient(135deg, rgba(0, 168, 232, 0.06) 0%, rgba(107, 75, 154, 0.04) 100%);
+            border-left: 4px solid var(--galgo-accent);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        .example-box {
+            background: #F0F8FF;
+            border: 2px solid var(--galgo-accent);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--galgo-accent);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            background: var(--bg-white);
+            font-size: 13px;
+        }
+
+        table th {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table tr:hover {
+            background: rgba(107, 75, 154, 0.04);
+        }
+
+        .formula {
+            background: #F5F5F5;
+            border-left: 3px solid var(--galgo-accent);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        svg {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .interpretation {
+            background: rgba(107, 75, 154, 0.08);
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 12px;
+            border-left: 4px solid var(--galgo-purple);
+            font-size: 14px;
+        }
+
+        .interpretation strong {
+            color: var(--galgo-purple);
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        ol, ul {
+            margin-left: 24px;
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-reference {
+            background: #F0F0F0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #D84E1F;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        footer {
+            margin-top: 60px;
+            padding: 24px;
+            text-align: center;
+            background: var(--bg-white);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        footer p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 12px;
+            }
+
+            header {
+                padding: 28px 16px;
+                border-radius: 12px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .table-of-contents {
+                padding: 20px;
+            }
+
+            .section-content {
+                padding: 16px;
+            }
+
+            .definition-box, .analogy-box, .example-box {
+                padding: 12px;
+                font-size: 13px;
+            }
+
+            table {
+                font-size: 11px;
+            }
+
+            table th, table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Forecasting</h1>
+            <p>Predecir el futuro del riesgo crediticio mediante Cadenas de Markov y Análisis de Supervivencia para proyectar la evolución de clientes y la duración de préstamos.</p>
+        </header>
+
+        <div class="table-of-contents">
+            <h2>Índice de contenidos</h2>
+            <ul class="toc-list">
+                <li><a href="#section1">12.6.1 Markov Chains — el riesgo como proceso de transición</a></li>
+                <li><a href="#section2">12.6.2 Survival Analysis — tiempo hasta el default</a></li>
+                <li><a href="#section3">Comparación conceptual: Markov vs Survival</a></li>
+                <li><a href="#section4">Interpretación práctica en modelos de crédito</a></li>
+            </ul>
+        </div>
+
+        <button class="expand-all-btn" onclick="toggleAllSections()">Expandir todo</button>
+
+        <!-- SECTION 1: MARKOV CHAINS -->
+        <div class="section" id="section1">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.6.1 Markov Chains — el riesgo como proceso de transición</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>Una Cadena de Markov</strong> es un proceso estocástico donde la probabilidad del próximo estado depende solo del estado actual, no de la historia pasada. Esto se representa con una matriz de transición P, cuyos elementos p_ij son las probabilidades de pasar del estado i al j.
+                    </div>
+                    <div class="formula">
+                        $$P(X_{t+1} = j \mid X_t = i, X_{t-1}, X_{t-2}, \dots) = P(X_{t+1} = j \mid X_t = i)$$
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>El juego de casillas</h3>
+                    <div class="analogy-box">
+                        <strong>Como un juego de casillas:</strong> Cada mes un cliente puede avanzar a "mejor", quedarse igual o caer a "peor". Solo importa la casilla actual para determinar su próximo movimiento, no cómo llegó allí.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Evolución de estados de cartera</h3>
+                    <div class="example-box">
+                        <strong>Ejemplo paso a paso: proyección de estados crediticios</strong>
+                    </div>
+                    
+                    <p>Supón tres estados de un préstamo:</p>
+                    <ol>
+                        <li><strong>Corriente (C)</strong> — paga puntualmente</li>
+                        <li><strong>En Mora (M)</strong> — atraso leve</li>
+                        <li><strong>Incumplido (D)</strong> — default</li>
+                    </ol>
+
+                    <p><strong>Matriz de transición mensual:</strong></p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>De / A</th>
+                                <th>C</th>
+                                <th>M</th>
+                                <th>D</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>C</td>
+                                <td>0.90</td>
+                                <td>0.08</td>
+                                <td>0.02</td>
+                            </tr>
+                            <tr>
+                                <td>M</td>
+                                <td>0.30</td>
+                                <td>0.50</td>
+                                <td>0.20</td>
+                            </tr>
+                            <tr>
+                                <td>D</td>
+                                <td>0.00</td>
+                                <td>0.00</td>
+                                <td>1.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="500" height="300" fill="#FAFAFA" stroke="#E0D9F0" stroke-width="2" rx="8"/>
+                        
+                        <!-- Title -->
+                        <text x="250" y="30" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Estados y Transiciones</text>
+                        
+                        <!-- Estados -->
+                        <circle cx="100" cy="150" r="40" fill="#4CAF50" opacity="0.8"/>
+                        <text x="100" y="155" text-anchor="middle" font-weight="bold" fill="white">C</text>
+                        
+                        <circle cx="250" cy="150" r="40" fill="#FF9800" opacity="0.8"/>
+                        <text x="250" y="155" text-anchor="middle" font-weight="bold" fill="white">M</text>
+                        
+                        <circle cx="400" cy="150" r="40" fill="#F44336" opacity="0.8"/>
+                        <text x="400" y="155" text-anchor="middle" font-weight="bold" fill="white">D</text>
+                        
+                        <!-- Transiciones -->
+                        <!-- C -> M -->
+                        <path d="M 140 150 Q 195 120 210 150" fill="none" stroke="#6B4B9A" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="175" y="125" font-size="12" text-anchor="middle" fill="#6B4B9A">0.08</text>
+                        
+                        <!-- C -> D -->
+                        <path d="M 140 150 Q 270 100 360 150" fill="none" stroke="#6B4B9A" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="250" y="105" font-size="12" text-anchor="middle" fill="#6B4B9A">0.02</text>
+                        
+                        <!-- M -> C -->
+                        <path d="M 210 150 Q 195 180 140 150" fill="none" stroke="#00A8E8" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="175" y="185" font-size="12" text-anchor="middle" fill="#00A8E8">0.30</text>
+                        
+                        <!-- M -> D -->
+                        <path d="M 290 150 L 360 150" fill="none" stroke="#6B4B9A" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="325" y="140" font-size="12" text-anchor="middle" fill="#6B4B9A">0.20</text>
+                        
+                        <!-- Self loops -->
+                        <!-- C -> C -->
+                        <circle cx="100" cy="95" r="25" fill="none" stroke="#4CAF50" stroke-width="2" stroke-dasharray="3,3"/>
+                        <text x="100" y="65" font-size="12" text-anchor="middle" fill="#4CAF50">0.90</text>
+                        
+                        <!-- M -> M -->
+                        <circle cx="250" cy="95" r="25" fill="none" stroke="#FF9800" stroke-width="2" stroke-dasharray="3,3"/>
+                        <text x="250" y="65" font-size="12" text-anchor="middle" fill="#FF9800">0.50</text>
+                        
+                        <!-- D -> D -->
+                        <circle cx="400" cy="205" r="25" fill="none" stroke="#F44336" stroke-width="2" stroke-dasharray="3,3"/>
+                        <text x="400" y="245" font-size="12" text-anchor="middle" fill="#F44336">1.00</text>
+                        
+                        <!-- Arrow marker -->
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#6B4B9A"/>
+                            </marker>
+                        </defs>
+                    </svg>
+
+                    <p><strong>Paso 1: Estado inicial</strong></p>
+                    <div class="formula">
+                        $$\pi_0 = [1, 0, 0]$$
+                    </div>
+                    <p>Al inicio del mes, el 100% de los clientes está "corriente".</p>
+
+                    <p><strong>Paso 2: Proyección a un mes</strong></p>
+                    <div class="formula">
+                        $$\pi_1 = \pi_0 P = [1, 0, 0] \begin{bmatrix} 0.9 & 0.08 & 0.02 \\ 0.3 & 0.5 & 0.2 \\ 0 & 0 & 1 \end{bmatrix} = [0.9, 0.08, 0.02]$$
+                    </div>
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> Después de 1 mes, 90% sigue corriente, 8% en mora, 2% en default.
+                    </div>
+
+                    <p><strong>Paso 3: Proyección a 3 meses</strong></p>
+                    <div class="formula">
+                        $$\pi_3 = \pi_0 P^3 = [0.757, 0.163, 0.080]$$
+                    </div>
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> Tras tres meses, 8.0% de la cartera está en default y 16.3% en mora. El proceso permite estimar la migración esperada de riesgo mes a mes.
+                    </div>
+
+                    <p><strong>Paso 4: Estado estacionario</strong></p>
+                    <div class="formula">
+                        $$\pi^* = \pi^* P \Rightarrow \pi^* = [0, 0, 1]$$
+                    </div>
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> Con el tiempo suficiente, todos los créditos terminan en default o se cierran: el estado "D" es absorbente. El análisis de Markov permite cuantificar el ritmo de deterioro y la probabilidad acumulada de pérdida.
+                    </div>
+                    <span class="code-reference">Ver código Python: forecasting_python.md → Sección 12.6.1</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: SURVIVAL ANALYSIS -->
+        <div class="section" id="section2">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.6.2 Survival Analysis — tiempo hasta el default</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>El Análisis de Supervivencia</strong> estima la probabilidad de que un evento ocurra después de un cierto tiempo. En crédito, el evento suele ser el default. Las funciones principales son la función de supervivencia S(t) y la función de riesgo (hazard) h(t).
+                    </div>
+                    <div class="formula">
+                        $$S(t) = P(T > t)$$
+                    </div>
+                    <div class="formula">
+                        $$h(t) = \frac{f(t)}{S(t)}$$
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>La vida útil de una bombilla</h3>
+                    <div class="analogy-box">
+                        <strong>Como estudiar la vida útil de una bombilla:</strong> La supervivencia es la probabilidad de que siga encendida después de cierto número de horas; la hazard es el riesgo de que se queme justo en la siguiente hora.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Tiempo hasta el incumplimiento</h3>
+                    <div class="example-box">
+                        <strong>Análisis Kaplan-Meier de 10 clientes durante 6 meses</strong>
+                    </div>
+
+                    <p>Observamos 10 clientes durante 6 meses:</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Mes de default</th>
+                                <th>Censurado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>A</td><td>3</td><td>No</td></tr>
+                            <tr><td>B</td><td>4</td><td>No</td></tr>
+                            <tr><td>C</td><td>5</td><td>No</td></tr>
+                            <tr><td>D</td><td>6</td><td>No</td></tr>
+                            <tr><td>E</td><td>—</td><td>Sí</td></tr>
+                            <tr><td>F</td><td>—</td><td>Sí</td></tr>
+                            <tr><td>G</td><td>—</td><td>Sí</td></tr>
+                            <tr><td>H</td><td>4</td><td>No</td></tr>
+                            <tr><td>I</td><td>5</td><td>No</td></tr>
+                            <tr><td>J</td><td>—</td><td>Sí</td></tr>
+                        </tbody>
+                    </table>
+
+                    <p><strong>Cálculo de supervivencia por mes:</strong></p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th>Defaults</th>
+                                <th>En riesgo</th>
+                                <th>Prob. supervivir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td>0</td><td>10</td><td>1.00</td></tr>
+                            <tr><td>2</td><td>0</td><td>10</td><td>1.00</td></tr>
+                            <tr><td>3</td><td>1</td><td>10</td><td>0.90</td></tr>
+                            <tr><td>4</td><td>2</td><td>9</td><td>0.78</td></tr>
+                            <tr><td>5</td><td>2</td><td>7</td><td>0.71</td></tr>
+                            <tr><td>6</td><td>1</td><td>5</td><td>0.80</td></tr>
+                        </tbody>
+                    </table>
+
+                    <svg viewBox="0 0 500 350" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="500" height="350" fill="#FAFAFA" stroke="#E0D9F0" stroke-width="2" rx="8"/>
+                        
+                        <!-- Title -->
+                        <text x="250" y="30" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Curva de Supervivencia Kaplan-Meier</text>
+                        
+                        <!-- Axes -->
+                        <line x1="60" y1="280" x2="440" y2="280" stroke="#2D1B4E" stroke-width="2"/>
+                        <line x1="60" y1="280" x2="60" y2="60" stroke="#2D1B4E" stroke-width="2"/>
+                        
+                        <!-- Y-axis labels -->
+                        <text x="40" y="65" font-size="12" text-anchor="end" fill="#555">1.0</text>
+                        <text x="40" y="125" font-size="12" text-anchor="end" fill="#555">0.8</text>
+                        <text x="40" y="185" font-size="12" text-anchor="end" fill="#555">0.6</text>
+                        <text x="40" y="245" font-size="12" text-anchor="end" fill="#555">0.4</text>
+                        <text x="40" y="285" font-size="12" text-anchor="end" fill="#555">0.2</text>
+                        <text x="20" y="170" font-size="12" text-anchor="middle" fill="#2D1B4E" transform="rotate(-90 20 170)">S(t)</text>
+                        
+                        <!-- X-axis labels -->
+                        <text x="60" y="305" font-size="12" text-anchor="middle" fill="#555">0</text>
+                        <text x="120" y="305" font-size="12" text-anchor="middle" fill="#555">1</text>
+                        <text x="180" y="305" font-size="12" text-anchor="middle" fill="#555">2</text>
+                        <text x="240" y="305" font-size="12" text-anchor="middle" fill="#555">3</text>
+                        <text x="300" y="305" font-size="12" text-anchor="middle" fill="#555">4</text>
+                        <text x="360" y="305" font-size="12" text-anchor="middle" fill="#555">5</text>
+                        <text x="420" y="305" font-size="12" text-anchor="middle" fill="#555">6</text>
+                        <text x="250" y="335" font-size="12" text-anchor="middle" fill="#2D1B4E">Mes</text>
+                        
+                        <!-- Survival curve -->
+                        <path d="M 60 80 L 180 80 L 180 116 L 240 116 L 240 152 L 300 152 L 300 188 L 360 188 L 360 224 L 420 224" 
+                              fill="none" stroke="#6B4B9A" stroke-width="3"/>
+                        
+                        <!-- Points -->
+                        <circle cx="180" cy="116" r="4" fill="#00A8E8"/>
+                        <circle cx="240" cy="152" r="4" fill="#00A8E8"/>
+                        <circle cx="300" cy="188" r="4" fill="#00A8E8"/>
+                        <circle cx="360" cy="224" r="4" fill="#00A8E8"/>
+                        
+                        <!-- Drop lines -->
+                        <line x1="180" y1="80" x2="180" y2="116" stroke="#6B4B9A" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="240" y1="116" x2="240" y2="152" stroke="#6B4B9A" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="300" y1="152" x2="300" y2="188" stroke="#6B4B9A" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="360" y1="188" x2="360" y2="224" stroke="#6B4B9A" stroke-width="1" stroke-dasharray="2,2"/>
+                        
+                        <!-- Values -->
+                        <text x="190" y="110" font-size="11" fill="#00A8E8">0.90</text>
+                        <text x="250" y="146" font-size="11" fill="#00A8E8">0.70</text>
+                        <text x="310" y="182" font-size="11" fill="#00A8E8">0.50</text>
+                        <text x="370" y="218" font-size="11" fill="#00A8E8">0.40</text>
+                    </svg>
+
+                    <p><strong>Cálculo de supervivencia acumulada (Kaplan-Meier):</strong></p>
+                    <div class="formula">
+                        $$S(t) = \prod_{i=1}^{t}(1 - d_i/n_i)$$
+                    </div>
+
+                    <p>Resultados:</p>
+                    <ul>
+                        <li>S(3) = 1 × 1 × 0.9 = 0.90</li>
+                        <li>S(4) = 0.9 × 0.777 = 0.699</li>
+                        <li>S(5) = 0.699 × 0.714 = 0.499</li>
+                        <li>S(6) = 0.499 × 0.8 = 0.399</li>
+                    </ul>
+
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> A los 6 meses, la probabilidad de seguir "vivo" (sin incumplir) es 39.9%. Por tanto, el riesgo acumulado de default es 1 - 0.399 = 0.601 → 60.1%.
+                    </div>
+
+                    <p><strong>Función de riesgo (hazard rate):</strong></p>
+                    <div class="formula">
+                        $$h(4) = \frac{d_4}{n_4} = \frac{2}{9} = 0.222$$
+                    </div>
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> Entre quienes han llegado al mes 4 sin caer, un 22.2% incumplirá en ese mes.
+                    </div>
+                    <span class="code-reference">Ver código Python: forecasting_python.md → Sección 12.6.2</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: COMPARACIÓN -->
+        <div class="section" id="section3">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">Comparación conceptual: Markov vs Survival</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANÁLISIS</span>Tabla comparativa</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aspecto</th>
+                                <th>Markov Chains</th>
+                                <th>Survival Analysis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Tipo de evento</td>
+                                <td>Transiciones entre múltiples estados (corriente, mora, default)</td>
+                                <td>Tiempo hasta un único evento (default)</td>
+                            </tr>
+                            <tr>
+                                <td>Naturaleza del tiempo</td>
+                                <td>Discreto (mensual, trimestral)</td>
+                                <td>Continuo o discreto</td>
+                            </tr>
+                            <tr>
+                                <td>Salida clave</td>
+                                <td>Matriz de transición y probabilidades futuras</td>
+                                <td>Función de supervivencia y hazard</td>
+                            </tr>
+                            <tr>
+                                <td>Utilidad</td>
+                                <td>Simular la evolución de carteras</td>
+                                <td>Estimar duración esperada de créditos o clientes</td>
+                            </tr>
+                            <tr>
+                                <td>Supuesto principal</td>
+                                <td>Memoria de un solo paso (Markov)</td>
+                                <td>Riesgo dependiente del tiempo, no del pasado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <svg viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Background -->
+                        <rect width="500" height="250" fill="#FAFAFA" stroke="#E0D9F0" stroke-width="2" rx="8"/>
+                        
+                        <!-- Title -->
+                        <text x="250" y="25" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Markov vs Survival: Enfoque Complementario</text>
+                        
+                        <!-- Markov side -->
+                        <rect x="30" y="50" width="200" height="180" fill="#6B4B9A" opacity="0.1" rx="8"/>
+                        <text x="130" y="75" font-size="14" font-weight="bold" text-anchor="middle" fill="#6B4B9A">Cadenas de Markov</text>
+                        
+                        <!-- Markov diagram -->
+                        <circle cx="80" cy="120" r="15" fill="#4CAF50" opacity="0.8"/>
+                        <circle cx="130" cy="120" r="15" fill="#FF9800" opacity="0.8"/>
+                        <circle cx="180" cy="120" r="15" fill="#F44336" opacity="0.8"/>
+                        <path d="M 95 120 L 115 120" fill="none" stroke="#6B4B9A" stroke-width="2" marker-end="url(#arrow2)"/>
+                        <path d="M 145 120 L 165 120" fill="none" stroke="#6B4B9A" stroke-width="2" marker-end="url(#arrow2)"/>
+                        
+                        <text x="130" y="160" font-size="12" text-anchor="middle" fill="#555">Estados múltiples</text>
+                        <text x="130" y="175" font-size="12" text-anchor="middle" fill="#555">Transiciones</text>
+                        <text x="130" y="190" font-size="12" text-anchor="middle" fill="#555">¿Cómo evoluciona?</text>
+                        
+                        <!-- Survival side -->
+                        <rect x="270" y="50" width="200" height="180" fill="#00A8E8" opacity="0.1" rx="8"/>
+                        <text x="370" y="75" font-size="14" font-weight="bold" text-anchor="middle" fill="#00A8E8">Análisis de Supervivencia</text>
+                        
+                        <!-- Survival timeline -->
+                        <line x1="300" y1="120" x2="440" y2="120" stroke="#00A8E8" stroke-width="3"/>
+                        <circle cx="300" cy="120" r="5" fill="#4CAF50"/>
+                        <circle cx="440" cy="120" r="5" fill="#F44336"/>
+                        <text x="300" y="110" font-size="10" text-anchor="middle" fill="#555">Inicio</text>
+                        <text x="440" y="110" font-size="10" text-anchor="middle" fill="#555">Default</text>
+                        
+                        <text x="370" y="160" font-size="12" text-anchor="middle" fill="#555">Tiempo hasta evento</text>
+                        <text x="370" y="175" font-size="12" text-anchor="middle" fill="#555">Duración</text>
+                        <text x="370" y="190" font-size="12" text-anchor="middle" fill="#555">¿Cuándo ocurre?</text>
+                        
+                        <!-- Arrow marker 2 -->
+                        <defs>
+                            <marker id="arrow2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                                <polygon points="0 0, 8 3, 0 6" fill="#6B4B9A"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: INTERPRETACIÓN PRÁCTICA -->
+        <div class="section" id="section4">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">Interpretación práctica en modelos de crédito</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">APLICACIÓN</span>Cadenas de Markov en la práctica</h3>
+                    <div class="definition-box">
+                        <strong>Útiles para simulaciones y proyecciones de portafolio:</strong>
+                        <ul>
+                            <li>Permiten estimar el número esperado de préstamos en mora o default en períodos futuros</li>
+                            <li>Sirven para medir la "velocidad de deterioro" o migration matrix, usada en IFRS 9 y modelos de capital económico</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">APLICACIÓN</span>Análisis de Supervivencia en la práctica</h3>
+                    <div class="definition-box">
+                        <strong>Clave en modelos de duración:</strong>
+                        <ul>
+                            <li>Estima la probabilidad de permanencia activa de un crédito o cliente</li>
+                            <li>Se usa para predecir churn, tiempo medio hasta default, o vida útil esperada del portafolio</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">SÍNTESIS</span>Analogía final: salud financiera como esperanza de vida</h3>
+                    <div class="analogy-box">
+                        <strong>En las Cadenas de Markov,</strong> el crédito es un paciente que puede mejorar, empeorar o morir, y cada mes se mide su cambio de estado.
+                        <br><br>
+                        <strong>En el Análisis de Supervivencia,</strong> se sigue al paciente hasta su fallecimiento, estimando su probabilidad de "sobrevivir" al paso del tiempo.
+                        <br><br>
+                        Ambas técnicas ofrecen una visión complementaria del futuro: una predice <em>cómo</em> evolucionará el riesgo; la otra, <em>cuándo</em> ocurrirá el evento crítico.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">IMPLEMENTACIÓN</span>Consideraciones prácticas</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Técnica</th>
+                                <th>Cuándo usar</th>
+                                <th>Requerimientos de datos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Markov Chains</strong></td>
+                                <td>
+                                    • Proyecciones mensuales/trimestrales<br>
+                                    • Gestión activa de cartera<br>
+                                    • Provisiones dinámicas
+                                </td>
+                                <td>
+                                    • Historial de transiciones<br>
+                                    • Estados bien definidos<br>
+                                    • Mínimo 12-24 meses
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Survival Analysis</strong></td>
+                                <td>
+                                    • Pricing de productos<br>
+                                    • Estimación de LGD<br>
+                                    • Análisis de prepago
+                                </td>
+                                <td>
+                                    • Tiempo hasta evento<br>
+                                    • Manejo de censura<br>
+                                    • Cohortes comparables
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <span class="code-reference">Ver código Python completo: forecasting_python.md</span>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Presentación: Forecasting en Credit Scoring</p>
+            <p>Basado en "Credit Intelligence & Modelling" - Raymond Anderson, Oxford University Press</p>
+            <p>Referencia: Capítulo 12.6 - Borrowed Measures</p>
+            <p style="margin-top: 20px; color: #999; font-size: 12px;">Para código Python ejecutable, ver documento: <strong>forecasting_python.md</strong></p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const btn = header.querySelector('.toggle-btn');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                btn.textContent = '+';
+            } else {
+                content.classList.add('expanded');
+                btn.textContent = '−';
+            }
+        }
+
+        function toggleAllSections() {
+            const sections = document.querySelectorAll('.section');
+            const allExpanded = Array.from(sections).every(s => 
+                s.querySelector('.section-content').classList.contains('expanded')
+            );
+
+            sections.forEach(section => {
+                const content = section.querySelector('.section-content');
+                const btn = section.querySelector('.toggle-btn');
+                
+                if (allExpanded) {
+                    content.classList.remove('expanded');
+                    btn.textContent = '+';
+                } else {
+                    content.classList.add('expanded');
+                    btn.textContent = '−';
+                }
+            });
+
+            // Update button text
+            const expandBtn = document.querySelector('.expand-all-btn');
+            expandBtn.textContent = allExpanded ? 'Expandir todo' : 'Colapsar todo';
+        }
+
+        // Ensure MathJax renders after page load
+        window.addEventListener('load', function() {
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        });
+    </script>
+</body>
+</html>

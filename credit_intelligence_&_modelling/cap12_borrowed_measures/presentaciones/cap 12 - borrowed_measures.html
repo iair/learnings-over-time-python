@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrowed Measures - Credit Intelligence & Modelling</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --galgo-purple: #2D1B4E;
+            --galgo-light-purple: #5A3D7A;
+            --galgo-dark: #1A0F2E;
+            --galgo-accent: #00A8E8;
+            --galgo-orange: #D84E1F;
+            --text-dark: #1A1A1A;
+            --text-light: #666666;
+            --bg-light: #F8F7FC;
+            --bg-white: #FFFFFF;
+            --border-color: #E0D9F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 24px rgba(45, 27, 78, 0.2);
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .key-takeaways {
+            background: linear-gradient(135deg, #E8F4F8 0%, #F0F8FF 100%);
+            border-left: 4px solid var(--galgo-accent);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .key-takeaways h2 {
+            color: var(--galgo-dark);
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .key-takeaways ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .key-takeaways li {
+            padding: 8px 0;
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .key-takeaways li:before {
+            content: "→ ";
+            color: var(--galgo-accent);
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .toc {
+            background: var(--bg-white);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 28px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .toc h2 {
+            font-size: 18px;
+            color: var(--galgo-purple);
+            margin-bottom: 16px;
+        }
+
+        .toc ol, .toc ul {
+            list-style-position: inside;
+            margin-left: 20px;
+        }
+
+        .toc li {
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .toc a {
+            color: var(--galgo-accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .toc a:hover {
+            color: var(--galgo-purple);
+            text-decoration: underline;
+        }
+
+        .expand-all {
+            background: var(--galgo-purple);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-all:hover {
+            background: var(--galgo-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 27, 78, 0.3);
+        }
+
+        .section {
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--bg-white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, var(--galgo-light-purple) 0%, var(--galgo-accent) 100%);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .toggle-btn {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .section-content {
+            padding: 24px;
+            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .section-content.expanded {
+            display: block;
+            max-height: 25000px;
+        }
+
+        .subsection {
+            margin-bottom: 24px;
+        }
+
+        .subsection h3 {
+            font-size: 15px;
+            color: var(--galgo-dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
+            background: var(--galgo-accent);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .definition-box, .analogy-box, .example-box, .interpretation-box {
+            padding: 16px;
+            margin: 12px 0;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .definition-box {
+            background: #F0F8FF;
+            border-left: 4px solid var(--galgo-accent);
+        }
+
+        .analogy-box {
+            background: #FFF8E1;
+            border-left: 4px solid #FFB300;
+            font-style: italic;
+        }
+
+        .example-box {
+            background: #E8F5E9;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .interpretation-box {
+            background: #FCE4EC;
+            border-left: 4px solid #E91E63;
+        }
+
+        .formula {
+            background: #F5F5F5;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+            border-left: 4px solid var(--galgo-purple);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+
+        table thead {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+        }
+
+        table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table tbody tr:nth-child(even) {
+            background: #F8F7FB;
+        }
+
+        table tbody tr:hover {
+            background: #E8E0FF;
+        }
+
+        .svg-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            background: #F8F7FB;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        h4 {
+            color: var(--galgo-purple);
+            font-size: 14px;
+            margin-top: 16px;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background: #F8F7FB;
+            border-top: 2px solid var(--border-color);
+            padding: 30px 20px;
+            margin-top: 60px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        footer p {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .python-ref {
+            background: #F0F8FF;
+            border: 1px solid var(--galgo-accent);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--galgo-dark);
+        }
+
+        .python-ref strong {
+            color: var(--galgo-purple);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px;
+            }
+
+            header {
+                padding: 30px 16px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .section-title {
+                font-size: 14px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            table th, table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <h1>Capítulo 12: Borrowed Measures</h1>
+            <p>Medidas Prestadas en Credit Scoring</p>
+            <p style="margin-top: 12px; font-size: 13px;">Integración de Matemática, Estadística, Economía, Teoría de la Información, Detección de Señales y Pronóstico</p>
+        </header>
+
+        <!-- KEY TAKEAWAYS -->
+        <div class="key-takeaways">
+            <h2>Conceptos Clave (2-3 min)</h2>
+            <ul>
+                <li>El credit scoring integra seis disciplinas para convertir la incertidumbre del riesgo en estructuras cuantificables</li>
+                <li>Probabilidades transformadas en log-odds, validadas por Bayes y Grandes Números, modeladas con distribuciones</li>
+                <li>Power predictivo medido por WoE e IV; desigualdad del riesgo por Gini-Lorenz</li>
+                <li>Rendimiento evaluado con ROC-AUC; evolución temporal proyectada con Markov y Supervivencia</li>
+                <li>Cada métrica aborda una dimensión diferente del riesgo crediticio</li>
+            </ul>
+        </div>
+
+        <!-- TABLE OF CONTENTS -->
+        <div class="toc">
+            <h2>Tabla de Contenidos</h2>
+            <button class="expand-all" onclick="toggleAllSections()">Expandir/Contraer Todo</button>
+            <ol>
+                <li><a href="#section0"><strong>12.0 – Estructura Conceptual: Seis Disciplinas</strong></a></li>
+                <li><a href="#section1"><strong>12.1 – Conexión Conceptual</strong></a></li>
+                <li><a href="#section2"><strong>12.2 – Fundamentos Matemáticos y Probabilísticos</strong></a></li>
+                <li><a href="#section3"><strong>12.3 – Ejercicio Práctico Integrador</strong></a>
+                    <ul>
+                        <li><a href="#section3">Parte A – Log-Odds, Bayes, Grandes Números, Distribuciones</a></li>
+                        <li><a href="#section3">Parte B – Weight of Evidence e Information Value</a></li>
+                        <li><a href="#section3">Parte C – Desigualdad del Riesgo (Lorenz y Gini)</a></li>
+                        <li><a href="#section3">Parte D – Evaluación de Clasificación (ROC y AUC)</a></li>
+                        <li><a href="#section3">Parte E – Proyección Futura (Cadenas de Markov)</a></li>
+                        <li><a href="#section3">Parte F – Validación Temporal (Análisis de Supervivencia)</a></li>
+                    </ul>
+                </li>
+                <li><a href="#section4"><strong>12.4 – Conclusiones e Interpretación Estratégica</strong></a></li>
+            </ol>
+        </div>
+
+        <!-- SECTION 0: ESTRUCTURA CONCEPTUAL -->
+        <div class="section" id="section0">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.1 – Conexión Conceptual y Narrativa Integrada</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="badge">VISIÓN</span>Las Medidas Prestadas</h3>
+                    <div class="definition-box">
+                        <strong>Borrowed Measures:</strong> El credit scoring no inventa herramientas nuevas, sino que las "toma prestadas" de disciplinas consolidadas. Cada una responde una pregunta esencial sobre el riesgo crediticio.
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Disciplina</th>
+                                <th>Pregunta</th>
+                                <th>Herramientas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Matemática</strong></td>
+                                <td>¿Cómo representar probabilidades de default?</td>
+                                <td>Log-odds, Bayes, Grandes Números</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Distribuciones</strong></td>
+                                <td>¿Cómo varía el riesgo en la cartera?</td>
+                                <td>Binomial, Normal, Logística</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Economía</strong></td>
+                                <td>¿Qué tan concentrado está el riesgo?</td>
+                                <td>Lorenz, Gini, Concentración</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Información</strong></td>
+                                <td>¿Qué variables predicen mejor?</td>
+                                <td>Entropy, WoE, Information Value</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Señales</strong></td>
+                                <td>¿Qué tan bien clasifica el modelo?</td>
+                                <td>ROC, AUC, Confusion Matrix</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Pronóstico</strong></td>
+                                <td>¿Cómo evolucionará el riesgo?</td>
+                                <td>Markov, Supervivencia</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="svg-container">
+                        <svg width="100%" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                    <polygon points="0 0, 10 3, 0 6" fill="#2D1B4E"/>
+                                </marker>
+                            </defs>
+                            <!-- Centro -->
+                            <circle cx="300" cy="150" r="40" fill="#2D1B4E" opacity="0.2"/>
+                            <text x="300" y="155" text-anchor="middle" font-size="13" font-weight="bold" fill="#2D1B4E">Credit Scoring</text>
+                            
+                            <!-- Disciplinas alrededor -->
+                            <circle cx="100" cy="50" r="35" fill="#5A3D7A" opacity="0.8"/>
+                            <text x="100" y="55" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Matemática</text>
+                            
+                            <circle cx="500" cy="50" r="35" fill="#5A3D7A" opacity="0.8"/>
+                            <text x="500" y="55" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Economía</text>
+                            
+                            <circle cx="100" cy="250" r="35" fill="#5A3D7A" opacity="0.8"/>
+                            <text x="100" y="255" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Distribuciones</text>
+                            
+                            <circle cx="500" cy="250" r="35" fill="#5A3D7A" opacity="0.8"/>
+                            <text x="500" y="255" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Información</text>
+                            
+                            <circle cx="300" cy="30" r="35" fill="#00A8E8" opacity="0.8"/>
+                            <text x="300" y="35" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Señales</text>
+                            
+                            <circle cx="300" cy="270" r="35" fill="#D84E1F" opacity="0.8"/>
+                            <text x="300" y="275" text-anchor="middle" font-size="12" font-weight="bold" fill="white">Pronóstico</text>
+                            
+                            <!-- Flechas -->
+                            <line x1="130" y1="75" x2="270" y2="135" stroke="#2D1B4E" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            <line x1="470" y1="75" x2="330" y2="135" stroke="#2D1B4E" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            <line x1="130" y1="225" x2="270" y2="165" stroke="#2D1B4E" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            <line x1="470" y1="225" x2="330" y2="165" stroke="#2D1B4E" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            <line x1="300" y1="65" x2="300" y2="115" stroke="#00A8E8" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            <line x1="300" y1="185" x2="300" y2="235" stroke="#D84E1F" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="python-ref">
+                    <strong>Referencia:</strong> Visualizaciones y análisis en <code>borrowed_measures_python.md</code>.
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 1: CONEXIÓN CONCEPTUAL -->
+        <div class="section" id="section1">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.2 – Fundamentos Matemáticos y Probabilísticos</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="badge">CONEXIÓN</span>Cómo se Integran las Disciplinas</h3>
+                    <ol>
+                        <li><strong>Matemática:</strong> Establece formalismo (log-odds, Bayes)</li>
+                        <li><strong>Distribuciones:</strong> Describen variabilidad (Binomial, Normal, Logística)</li>
+                        <li><strong>Economía:</strong> Mide concentración (Gini, Lorenz)</li>
+                        <li><strong>Información:</strong> Cuantifica poder predictivo (WoE, IV)</li>
+                        <li><strong>Señales:</strong> Evalúa rendimiento operativo (ROC, AUC)</li>
+                        <li><strong>Pronóstico:</strong> Proyecta evolución temporal (Markov, Supervivencia)</li>
+                    </ol>
+
+                    <div class="analogy-box">
+                        Construir un modelo de credit scoring es como construir un edificio: la matemática es el plano, las distribuciones son los materiales, la economía mide eficiencia, la información valida que el diseño es correcto, las señales prueban solidez estructural, y el pronóstico predice durabilidad futura.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: FUNDAMENTOS MATEMÁTICOS Y PROBABILÍSTICOS -->
+        <div class="section" id="section2">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.0 – Estructura Conceptual: Seis Disciplinas Integradas</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="badge">BASE</span>Fundamentos de Probabilidad</h3>
+                    <div class="definition-box">
+                        <strong>Probabilidad:</strong> Medida del grado de incertidumbre sobre un evento. En credit scoring, representa la probabilidad de que un cliente incumpla (default) bajo ciertas condiciones.
+                    </div>
+
+                    <h4>Variables Aleatorias Bernoulli</h4>
+                    <div class="formula">
+                        $$X \sim \text{Bernoulli}(p) \quad \Rightarrow \quad P(X=1) = p, \quad P(X=0) = 1-p$$
+                    </div>
+                    <div class="interpretation-box">
+                        En credit scoring: X=1 si cliente entra en default, X=0 si permanece corriente. Parámetro p es la Probabilidad de Default (PD).
+                    </div>
+
+                    <h4>Independencia y Distribuciones Conjuntas</h4>
+                    <div class="formula">
+                        $$P(X_1, X_2, \ldots, X_n) = \prod_{i=1}^{n} P(X_i) \quad \text{si son independientes}$$
+                    </div>
+                    <div class="example-box">
+                        <strong>Ejemplo:</strong> Si cada cliente tiene probabilidad independiente de default, la probabilidad de que exactamente k de n clientes entre en default sigue Binomial(n, p).
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">BAYES</span>Teorema de Bayes: Actualización de Probabilidades</h3>
+                    <div class="definition-box">
+                        <strong>Teorema de Bayes:</strong> Permite actualizar probabilidades a priori usando información nueva observada.
+                    </div>
+
+                    <div class="formula">
+                        $$P(A | B) = \frac{P(B | A) \cdot P(A)}{P(B)}$$
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>En credit scoring:</strong>
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li>P(D | Características) = Probabilidad de default dado el perfil del cliente</li>
+                            <li>P(Características | D) = Likelihood: qué características ves en defaults</li>
+                            <li>P(D) = Prior: tasa histórica de default</li>
+                            <li>P(Características) = Evidence: qué tan común es ese perfil</li>
+                        </ul>
+                    </div>
+
+                    <h4>Intuición Bayesiana</h4>
+                    <div class="analogy-box">
+                        Imagina un doctor que sabe que el 1% de la población tiene una enfermedad (prior). Un paciente da positivo en un test. El doctor usa Bayes para actualizar: dado el test positivo, ¿cuál es la probabilidad real de que el paciente tenga la enfermedad? Similarmente, en credit: dado que el cliente tiene score bajo, ¿cuál es su verdadera PD?
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">ODDS</span>Log-Odds: Escala Lineal para Regresión</h3>
+                    <div class="definition-box">
+                        <strong>Odds:</strong> Razón entre probabilidad de evento y no-evento.
+                    </div>
+
+                    <div class="formula">
+                        $$\text{Odds} = \frac{P(D)}{1 - P(D)}$$
+                    </div>
+
+                    <div class="formula">
+                        $$\text{Log-Odds} = \ln\left(\frac{P(D)}{1 - P(D)}\right) = \text{logit}(P)$$
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Ventaja del log-odds:</strong> Transforma probabilidades (limitadas a [0,1]) en escala lineal (-∞, +∞), permitiendo regresión lineal. Log-odds = 0 ⟺ P=0.5 (punto de indiferencia).
+                    </div>
+
+                    <h4>Función Inversa: Logística</h4>
+                    <div class="formula">
+                        $$P = \frac{1}{1 + e^{-\text{log-odds}}} = \text{sigmoid}(\text{log-odds})$$
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Mapeo:</strong> Si cliente tiene log-odds = 0.5, entonces P(D) = 1/(1+e^{-0.5}) ≈ 0.622 (62.2% default probability).
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">LGN</span>Ley de Grandes Números: Validez de Estimadores</h3>
+                    <div class="definition-box">
+                        <strong>Ley de Grandes Números:</strong> La media muestral converge a la media poblacional cuando n → ∞.
+                    </div>
+
+                    <div class="formula">
+                        $$\lim_{n \to \infty} \frac{1}{n} \sum_{i=1}^{n} X_i = E[X] \quad \text{(probabilidad 1)}$$
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>En credit scoring:</strong> Si observamos n=10,000 clientes, la tasa de default observada (# defaults / 10,000) es un estimador confiable de la verdadera PD poblacional. Muestras más grandes = estimadores más precisos.
+                    </div>
+
+                    <h4>Consecuencia: Teorema del Límite Central</h4>
+                    <div class="formula">
+                        $$\bar{X}_n \approx N\left(\mu, \frac{\sigma^2}{n}\right) \quad \text{para } n \text{ grande}$$
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Implicación:</strong> El número total de defaults en la cartera se distribuye (aproximadamente) Normal. Esto permite calcular intervalos de confianza y probabilidades de exceso de defaults.
+                    </div>
+                </div>
+
+                <div class="python-ref">
+                    <strong>Referencia:</strong> Estos conceptos se implementan en <code>borrowed_measures_python.md</code>, Parte A, con simulaciones numéricas.
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: EJERCICIO PRÁCTICO -->
+        <div class="section" id="section3">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.3 – Ejercicio Práctico Integrador: Modelo de Crédito PyME</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="badge">CONTEXTO</span>Dataset: 10,000 Clientes, 8% Default</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Banda</th>
+                                <th>Buenos</th>
+                                <th>Malos</th>
+                                <th>Total</th>
+                                <th>% Default</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1 (peor)</td>
+                                <td>500</td>
+                                <td>400</td>
+                                <td>900</td>
+                                <td>44.4%</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>1,200</td>
+                                <td>200</td>
+                                <td>1,400</td>
+                                <td>14.3%</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>2,400</td>
+                                <td>120</td>
+                                <td>2,520</td>
+                                <td>4.8%</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>2,800</td>
+                                <td>60</td>
+                                <td>2,860</td>
+                                <td>2.1%</td>
+                            </tr>
+                            <tr>
+                                <td>5 (mejor)</td>
+                                <td>2,300</td>
+                                <td>20</td>
+                                <td>2,320</td>
+                                <td>0.9%</td>
+                            </tr>
+                            <tr style="background: #E8F5E9;">
+                                <td><strong>Total</strong></td>
+                                <td><strong>9,200</strong></td>
+                                <td><strong>800</strong></td>
+                                <td><strong>10,000</strong></td>
+                                <td><strong>8.0%</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="python-ref">
+                        <strong>Código:</strong> Simulación en <code>borrowed_measures_python.md</code>, sección "Dataset Simulation".
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">PARTE A</span>Log-Odds, Bayes, Grandes Números, Distribuciones</h3>
+                    <div class="example-box">
+                        <strong>Objetivo:</strong> Transformar probabilidades individuales en scores lineales, validarlos estadísticamente, y modelar variabilidad.
+                    </div>
+
+                    <h4>1. Probabilidades Condicionales</h4>
+                    <div class="formula">
+                        $$P(D | \text{Banda}_i) = \frac{\text{Malos}_i}{\text{Total}_i}$$
+                    </div>
+
+                    <h4>2. Log-Odds por Banda</h4>
+                    <div class="formula">
+                        $$\text{Log-Odds}_i = \ln\left(\frac{P(D)}{1-P(D)}\right)$$
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Banda</th>
+                                <th>P(D)</th>
+                                <th>Log-Odds</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>0.4444</td>
+                                <td>-0.2231</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>0.1429</td>
+                                <td>-1.7918</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>0.0476</td>
+                                <td>-2.9957</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>0.0210</td>
+                                <td>-3.8407</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>0.0086</td>
+                                <td>-4.7473</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>3. Distribuciones</h4>
+                    <div class="formula">
+                        $$\text{Binomial: } E[X] = np, \quad \sigma = \sqrt{np(1-p)}$$
+                        $$\text{Normal (TLC): } \bar{X} \approx N(\mu, \sigma^2/n)$$
+                        $$\text{Logística: } P = \frac{1}{1 + e^{-z}}$$
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Resumen Parte A:</strong> Transformamos probabilidades en escala lineal (log-odds), las validamos con Bayes (actualización a posteriori), confirmamos convergencia con Grandes Números (n=10k es confiable), y modelamos variabilidad con distribuciones (Binomial para counts, Normal para totales, Logística para mapeo).
+                    </div>
+
+                    <div class="python-ref">
+                        <strong>Código:</strong> <code>borrowed_measures_python.md</code>, Parte A (Log-Odds, Bayes, Distribuciones).
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">PARTE B</span>Weight of Evidence (WoE) e Information Value (IV)</h3>
+
+                    <h4>1. WoE: Mide Separación de Distribuciones</h4>
+                    <div class="formula">
+                        $$\text{WoE}_i = \ln\left(\frac{p_i^{good}}{p_i^{bad}}\right)$$
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Banda</th>
+                                <th>p_good</th>
+                                <th>p_bad</th>
+                                <th>WoE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>0.0543</td>
+                                <td>0.5000</td>
+                                <td>-2.22</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>0.1304</td>
+                                <td>0.2500</td>
+                                <td>-0.65</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>0.2609</td>
+                                <td>0.1500</td>
+                                <td>0.56</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>0.3043</td>
+                                <td>0.0750</td>
+                                <td>1.40</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>0.2500</td>
+                                <td>0.0250</td>
+                                <td>2.30</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>2. Information Value: Poder Predictivo Total</h4>
+                    <div class="formula">
+                        $$\text{IV} = \sum_i (p_i^{good} - p_i^{bad}) \times \text{WoE}_i$$
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Resultado: IV = 1.97</strong> → Extraordinario (IV típico: 0.3–0.6). Modelo con excelente discriminación, posiblemente sobreajustado.
+                    </div>
+
+                    <div class="python-ref">
+                        <strong>Código:</strong> <code>borrowed_measures_python.md</code>, Parte B (WoE & IV).
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">PARTE C</span>Desigualdad del Riesgo: Lorenz y Gini</h3>
+
+                    <h4>1. Curva de Lorenz: Concentración Visual</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Banda</th>
+                                <th>% Clientes Acum.</th>
+                                <th>% Defaults Acum.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>9%</td>
+                                <td>50%</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>23%</td>
+                                <td>75%</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>48%</td>
+                                <td>90%</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>77%</td>
+                                <td>97.5%</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>100%</td>
+                                <td>100%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>2. Coeficiente de Gini</h4>
+                    <div class="formula">
+                        $$G = 1 - 2 \times A \quad \text{donde } A = \text{área bajo curva Lorenz}$$
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Resultado: Gini = 0.584</strong> → Muy concentrado. 9% de clientes concentran 50% de defaults. Excelente discriminación del modelo.
+                    </div>
+
+                    <div class="python-ref">
+                        <strong>Código:</strong> <code>borrowed_measures_python.md</code>, Parte C (Lorenz & Gini).
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">PARTE D</span>Evaluación de Clasificación: ROC y AUC</h3>
+
+                    <h4>1. Matriz de Confusión (Umbral: Banda 2/3)</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Pred: Default</th>
+                                <th>Pred: No Default</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Real: Default</strong></td>
+                                <td>TP = 600</td>
+                                <td>FN = 200</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Real: No Default</strong></td>
+                                <td>FP = 1,700</td>
+                                <td>TN = 7,500</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>2. Métricas Operativas</h4>
+                    <div class="formula">
+                        $$\text{TPR} = 0.75, \quad \text{FPR} = 0.185, \quad \text{Precision} = 0.261$$
+                    </div>
+
+                    <h4>3. AUC (Area Under ROC)</h4>
+                    <div class="formula">
+                        $$\text{AUC} = \int_0^1 \text{TPR}(s) \, ds \approx 0.891$$
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Resultado: AUC = 0.891</strong> → Excelente. 89% de probabilidad de que el modelo asigne score más alto a cliente bueno que a malo.
+                    </div>
+
+                    <div class="python-ref">
+                        <strong>Código:</strong> <code>borrowed_measures_python.md</code>, Parte D (ROC & AUC).
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">PARTE E</span>Proyección Futura: Cadenas de Markov</h3>
+
+                    <h4>1. Estados Crediticios</h4>
+                    <ul>
+                        <li><strong>C (Corriente):</strong> Cliente sin mora</li>
+                        <li><strong>M (Mora):</strong> Atraso 1-89 días</li>
+                        <li><strong>D (Default):</strong> Atraso ≥90 días</li>
+                    </ul>
+
+                    <h4>2. Matriz de Transición Mensual</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>De / A</th>
+                                <th>C</th>
+                                <th>M</th>
+                                <th>D</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>C</td>
+                                <td>0.92</td>
+                                <td>0.06</td>
+                                <td>0.02</td>
+                            </tr>
+                            <tr>
+                                <td>M</td>
+                                <td>0.40</td>
+                                <td>0.45</td>
+                                <td>0.15</td>
+                            </tr>
+                            <tr>
+                                <td>D</td>
+                                <td>0.00</td>
+                                <td>0.00</td>
+                                <td>1.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>3. Proyección 6 Meses</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th>P(C)</th>
+                                <th>P(M)</th>
+                                <th>P(D)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0</td>
+                                <td>100%</td>
+                                <td>0%</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>92%</td>
+                                <td>6%</td>
+                                <td>2%</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>80%</td>
+                                <td>11%</td>
+                                <td>9%</td>
+                            </tr>
+                            <tr style="background: #FCE4EC;">
+                                <td>6</td>
+                                <td>69%</td>
+                                <td>15%</td>
+                                <td>16%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="interpretation-box">
+                        <strong>Resultado: 16% acumulado en default a 6 meses.</strong> Implica provisiones contables, cobranzas activas, y conformidad IFRS 9.
+                    </div>
+
+                    <div class="python-ref">
+                        <strong>Código:</strong> <code>borrowed_measures_python.md</code>, Parte E (Markov Chains).
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">PARTE F</span>Validación Temporal: Análisis de Supervivencia</h3>
+
+                    <h4>1. Estimador de Kaplan–Meier</h4>
+                    <div class="formula">
+                        $$S(t) = \prod_{i=1}^{t} \left(1 - \frac{d_i}{n_i}\right)$$
+                    </div>
+
+                    <h4>2. Supervivencia Acumulada 6 Meses</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th>S(t)</th>
+                                <th>Default Acum.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>0.9900</td>
+                                <td>1.0%</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>0.9702</td>
+                                <td>3.0%</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>0.9399</td>
+                                <td>6.0%</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>0.8403</td>
+                                <td>16.0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="interpretation-box">
+                        <strong>Validación Cruzada:</strong> Kaplan-Meier (16%) ≈ Markov (16%). ✓ Ambos métodos coinciden, confirmando consistencia temporal del modelo.
+                    </div>
+
+                    <div class="python-ref">
+                        <strong>Código:</strong> <code>borrowed_measures_python.md</code>, Parte F (Kaplan-Meier).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: CONCLUSIONES -->
+        <div class="section" id="section4">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.4 – Conclusiones e Interpretación Estratégica</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="badge">SÍNTESIS</span>Las Seis Disciplinas Integradas</h3>
+                    <div class="interpretation-box">
+                        Cada disciplina aborda una dimensión del riesgo crediticio:
+                        <ol style="margin-top: 12px; margin-left: 20px;">
+                            <li><strong>Matemática:</strong> Log-odds, Bayes (formalismo)</li>
+                            <li><strong>Distribuciones:</strong> Binomial, Normal, Logística (variabilidad)</li>
+                            <li><strong>Economía:</strong> Gini, Lorenz (desigualdad)</li>
+                            <li><strong>Información:</strong> WoE, IV (poder predictivo)</li>
+                            <li><strong>Señales:</strong> ROC, AUC (rendimiento)</li>
+                            <li><strong>Pronóstico:</strong> Markov, Supervivencia (evolución temporal)</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">MÉTRICAS</span>Resumen de Resultados</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Métrica</th>
+                                <th>Valor</th>
+                                <th>Evaluación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Information Value (IV)</td>
+                                <td>1.97</td>
+                                <td>Extraordinario</td>
+                            </tr>
+                            <tr>
+                                <td>Coeficiente Gini</td>
+                                <td>0.584</td>
+                                <td>Muy concentrado</td>
+                            </tr>
+                            <tr>
+                                <td>AUC (ROC)</td>
+                                <td>0.891</td>
+                                <td>Excelente</td>
+                            </tr>
+                            <tr>
+                                <td>Default acum. 6m (Markov)</td>
+                                <td>16.0%</td>
+                                <td>Estable</td>
+                            </tr>
+                            <tr style="background: #E8F5E9;">
+                                <td>Supervivencia 6m (K-M)</td>
+                                <td>84.0%</td>
+                                <td>Validado ✓</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">APLICACIÓN</span>Decisiones por Función</h3>
+
+                    <div class="example-box">
+                        <strong>Originación:</strong> Maximizar TPR (recall) para capturar defaults. EL = PD × LGD × EAD.
+                    </div>
+                    <div class="example-box">
+                        <strong>Comercial:</strong> Optimizar precision para no rechazar clientes rentables. Pricing diferenciado por banda.
+                    </div>
+                    <div class="example-box">
+                        <strong>Cobranzas:</strong> Focalizar en banda 1 (9% clientes, 50% defaults). Monitorear transiciones C→M.
+                    </div>
+                    <div class="example-box">
+                        <strong>Regulación (IFRS 9/Basilea):</strong> Monitorear AUC, K-S, IV. Proyectar provisiones con Markov.
+                    </div>
+                    <div class="example-box">
+                        <strong>Finanzas:</strong> Reservar capital para 16% en default a 6 meses. Stress testing: P(D) +20%.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="badge">CIERRE</span>Narrativa Integrada</h3>
+                    <div class="analogy-box">
+                        El credit scoring es un sistema donde cada disciplina responde una pregunta diferente, pero todas convergen en la misma verdad: la probabilidad individual de default y su evolución temporal determinan el éxito del modelo. Desde el cálculo individual (Matemática) hasta la proyección de cartera (Pronóstico), cada capa ilumina una perspectiva del riesgo crediticio, permitiendo decisiones informadas en originación, comercial, cobranzas y regulación.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>Capítulo 12: Borrowed Measures</strong></p>
+            <p>Credit Intelligence & Modelling — Raymond Anderson, Oxford University Press</p>
+            <p>Presentación Interactiva Completa con Ejercicio Práctico Integrador</p>
+            <div class="python-ref" style="margin-top: 20px; background: #F0F8FF; border: 1px solid #00A8E8; text-align: left;">
+                <strong>Código Python Ejecutable:</strong> Ver <code>borrowed_measures_python.md</code>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Simulación de dataset (10k clientes, 8% default, 5 bandas)</li>
+                    <li>Parte A: Log-odds, Bayes, Grandes Números, Distribuciones</li>
+                    <li>Parte B: Weight of Evidence e Information Value</li>
+                    <li>Parte C: Curva de Lorenz y Coeficiente de Gini</li>
+                    <li>Parte D: Matriz de confusión, ROC y AUC</li>
+                    <li>Parte E: Cadenas de Markov (6 meses proyección)</li>
+                    <li>Parte F: Kaplan-Meier (validación temporal)</li>
+                </ul>
+            </div>
+            <p style="margin-top: 20px; color: #999; font-size: 12px;">Presentación responsiva • Secciones expandibles • Fórmulas MathJax • Índice con links funcionales • Profesional y académico</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const btn = header.querySelector('.toggle-btn');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                btn.textContent = '+';
+            } else {
+                content.classList.add('expanded');
+                btn.textContent = '−';
+            }
+        }
+
+        function toggleAllSections() {
+            const sections = document.querySelectorAll('.section');
+            const allExpanded = Array.from(sections).every(s => 
+                s.querySelector('.section-content').classList.contains('expanded')
+            );
+
+            sections.forEach(section => {
+                const content = section.querySelector('.section-content');
+                const btn = section.querySelector('.toggle-btn');
+                
+                if (allExpanded) {
+                    content.classList.remove('expanded');
+                    btn.textContent = '+';
+                } else {
+                    content.classList.add('expanded');
+                    btn.textContent = '−';
+                }
+            });
+        }
+
+        window.addEventListener('load', function() {
+            if (window.MathJax) {
+                MathJax.contentDocument.dispatchEvent(new Event('DOMContentLoaded'));
+            }
+        });
+    </script>
+</body>
+</html>

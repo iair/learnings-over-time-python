@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information and Cryptography - Credit Scoring</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --galgo-purple: #6B4B9A;
+            --galgo-light-purple: #8B6BB8;
+            --galgo-dark: #2D1B4E;
+            --galgo-accent: #00A8E8;
+            --text-dark: #1A1A1A;
+            --text-light: #555555;
+            --bg-light: #F8F7FB;
+            --bg-white: #FFFFFF;
+            --border-color: #E0D9F0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, #FFFFFF 100%);
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 24px rgba(107, 75, 154, 0.15);
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .table-of-contents {
+            background: var(--bg-white);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-of-contents h2 {
+            color: var(--galgo-purple);
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: var(--galgo-accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 8px 12px;
+            border-left: 3px solid transparent;
+        }
+
+        .toc-list a:hover {
+            color: var(--galgo-purple);
+            border-left-color: var(--galgo-purple);
+            background: rgba(107, 75, 154, 0.05);
+        }
+
+        .section {
+            background: var(--bg-white);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, rgba(107, 75, 154, 0.08) 0%, rgba(0, 168, 232, 0.05) 100%);
+            padding: 24px;
+            border-bottom: 2px solid var(--border-color);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, rgba(107, 75, 154, 0.12) 0%, rgba(0, 168, 232, 0.08) 100%);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--galgo-purple);
+            margin: 0;
+        }
+
+        .toggle-btn {
+            width: 32px;
+            height: 32px;
+            background: var(--galgo-accent);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .toggle-btn:hover {
+            background: var(--galgo-purple);
+            transform: scale(1.1);
+        }
+
+        .section-content {
+            padding: 24px;
+            max-height: 2000px;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .section-content.collapsed {
+            max-height: 0;
+            padding: 0 24px;
+        }
+
+        .subsection {
+            margin-bottom: 28px;
+        }
+
+        .subsection:last-child {
+            margin-bottom: 0;
+        }
+
+        .subsection h3 {
+            color: var(--galgo-purple);
+            font-size: 16px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .subsection-badge {
+            display: inline-block;
+            background: var(--galgo-accent);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, rgba(107, 75, 154, 0.06) 0%, rgba(0, 168, 232, 0.04) 100%);
+            border-left: 4px solid var(--galgo-purple);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+        }
+
+        .definition-box strong {
+            color: var(--galgo-purple);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .analogy-box {
+            background: linear-gradient(135deg, rgba(0, 168, 232, 0.06) 0%, rgba(107, 75, 154, 0.04) 100%);
+            border-left: 4px solid var(--galgo-accent);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        .example-box {
+            background: #F0F8FF;
+            border: 2px solid var(--galgo-accent);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: var(--galgo-accent);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+            background: var(--bg-white);
+            font-size: 13px;
+        }
+
+        table th {
+            background: linear-gradient(135deg, var(--galgo-purple) 0%, var(--galgo-light-purple) 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table tr:hover {
+            background: rgba(107, 75, 154, 0.04);
+        }
+
+        .formula {
+            background: #F5F5F5;
+            border-left: 3px solid var(--galgo-accent);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        svg {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .interpretation {
+            background: rgba(107, 75, 154, 0.08);
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 12px;
+            border-left: 4px solid var(--galgo-purple);
+            font-size: 14px;
+        }
+
+        .interpretation strong {
+            color: var(--galgo-purple);
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        ol, ul {
+            margin-left: 24px;
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-reference {
+            background: #F0F0F0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #D84E1F;
+            display: inline-block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            font-size: 13px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 12px;
+            }
+
+            header {
+                padding: 28px 16px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .section-content {
+                padding: 16px;
+            }
+
+            .definition-box, .analogy-box, .example-box {
+                padding: 12px;
+            }
+
+            table {
+                font-size: 11px;
+            }
+
+            table th, table td {
+                padding: 8px;
+            }
+        }
+
+        .expand-all-btn {
+            background: var(--galgo-purple);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .expand-all-btn:hover {
+            background: var(--galgo-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 75, 154, 0.3);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .info-card {
+            background: #F0F8FF;
+            border-left: 4px solid var(--galgo-accent);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .info-card strong {
+            color: var(--galgo-accent);
+            display: block;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Information and Cryptography</h1>
+            <p>Teoría de la información aplicada a credit scoring. Medir cuánta información aporta una variable al modelo de riesgo mediante Entropy, Weight of Evidence e Information Value.</p>
+        </header>
+
+        <div class="table-of-contents">
+            <h2>Índice de contenidos</h2>
+            <ul class="toc-list">
+                <li><a href="#section1">12.4.1 Shannon's Entropy — medir el desorden de la información</a></li>
+                <li><a href="#section2">12.4.2 Weight of Evidence (WoE) — traducir evidencia en números</a></li>
+                <li><a href="#section3">12.4.3 Information Value (IV) — medir el poder predictivo</a></li>
+                <li><a href="#section4">12.4.4 Conexión conceptual — Entropy, WoE e IV integrados</a></li>
+            </ul>
+        </div>
+
+        <button class="expand-all-btn" onclick="toggleAllSections()">Expandir todo</button>
+
+        <!-- SECTION 1: SHANNON'S ENTROPY -->
+        <div class="section" id="section1">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.4.1 Shannon's Entropy — medir el desorden de la información</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>La entropía</strong> cuantifica la incertidumbre o desorden en un sistema. Se define como:
+                    </div>
+                    <div class="formula">
+                        $$H = -\sum_{i=1}^{n} p_i \log_2(p_i)$$
+                    </div>
+                    <p>donde p<sub>i</sub> es la probabilidad de cada categoría. La entropía es máxima cuando todas las categorías son igualmente probables, y mínima (0) cuando hay certeza total.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>Comprendiendo la entropía</h3>
+                    <div class="analogy-box">
+                        Piensa en una ruleta: si tiene un solo color, no hay sorpresa (entropía baja). Si cada color tiene igual probabilidad, hay máxima incertidumbre: no puedes anticipar el resultado. En credit scoring, una variable con valores muy predecibles aporta poca información al modelo; una más variada, más información.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Cálculo de entropía de empleabilidad</h3>
+                    <div class="example-box">
+                        <strong>Variable:</strong> Tipo de empleo con distribución:
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Probabilidad (p<sub>i</sub>)</th>
+                            <th>log₂(p<sub>i</sub>)</th>
+                            <th>p<sub>i</sub> × log₂(p<sub>i</sub>)</th>
+                        </tr>
+                        <tr>
+                            <td>Público</td>
+                            <td>0.5</td>
+                            <td>-1.000</td>
+                            <td>-0.500</td>
+                        </tr>
+                        <tr>
+                            <td>Privado</td>
+                            <td>0.3</td>
+                            <td>-1.737</td>
+                            <td>-0.521</td>
+                        </tr>
+                        <tr>
+                            <td>Independiente</td>
+                            <td>0.2</td>
+                            <td>-2.322</td>
+                            <td>-0.464</td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Cálculo de entropía:</strong></p>
+                    <div class="formula">
+                        $$H = -(-0.500 - 0.521 - 0.464) = 1.485 \text{ bits}$$
+                    </div>
+
+                    <p><strong>Entropía máxima posible:</strong></p>
+                    <div class="formula">
+                        $$H_{max} = \log_2(3) = 1.585 \text{ bits}$$
+                    </div>
+
+                    <p><strong>Entropía relativa:</strong></p>
+                    <div class="formula">
+                        $$\frac{H}{H_{max}} = \frac{1.485}{1.585} = 93.7\%$$
+                    </div>
+
+                    <svg width="100%" height="160" viewBox="0 0 400 160" style="margin: 16px 0;">
+                        <text x="200" y="18" font-size="13" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Entropía en tres escenarios</text>
+                        
+                        <!-- Scenario 1: Bajo -->
+                        <text x="70" y="40" font-size="10" font-weight="bold" fill="#6B4B9A" text-anchor="middle">Baja (Domina 1)</text>
+                        <rect x="50" y="50" width="40" height="70" fill="#FF6B6B" opacity="0.8"/>
+                        <rect x="50" y="115" width="5" height="5" fill="#8B6BB8" opacity="0.8"/>
+                        <rect x="60" y="115" width="5" height="5" fill="#00A8E8" opacity="0.8"/>
+                        <text x="70" y="135" font-size="9" text-anchor="middle" fill="#555">H ≈ 0.3</text>
+                        
+                        <!-- Scenario 2: Media -->
+                        <text x="200" y="40" font-size="10" font-weight="bold" fill="#6B4B9A" text-anchor="middle">Media (Similar)</text>
+                        <rect x="175" y="55" width="15" height="60" fill="#FF6B6B" opacity="0.8"/>
+                        <rect x="190" y="60" width="15" height="55" fill="#8B6BB8" opacity="0.8"/>
+                        <rect x="205" y="50" width="15" height="65" fill="#00A8E8" opacity="0.8"/>
+                        <text x="200" y="135" font-size="9" text-anchor="middle" fill="#555">H ≈ 1.5</text>
+                        
+                        <!-- Scenario 3: Alta (equiprobable) -->
+                        <text x="330" y="40" font-size="10" font-weight="bold" fill="#6B4B9A" text-anchor="middle">Máxima (Igual)</text>
+                        <rect x="305" y="55" width="17" height="60" fill="#FF6B6B" opacity="0.8"/>
+                        <rect x="322" y="55" width="17" height="60" fill="#8B6BB8" opacity="0.8"/>
+                        <rect x="339" y="55" width="17" height="60" fill="#00A8E8" opacity="0.8"/>
+                        <text x="330" y="135" font-size="9" text-anchor="middle" fill="#555">H ≈ 1.58</text>
+                    </svg>
+
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> Con entropía de 93.7% de la máxima, la variable tiene alto nivel de incertidumbre y potencial informativo. Si una categoría dominara el 90% de los casos, la entropía sería cercana a 0, indicando escaso poder predictivo.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: WEIGHT OF EVIDENCE -->
+        <div class="section" id="section2">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.4.2 Weight of Evidence (WoE) — traducir evidencia en números</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>El Weight of Evidence (WoE)</strong> mide la fuerza con la que una categoría apoya la hipótesis de ser "buen cliente" frente a "mal cliente". Matemáticamente:
+                    </div>
+                    <div class="formula">
+                        $$WoE_i = \ln\left(\frac{p_i^{good}}{p_i^{bad}}\right)$$
+                    </div>
+                    <p>donde p<sub>i</sub><sup>good</sup> y p<sub>i</sub><sup>bad</sup> son las proporciones de buenos y malos dentro de la categoría i. Se expresa en log-odds, igual que el modelo logístico.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>El testigo en el juicio</h3>
+                    <div class="analogy-box">
+                        Imagina que cada variable es un "testigo" en un juicio: el WoE indica cuán fuerte es el testimonio de esa categoría a favor o en contra del acusado (el cliente). WoE positivo = testigo a favor; WoE negativo = testigo en contra.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Weight of Evidence de tenencia de vivienda</h3>
+                    <div class="example-box">
+                        <strong>Variable:</strong> Tenencia de vivienda
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Buenos</th>
+                            <th>Malos</th>
+                            <th>Total</th>
+                        </tr>
+                        <tr>
+                            <td>Propietario</td>
+                            <td>800</td>
+                            <td>100</td>
+                            <td>900</td>
+                        </tr>
+                        <tr>
+                            <td>Inquilino</td>
+                            <td>200</td>
+                            <td>100</td>
+                            <td>300</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td><strong>1,000</strong></td>
+                            <td><strong>200</strong></td>
+                            <td><strong>1,200</strong></td>
+                        </tr>
+                    </table>
+
+                    <p><strong>Paso 1: Proporciones dentro de cada grupo</strong></p>
+                    <div class="formula">
+                        $$p_{prop}^{good} = \frac{800}{1000} = 0.8 \quad ; \quad p_{prop}^{bad} = \frac{100}{200} = 0.5$$
+                        $$p_{inq}^{good} = \frac{200}{1000} = 0.2 \quad ; \quad p_{inq}^{bad} = \frac{100}{200} = 0.5$$
+                    </div>
+
+                    <p><strong>Paso 2: Calcular WoE</strong></p>
+                    <div class="formula">
+                        $$WoE_{prop} = \ln\left(\frac{0.8}{0.5}\right) = \ln(1.6) = 0.470$$
+                        $$WoE_{inq} = \ln\left(\frac{0.2}{0.5}\right) = \ln(0.4) = -0.916$$
+                    </div>
+
+                    <svg width="100%" height="180" viewBox="0 0 400 180" style="margin: 16px 0;">
+                        <text x="200" y="18" font-size="13" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Weight of Evidence por categoría</text>
+                        
+                        <!-- Y-axis (WoE values) -->
+                        <line x1="50" y1="100" x2="50" y2="140" stroke="#000" stroke-width="2"/>
+                        <line x1="50" y1="100" x2="370" y2="100" stroke="#000" stroke-width="2"/>
+                        
+                        <!-- Grid -->
+                        <line x1="50" y1="85" x2="370" y2="85" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="50" y1="115" x2="370" y2="115" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="2,2"/>
+                        
+                        <!-- Y-axis labels -->
+                        <text x="45" y="105" font-size="9" text-anchor="end" fill="#555">0</text>
+                        <text x="35" y="90" font-size="9" text-anchor="end" fill="#00A8E8">+WoE</text>
+                        <text x="35" y="125" font-size="9" text-anchor="end" fill="#FF6B6B">-WoE</text>
+                        
+                        <!-- Propietario bar (positive) -->
+                        <rect x="120" y="60" width="40" height="40" fill="#00A8E8" opacity="0.8"/>
+                        <text x="140" y="35" font-size="11" font-weight="bold" fill="#00A8E8">+0.470</text>
+                        <text x="140" y="155" font-size="10" text-anchor="middle" fill="#555">Propietario</text>
+                        
+                        <!-- Inquilino bar (negative) -->
+                        <rect x="240" y="100" width="40" height="50" fill="#FF6B6B" opacity="0.8"/>
+                        <text x="260" y="160" font-size="11" font-weight="bold" fill="#FF6B6B">-0.916</text>
+                        <text x="260" y="155" font-size="10" text-anchor="middle" fill="#555">Inquilino</text>
+                        
+                        <!-- Interpretation labels -->
+                        <text x="140" y="52" font-size="8" text-anchor="middle" fill="white" font-weight="bold">A favor</text>
+                        <text x="260" y="130" font-size="8" text-anchor="middle" fill="white" font-weight="bold">En contra</text>
+                    </svg>
+
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> WoE positivo indica evidencia a favor del buen comportamiento (propietarios tienden a pagar). WoE negativo indica mayor riesgo (inquilinos tienen más defaults). En un scorecard, el modelo asignará pesos proporcionales a estos WoE.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: INFORMATION VALUE -->
+        <div class="section" id="section3">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.4.3 Information Value (IV) — medir el poder predictivo</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">CONCEPTO</span>Definición conceptual</h3>
+                    <div class="definition-box">
+                        <strong>El Information Value (IV)</strong> resume cuánta información total aporta una variable al modelo. Se calcula como:
+                    </div>
+                    <div class="formula">
+                        $$IV = \sum_i \left(p_i^{good} - p_i^{bad}\right) \times WoE_i$$
+                    </div>
+                    <p>Valores típicos de referencia:</p>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <strong>IV < 0.02</strong>
+                            No predictiva
+                        </div>
+                        <div class="info-card">
+                            <strong>0.02 – 0.10</strong>
+                            Débil
+                        </div>
+                        <div class="info-card">
+                            <strong>0.10 – 0.30</strong>
+                            Moderada
+                        </div>
+                        <div class="info-card">
+                            <strong>0.30 – 0.50</strong>
+                            Fuerte
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">ANALOGÍA</span>El poder de persuasión</h3>
+                    <div class="analogy-box">
+                        Piensa en IV como el "poder de persuasión" total del testigo (la variable): una cosa es lo que dice cada categoría (WoE), otra cuánto cambia eso el veredicto global (IV).
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">EJEMPLO</span>Information Value de tenencia de vivienda</h3>
+                    <div class="example-box">
+                        <strong>Usando los datos del ejemplo anterior de WoE:</strong>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>p<sub>i</sub><sup>good</sup></th>
+                            <th>p<sub>i</sub><sup>bad</sup></th>
+                            <th>Diferencia</th>
+                            <th>WoE</th>
+                            <th>(p<sup>good</sup> - p<sup>bad</sup>) × WoE</th>
+                        </tr>
+                        <tr>
+                            <td>Propietario</td>
+                            <td>0.8</td>
+                            <td>0.5</td>
+                            <td>0.3</td>
+                            <td>0.470</td>
+                            <td>0.141</td>
+                        </tr>
+                        <tr>
+                            <td>Inquilino</td>
+                            <td>0.2</td>
+                            <td>0.5</td>
+                            <td>-0.3</td>
+                            <td>-0.916</td>
+                            <td>0.275</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><strong>Total IV</strong></td>
+                            <td><strong>0.416</strong></td>
+                        </tr>
+                    </table>
+
+                    <svg width="100%" height="160" viewBox="0 0 400 160" style="margin: 16px 0;">
+                        <text x="200" y="18" font-size="13" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Contribución de cada categoría al IV</text>
+                        
+                        <!-- Axes -->
+                        <line x1="50" y1="130" x2="370" y2="130" stroke="#000" stroke-width="2"/>
+                        <line x1="50" y1="30" x2="50" y2="130" stroke="#000" stroke-width="2"/>
+                        
+                        <!-- Grid -->
+                        <line x1="50" y1="100" x2="370" y2="100" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="50" y1="70" x2="370" y2="70" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="2,2"/>
+                        
+                        <!-- Y-axis labels -->
+                        <text x="45" y="135" font-size="10" text-anchor="end" fill="#555">0</text>
+                        <text x="35" y="75" font-size="10" text-anchor="end" fill="#555">0.2</text>
+                        <text x="35" y="35" font-size="10" text-anchor="end" fill="#555">0.4</text>
+                        
+                        <!-- Propietario bar -->
+                        <rect x="100" y="68" width="60" height="62" fill="#00A8E8" opacity="0.8"/>
+                        <text x="130" y="85" font-size="10" font-weight="bold" fill="white">0.141</text>
+                        <text x="130" y="145" font-size="10" text-anchor="middle" fill="#555">Propietario</text>
+                        
+                        <!-- Inquilino bar -->
+                        <rect x="220" y="32" width="60" height="98" fill="#8B6BB8" opacity="0.8"/>
+                        <text x="250" y="82" font-size="10" font-weight="bold" fill="white">0.275</text>
+                        <text x="250" y="145" font-size="10" text-anchor="middle" fill="#555">Inquilino</text>
+                        
+                        <!-- Total line -->
+                        <line x1="50" y1="28" x2="370" y2="28" stroke="#FF6B6B" stroke-width="2" stroke-dasharray="3,3"/>
+                        <text x="375" y="32" font-size="10" fill="#FF6B6B" font-weight="bold">IV=0.416</text>
+                    </svg>
+
+                    <div class="interpretation">
+                        <strong>Interpretación:</strong> IV = 0.416 indica poder predictivo fuerte. La tenencia de vivienda distingue marcadamente el comportamiento crediticio: ser propietario es un factor de protección, ser inquilino un factor de riesgo. Si una variable tuviera IV > 0.50, se revisaría por posible duplicación con otra variable o segmentación excesiva.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: CONCEPTUAL CONNECTION -->
+        <div class="section" id="section4">
+            <div class="section-header" onclick="toggleSection(this)">
+                <h2 class="section-title">12.4.4 Conexión conceptual — Entropy, WoE e IV integrados</h2>
+                <button class="toggle-btn">+</button>
+            </div>
+            <div class="section-content collapsed">
+                <div class="subsection">
+                    <h3><span class="subsection-badge">FRAMEWORK</span>Relación entre conceptos</h3>
+                    <table>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Qué mide</th>
+                            <th>Nivel</th>
+                            <th>Interpretación práctica</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Entropy</strong></td>
+                            <td>Incertidumbre global</td>
+                            <td>Variable sin clases</td>
+                            <td>Cuánto desorden hay en los datos (máxima cuando equiprobable)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>WoE</strong></td>
+                            <td>Evidencia de clase</td>
+                            <td>Por categoría</td>
+                            <td>Cuán fuertemente una categoría predice el resultado (±)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IV</strong></td>
+                            <td>Poder predictivo total</td>
+                            <td>Variable completa</td>
+                            <td>Cuánto aporta una variable a la discriminación de riesgo</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">FLUJO</span>Proceso práctico en credit scoring</h3>
+                    <div class="analogy-box">
+                        Durante el preprocesamiento, las variables categóricas se transforman con WoE para facilitar su interpretación y garantizar monotonicidad con el riesgo. En la selección de variables, se filtran las de IV bajo (< 0.02) porque no agregan valor. En la validación regulatoria, los bancos reportan la lista de variables clave y su IV para demostrar solidez y estabilidad del modelo.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">APLICACIÓN</span>Checklist de validación</h3>
+                    <p>Para cada variable categórica en un modelo:</p>
+                    <ol>
+                        <li><strong>Calcular Entropy:</strong> ¿Tiene la variable suficiente varianza en sus categorías? (H cercana a H<sub>max</sub> es buena señal)</li>
+                        <li><strong>Calcular WoE por categoría:</strong> ¿Las categorías tienen direccionalidad clara respecto al riesgo? (WoE monótono es ideal)</li>
+                        <li><strong>Calcular IV:</strong> ¿La variable tiene poder discriminante? (IV > 0.10 es mínimo recomendado)</li>
+                        <li><strong>Revisar redundancia:</strong> Si IV > 0.50, revisar correlación con otras variables de IV alto</li>
+                        <li><strong>Aplicar transformación:</strong> Reemplazar categorías originales por sus WoE en el modelo</li>
+                    </ol>
+                </div>
+
+                <div class="subsection">
+                    <h3><span class="subsection-badge">RESULTADO</span>Beneficios de esta metodología</h3>
+                    <div class="definition-box">
+                        <strong>Ventajas:</strong><br>
+                        • Variables categóricas se vuelven numéricas de forma interpretable<br>
+                        • Garantiza monotonicidad entre variable y riesgo<br>
+                        • IV proporciona métrica objetiva de importancia variable<br>
+                        • Facilita comunicación regulatoria del modelo<br>
+                        • Estable en backtesting y validación fuera de muestra
+                    </div>
+                </div>
+
+                <svg width="100%" height="150" viewBox="0 0 400 150" style="margin: 20px 0;">
+                    <text x="200" y="18" font-size="13" font-weight="bold" text-anchor="middle" fill="#2D1B4E">Ranking de variables por Information Value</text>
+                    
+                    <!-- Axes -->
+                    <line x1="50" y1="130" x2="370" y2="130" stroke="#000" stroke-width="2"/>
+                    <line x1="50" y1="30" x2="50" y2="130" stroke="#000" stroke-width="2"/>
+                    
+                    <!-- Grid -->
+                    <line x1="50" y1="95" x2="370" y2="95" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="2,2"/>
+                    <line x1="50" y1="60" x2="370" y2="60" stroke="#E0D9F0" stroke-width="1" stroke-dasharray="2,2"/>
+                    
+                    <!-- Y-axis labels -->
+                    <text x="45" y="135" font-size="10" text-anchor="end" fill="#555">0</text>
+                    <text x="35" y="65" font-size="10" text-anchor="end" fill="#555">0.20</text>
+                    <text x="35" y="35" font-size="10" text-anchor="end" fill="#555">0.40</text>
+                    
+                    <!-- Variables (example rankings) -->
+                    <!-- Vivienda: 0.416 -->
+                    <rect x="60" y="29" width="50" height="101" fill="#00A8E8" opacity="0.8"/>
+                    <text x="85" y="85" font-size="9" font-weight="bold" fill="white">0.42</text>
+                    <text x="85" y="145" font-size="9" text-anchor="middle" fill="#555">Vivienda</text>
+                    
+                    <!-- Ingresos: 0.38 -->
+                    <rect x="130" y="42" width="50" height="88" fill="#8B6BB8" opacity="0.8"/>
+                    <text x="155" y="90" font-size="9" font-weight="bold" fill="white">0.38</text>
+                    <text x="155" y="145" font-size="9" text-anchor="middle" fill="#555">Ingresos</text>
+                    
+                    <!-- Edad: 0.25 -->
+                    <rect x="200" y="75" width="50" height="55" fill="#FF6B6B" opacity="0.8"/>
+                    <text x="225" y="105" font-size="9" font-weight="bold" fill="white">0.25</text>
+                    <text x="225" y="145" font-size="9" text-anchor="middle" fill="#555">Edad</text>
+                    
+                    <!-- Educación: 0.08 -->
+                    <rect x="270" y="120" width="50" height="10" fill="#FFA500" opacity="0.8"/>
+                    <text x="295" y="130" font-size="9" text-anchor="middle" fill="white">0.08</text>
+                    <text x="295" y="145" font-size="9" text-anchor="middle" fill="#555">Educación</text>
+                    
+                    <!-- Quality zones -->
+                    <line x1="50" y1="42" x2="360" y2="42" stroke="#00A8E8" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+                    <text x="365" y="45" font-size="8" fill="#00A8E8">Fuerte</text>
+                    
+                    <line x1="50" y1="95" x2="360" y2="95" stroke="#FFA500" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
+                    <text x="365" y="98" font-size="8" fill="#FFA500">Débil</text>
+                </svg>
+
+                <div class="interpretation">
+                    <strong>Recomendación:</strong> Variables con IV < 0.02 se descartan. Variables con IV entre 0.02-0.10 se incluyen solo si agregan perspectiva única. Variables con IV > 0.10 son candidatas fuertes. El balance es clave: un modelo con pocas variables de IV fuerte es preferible a muchas variables débiles.
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Documento de referencia sobre teoría de la información aplicada a credit scoring.</p>
+            <p>Para código Python ejecutable, consulta <span class="code-reference">python_examples_124.md</span></p>
+            <p style="margin-top: 16px; font-size: 12px; color: #999;">© 2025 | Optimizado para navegación en dispositivos móviles</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const btn = header.querySelector('.toggle-btn');
+            
+            content.classList.toggle('collapsed');
+            btn.textContent = content.classList.contains('collapsed') ? '+' : '−';
+        }
+
+        function toggleAllSections() {
+            const sections = document.querySelectorAll('.section-content');
+            const btn = document.querySelector('.expand-all-btn');
+            const allCollapsed = Array.from(sections).every(s => s.classList.contains('collapsed'));
+            
+            sections.forEach(content => {
+                const header = content.previousElementSibling;
+                const toggleBtn = header.querySelector('.toggle-btn');
+                
+                if (allCollapsed) {
+                    content.classList.remove('collapsed');
+                    toggleBtn.textContent = '−';
+                } else {
+                    content.classList.add('collapsed');
+                    toggleBtn.textContent = '+';
+                }
+            });
+            
+            btn.textContent = allCollapsed ? 'Contraer todo' : 'Expandir todo';
+        }
+
+        // Smooth scroll to section
+        document.querySelectorAll('.toc-list a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

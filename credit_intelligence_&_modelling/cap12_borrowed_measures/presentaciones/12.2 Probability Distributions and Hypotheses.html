@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12.2 Probability Distributions and Hypotheses</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #0d47a1;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .toc h2 {
+            color: #0d47a1;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-list li {
+            margin: 12px 0;
+            border-left: 4px solid #ff9800;
+            padding-left: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .toc-list li:hover {
+            transform: translateX(5px);
+            border-left-color: #f57c00;
+        }
+
+        .toc-list a {
+            color: #0d47a1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .toc-list a:hover {
+            color: #ff9800;
+        }
+
+        /* Main Content */
+        .content {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .section {
+            border-bottom: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #1565c0 0%, #1a73e8 100%);
+            padding-left: 25px;
+        }
+
+        .section-header h3 {
+            font-size: 1.3em;
+            margin: 0;
+        }
+
+        .toggle-btn {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        .section-content {
+            padding: 40px;
+            display: none;
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 2000px;
+            }
+        }
+
+        /* Typography */
+        h2 {
+            color: #0d47a1;
+            margin: 20px 0 15px 0;
+            font-size: 1.5em;
+            border-bottom: 2px solid #ff9800;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #1565c0;
+            margin: 15px 0 10px 0;
+            font-size: 1.1em;
+        }
+
+        p {
+            margin: 15px 0;
+            color: #444;
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border-left: 5px solid #0d47a1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .definition-box strong {
+            color: #0d47a1;
+        }
+
+        /* Analogy Box */
+        .analogy-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #fce4ec 100%);
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .analogy-box strong {
+            color: #ff9800;
+        }
+
+        /* Example Box */
+        .example-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0 80px 0;
+            border-radius: 8px;
+        }
+
+        .example-box strong {
+            color: #4caf50;
+        }
+
+        /* Interpretation Box */
+        .interpretation-box {
+            background: linear-gradient(135deg, #f3e5f5 0%, #ede7f6 100%);
+            border-left: 5px solid #7b1fa2;
+            padding: 20px;
+            margin: 40px 0 25px 0;
+            border-radius: 8px;
+        }
+
+        .interpretation-box strong {
+            color: #7b1fa2;
+        }
+
+        .svg-container + .interpretation-box {
+            margin-top: 80px;
+        }
+
+        /* Formula Container */
+        .formula-container {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid #e0e0e0;
+        }
+
+        .formula-container p {
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0 35px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 20px 0;
+        }
+
+        th {
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* SVG Container */
+        .svg-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0 60px 0;
+            background: #fafafa;
+            padding: 30px 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            min-height: 400px;
+            overflow: visible;
+        }
+
+        .example-box + .svg-container {
+            margin-top: 60px;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Reference Link */
+        .reference {
+            background: #eceff1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 40px 0 20px 0;
+            font-size: 0.9em;
+            color: #555;
+            border-left: 4px solid #0d47a1;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.7em;
+            }
+
+            .section-header {
+                padding: 15px;
+            }
+
+            .section-content {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 1.2em;
+            }
+
+            .definition-box,
+            .analogy-box,
+            .example-box,
+            .interpretation-box {
+                padding: 15px;
+                margin: 15px 0;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .back-to-top.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>12.2 Probability Distributions and Hypotheses</h1>
+            <p class="subtitle">Credit Intelligence & Modelling</p>
+            <p>Raymond Anderson</p>
+        </header>
+
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2>Contenidos</h2>
+            <ul class="toc-list">
+                <li><a href="#section-intro">Introducción: Distribuciones en Modelos de Crédito</a></li>
+                <li><a href="#section-binomial">12.2.1 Binomial Distribution</a></li>
+                <li><a href="#section-normal">12.2.2 Normal Distribution</a></li>
+                <li><a href="#section-t">12.2.3 Student's t-Distribution</a></li>
+                <li><a href="#section-logistic">12.2.4 Logistic (Verhulst) Curve</a></li>
+                <li><a href="#section-chi">12.2.5 Pearson's Chi-Square Distribution</a></li>
+                <li><a href="#section-summary">Síntesis Visual</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Introduction Section -->
+            <div class="section" id="section-intro">
+                <div class="section-header">
+                    <h3>Introducción: Distribuciones en Modelos de Crédito</h3>
+                    <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+                </div>
+                <div class="section-content active">
+                    <p>Los modelos de crédito se construyen sobre <strong>distribuciones de probabilidad</strong> que describen la incertidumbre en los datos. Cada distribución tiene una función distinta en el modelado de riesgo crediticio.</p>
+                    <div class="definition-box">
+                        <strong>Distribuciones Clave:</strong>
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li><strong>Binomial:</strong> Modela eventos discretos (default o no)</li>
+                            <li><strong>Normal:</strong> Estandariza variables continuas</li>
+                            <li><strong>t de Student:</strong> Contrasta medias en muestras pequeñas</li>
+                            <li><strong>Logística:</strong> Da forma a la curva S del riesgo</li>
+                            <li><strong>Chi-cuadrado:</strong> Evalúa hipótesis de independencia</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Binomial Distribution Section -->
+            <div class="section" id="section-binomial">
+                <div class="section-header">
+                    <h3>12.2.1 Binomial Distribution — Medir lo Discreto</h3>
+                    <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+                </div>
+                <div class="section-content">
+                    <div class="definition-box">
+                        <strong>Definición Conceptual:</strong>
+                        <p style="margin-top: 10px;">Modela el número de éxitos (por ejemplo, defaults) en n ensayos independientes, donde la probabilidad de default p es constante.</p>
+                        <div class="formula-container">
+                            <p>$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$</p>
+                        </div>
+                    </div>
+
+                    <div class="analogy-box">
+                        <strong>Analogía Intuitiva:</strong>
+                        <p style="margin-top: 10px;">Como lanzar una moneda con probabilidad p de caer en "default". Cada préstamo es un lanzamiento, y el número de incumplimientos es la suma de "caras".</p>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Ejemplo Paso a Paso:</strong>
+                        <p style="margin-top: 10px;">Supón una cartera de 10 créditos con una PD de 5% (p = 0.05). Queremos saber la probabilidad de que exactamente 2 clientes fallen.</p>
+                        
+                        <p><strong>1. Calcular combinaciones:</strong></p>
+                        <div class="formula-container">
+                            <p>$$\binom{10}{2} = \frac{10!}{2!8!} = 45$$</p>
+                        </div>
+
+                        <p><strong>2. Sustituir en la fórmula:</strong></p>
+                        <div class="formula-container">
+                            <p>$$P(X=2) = 45 \times 0.05^2 \times 0.95^8$$</p>
+                        </div>
+
+                        <p><strong>3. Cálculo:</strong></p>
+                        <div class="formula-container">
+                            <p>$$= 45 \times 0.0025 \times 0.6634 = 0.0741$$</p>
+                        </div>
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Interpretación:</strong>
+                        <p style="margin-top: 10px;">Hay un <strong>7.4%</strong> de probabilidad de observar exactamente dos defaults. Si el portafolio crece a 10,000 préstamos, la distribución binomial se aproxima a la normal (teorema central del límite).</p>
+                    </div>
+
+                    <div class="svg-container">
+                        <svg viewBox="0 0 500 300" width="500" height="300" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Grid -->
+                            <defs>
+                                <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="500" height="300" fill="url(#grid)" />
+                            
+                            <!-- Axes -->
+                            <line x1="50" y1="250" x2="450" y2="250" stroke="#333" stroke-width="2"/>
+                            <line x1="50" y1="250" x2="50" y2="30" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- Labels -->
+                            <text x="460" y="265" font-size="12" fill="#333">k (defaults)</text>
+                            <text x="20" y="40" font-size="12" fill="#333">P(X=k)</text>
+                            
+                            <!-- Bars for Binomial Distribution (n=10, p=0.05) -->
+                            <rect x="70" y="200" width="25" height="50" fill="#0d47a1" opacity="0.7"/>
+                            <rect x="105" y="170" width="25" height="80" fill="#0d47a1" opacity="0.7"/>
+                            <rect x="140" y="155" width="25" height="95" fill="#ff9800" opacity="0.9"/>
+                            <rect x="175" y="180" width="25" height="70" fill="#0d47a1" opacity="0.7"/>
+                            <rect x="210" y="210" width="25" height="40" fill="#0d47a1" opacity="0.7"/>
+                            <rect x="245" y="230" width="25" height="20" fill="#0d47a1" opacity="0.7"/>
+                            
+                            <!-- X-axis labels -->
+                            <text x="65" y="270" font-size="11" fill="#333">0</text>
+                            <text x="100" y="270" font-size="11" fill="#333">1</text>
+                            <text x="135" y="270" font-size="11" fill="#333">2</text>
+                            <text x="170" y="270" font-size="11" fill="#333">3</text>
+                            <text x="205" y="270" font-size="11" fill="#333">4</text>
+                            <text x="240" y="270" font-size="11" fill="#333">5</text>
+                            
+                            <!-- Title -->
+                            <text x="250" y="20" font-size="14" font-weight="bold" fill="#0d47a1" text-anchor="middle">
+                                Distribución Binomial: n=10, p=0.05
+                            </text>
+                            
+                            <!-- Legend -->
+                            <rect x="290" y="140" width="15" height="15" fill="#ff9800" opacity="0.9"/>
+                            <text x="315" y="152" font-size="11" fill="#333">Máximo (k=2)</text>
+                        </svg>
+                    </div>
+
+                    <div class="reference">
+                        <strong>Código Python:</strong> Consulta el archivo <code>codigo_probabilidades.md</code> para implementar cálculos de distribución binomial.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Normal Distribution Section -->
+            <div class="section" id="section-normal">
+                <div class="section-header">
+                    <h3>12.2.2 Normal Distribution — El Patrón de la Naturaleza</h3>
+                    <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+                </div>
+                <div class="section-content">
+                    <div class="definition-box">
+                        <strong>Definición Conceptual:</strong>
+                        <p style="margin-top: 10px;">La distribución normal describe fenómenos continuos donde los valores se agrupan alrededor de una media y decrecen simétricamente hacia los extremos.</p>
+                        <div class="formula-container">
+                            <p>$$f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}$$</p>
+                        </div>
+                    </div>
+
+                    <div class="analogy-box">
+                        <strong>Analogía Intuitiva:</strong>
+                        <p style="margin-top: 10px;">Imagina las alturas de las personas o las puntuaciones de crédito: la mayoría cerca del promedio, pocos extremadamente bajos o altos. Es la "campana de Gauss" que domina el azar natural.</p>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Ejemplo Paso a Paso:</strong>
+                        <p style="margin-top: 10px;">Supón que los puntajes de una cartera siguen una distribución normal con media μ = 700 y desviación estándar σ = 50. Queremos saber qué proporción de clientes tiene puntaje menor a 650.</p>
+                        
+                        <p><strong>1. Calcular el z-score:</strong></p>
+                        <div class="formula-container">
+                            <p>$$z = \frac{650 - 700}{50} = -1$$</p>
+                        </div>
+
+                        <p><strong>2. Buscar en tabla normal estándar:</strong></p>
+                        <div class="formula-container">
+                            <p>$$P(Z < -1) = 0.1587$$</p>
+                        </div>
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Interpretación:</strong>
+                        <p style="margin-top: 10px;">El <strong>15.9%</strong> de los clientes tiene score < 650. Si 100,000 clientes están distribuidos así, unos 15,900 se ubican en ese rango de mayor riesgo.</p>
+                    </div>
+
+                    <div class="svg-container">
+                        <svg viewBox="0 0 500 300" width="500" height="300" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Grid -->
+                            <defs>
+                                <pattern id="grid2" width="50" height="50" patternUnits="userSpaceOnUse">
+                                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="500" height="300" fill="url(#grid2)" />
+                            
+                            <!-- Axes -->
+                            <line x1="50" y1="220" x2="450" y2="220" stroke="#333" stroke-width="2"/>
+                            <line x1="50" y1="220" x2="50" y2="40" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- Normal Curve (μ=700, σ=50) -->
+                            <path d="M 60 220 Q 100 180 150 100 Q 200 60 250 50 Q 300 60 350 100 Q 400 180 440 220" 
+                                  stroke="#0d47a1" stroke-width="3" fill="none"/>
+                            
+                            <!-- Shaded area for z < -1 (left tail) -->
+                            <path d="M 60 220 Q 100 180 150 100 L 150 220 Z" 
+                                  fill="#ff9800" opacity="0.4"/>
+                            
+                            <!-- Vertical lines at -1σ and mean -->
+                            <line x1="150" y1="40" x2="150" y2="220" stroke="#ff9800" stroke-width="2" stroke-dasharray="5,5"/>
+                            <line x1="250" y1="40" x2="250" y2="220" stroke="#4caf50" stroke-width="2" stroke-dasharray="5,5"/>
+                            
+                            <!-- Labels -->
+                            <text x="460" y="235" font-size="12" fill="#333">x (score)</text>
+                            <text x="20" y="45" font-size="12" fill="#333">f(x)</text>
+                            
+                            <!-- Specific values -->
+                            <text x="145" y="240" font-size="11" fill="#ff9800" font-weight="bold">650</text>
+                            <text x="245" y="240" font-size="11" fill="#4caf50" font-weight="bold">700</text>
+                            
+                            <!-- Sigma markers -->
+                            <text x="145" y="30" font-size="10" fill="#ff9800" font-weight="bold">-1σ</text>
+                            <text x="245" y="30" font-size="10" fill="#4caf50" font-weight="bold">μ</text>
+                            
+                            <!-- Shaded area label -->
+                            <text x="110" y="130" font-size="11" fill="#ff9800" font-weight="bold">15.9%</text>
+                            
+                            <!-- Title -->
+                            <text x="250" y="20" font-size="14" font-weight="bold" fill="#0d47a1" text-anchor="middle">
+                                Distribución Normal: μ=700, σ=50
+                            </text>
+                        </svg>
+                    </div>
+
+                    <div class="reference">
+                        <strong>Código Python:</strong> Consulta el archivo <code>codigo_probabilidades.md</code> para calcular z-scores y probabilidades normales.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student's t-Distribution Section -->
+            <div class="section" id="section-t">
+                <div class="section-header">
+                    <h3>12.2.3 Student's t-Distribution — Pequeñas Muestras, Gran Incertidumbre</h3>
+                    <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+                </div>
+                <div class="section-content">
+                    <div class="definition-box">
+                        <strong>Definición Conceptual:</strong>
+                        <p style="margin-top: 10px;">La t de Student se usa para comparar medias cuando la varianza poblacional es desconocida y el tamaño de muestra es pequeño. Sus colas son más gruesas que las de la normal, reflejando mayor incertidumbre.</p>
+                    </div>
+
+                    <div class="analogy-box">
+                        <strong>Analogía Intuitiva:</strong>
+                        <p style="margin-top: 10px;">Es como estimar la temperatura de un país midiendo solo tres ciudades: el promedio sirve, pero las colas anchas representan el margen de error extra.</p>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Ejemplo Paso a Paso:</strong>
+                        <p style="margin-top: 10px;">Queremos evaluar si los ingresos medios de clientes buenos y malos difieren significativamente.</p>
+                        
+                        <div class="table-container">
+                            <table>
+                                <tr>
+                                    <th>Grupo</th>
+                                    <th>n</th>
+                                    <th>Media (μ)</th>
+                                    <th>Desv. Est. (s)</th>
+                                </tr>
+                                <tr>
+                                    <td><strong>Buenos</strong></td>
+                                    <td>15</td>
+                                    <td>$2,200</td>
+                                    <td>$400</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Malos</strong></td>
+                                    <td>12</td>
+                                    <td>$1,900</td>
+                                    <td>$350</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <p><strong>1. Calcular error estándar combinado:</strong></p>
+                        <div class="formula-container">
+                            <p>$$SE = \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}} = \sqrt{\frac{160000}{15} + \frac{122500}{12}} = \sqrt{10666.7 + 10208.3} = 145.4$$</p>
+                        </div>
+
+                        <p><strong>2. Calcular estadístico t:</strong></p>
+                        <div class="formula-container">
+                            <p>$$t = \frac{2200 - 1900}{145.4} = 2.06$$</p>
+                        </div>
+
+                        <p><strong>3. Determinar significancia:</strong></p>
+                        <p>Con 25 grados de libertad (n₁ + n₂ – 2), el valor crítico a 95% es 2.06.</p>
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Interpretación:</strong>
+                        <p style="margin-top: 10px;">t calculado ≈ t crítico → la diferencia es <strong>justo significativa al 95%</strong>. Los ingresos parecen efectivamente mayores entre los buenos.</p>
+                    </div>
+
+                    <div class="svg-container">
+                        <svg viewBox="0 0 500 300" width="500" height="300" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Grid -->
+                            <defs>
+                                <pattern id="grid3" width="50" height="50" patternUnits="userSpaceOnUse">
+                                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="500" height="300" fill="url(#grid3)" />
+                            
+                            <!-- Axes -->
+                            <line x1="50" y1="220" x2="450" y2="220" stroke="#333" stroke-width="2"/>
+                            <line x1="50" y1="220" x2="50" y2="40" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- Normal curve (thin) -->
+                            <path d="M 60 220 Q 100 170 150 90 Q 200 50 250 45 Q 300 50 350 90 Q 400 170 440 220" 
+                                  stroke="#0d47a1" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+                            
+                            <!-- Student's t curve (thicker tails) -->
+                            <path d="M 60 220 Q 80 160 130 80 Q 180 55 250 45 Q 320 55 370 80 Q 420 160 440 220" 
+                                  stroke="#ff9800" stroke-width="3" fill="none"/>
+                            
+                            <!-- Rejection regions -->
+                            <path d="M 60 220 Q 80 160 110 110 L 110 220 Z" fill="#ff6b6b" opacity="0.3"/>
+                            <path d="M 390 220 Q 420 160 440 110 L 440 220 Z" fill="#ff6b6b" opacity="0.3"/>
+                            
+                            <!-- Vertical lines at critical values -->
+                            <line x1="110" y1="40" x2="110" y2="220" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,5"/>
+                            <line x1="390" y1="40" x2="390" y2="220" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,5"/>
+                            
+                            <!-- Labels -->
+                            <text x="460" y="235" font-size="12" fill="#333">t</text>
+                            <text x="20" y="45" font-size="12" fill="#333">f(t)</text>
+                            
+                            <!-- Legend -->
+                            <text x="260" y="80" font-size="11" fill="#0d47a1" font-weight="bold">Normal</text>
+                            <text x="260" y="110" font-size="11" fill="#ff9800" font-weight="bold">t de Student</text>
+                            <text x="75" y="250" font-size="10" fill="#ff6b6b" font-weight="bold">-2.06</text>
+                            <text x="380" y="250" font-size="10" fill="#ff6b6b" font-weight="bold">+2.06</text>
+                            
+                            <!-- Title -->
+                            <text x="250" y="20" font-size="14" font-weight="bold" fill="#0d47a1" text-anchor="middle">
+                                Comparación: Normal vs Student's t
+                            </text>
+                        </svg>
+                    </div>
+
+                    <div class="reference">
+                        <strong>Código Python:</strong> Consulta el archivo <code>codigo_probabilidades.md</code> para realizar pruebas t.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logistic Distribution Section -->
+            <div class="section" id="section-logistic">
+                <div class="section-header">
+                    <h3>12.2.4 Logistic (Verhulst) Curve — El Corazón del Scoring</h3>
+                    <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+                </div>
+                <div class="section-content">
+                    <div class="definition-box">
+                        <strong>Definición Conceptual:</strong>
+                        <p style="margin-top: 10px;">La curva logística describe un crecimiento limitado en forma de "S", y su fórmula es:</p>
+                        <div class="formula-container">
+                            <p>$$P(x) = \frac{1}{1 + e^{-(\beta_0 + \beta_1x)}}$$</p>
+                        </div>
+                        <p style="margin-top: 10px;">Es la función de enlace de la regresión logística: transforma una combinación lineal de variables en una probabilidad entre 0 y 1.</p>
+                    </div>
+
+                    <div class="analogy-box">
+                        <strong>Analogía Intuitiva:</strong>
+                        <p style="margin-top: 10px;">Piensa en el riesgo como una válvula: al principio, pequeños cambios en los factores casi no alteran la presión (riesgo); luego, en cierto rango, la válvula responde rápido; y finalmente se satura.</p>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Ejemplo Paso a Paso:</strong>
+                        <p style="margin-top: 10px;">Supón un modelo simple:</p>
+                        <div class="formula-container">
+                            <p>$$P(\text{default}) = \frac{1}{1 + e^{-(3 - 0.01 \times \text{score})}}$$</p>
+                        </div>
+
+                        <p style="margin-top: 10px;"><strong>Calculemos para tres clientes:</strong></p>
+                        <div class="table-container">
+                            <table>
+                                <tr>
+                                    <th>Score</th>
+                                    <th>Cálculo</th>
+                                    <th>Probabilidad</th>
+                                </tr>
+                                <tr>
+                                    <td>800</td>
+                                    <td>$$\frac{1}{1+e^{-(3 - 8)}} = \frac{1}{1+e^{5}}$$</td>
+                                    <td>0.7%</td>
+                                </tr>
+                                <tr>
+                                    <td>600</td>
+                                    <td>$$\frac{1}{1+e^{-(3 - 6)}} = \frac{1}{1+e^{3}}$$</td>
+                                    <td>4.7%</td>
+                                </tr>
+                                <tr>
+                                    <td>400</td>
+                                    <td>$$\frac{1}{1+e^{-(3 - 4)}} = \frac{1}{1+e^{1}}$$</td>
+                                    <td>26.9%</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Interpretación:</strong>
+                        <p style="margin-top: 10px;">La curva S hace que el riesgo crezca lentamente en scores altos, rápidamente en el rango medio y se estabilice cerca del 100% para scores muy bajos.</p>
+                    </div>
+
+                    <div class="svg-container">
+                        <svg viewBox="0 0 500 300" width="500" height="300" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Grid -->
+                            <defs>
+                                <pattern id="grid4" width="50" height="50" patternUnits="userSpaceOnUse">
+                                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="500" height="300" fill="url(#grid4)" />
+                            
+                            <!-- Axes -->
+                            <line x1="50" y1="250" x2="450" y2="250" stroke="#333" stroke-width="2"/>
+                            <line x1="50" y1="250" x2="50" y2="20" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- Logistic Curve -->
+                            <path d="M 60 240 Q 120 210 180 140 Q 220 90 250 65 Q 280 40 320 30 Q 380 25 440 25" 
+                                  stroke="#ff9800" stroke-width="4" fill="none" stroke-linecap="round"/>
+                            
+                            <!-- Horizontal lines -->
+                            <line x1="50" y1="250" x2="450" y2="250" stroke="#999" stroke-width="0.5"/>
+                            <line x1="50" y1="135" x2="450" y2="135" stroke="#999" stroke-width="0.5" stroke-dasharray="5,5"/>
+                            
+                            <!-- Vertical lines at key scores -->
+                            <line x1="150" y1="20" x2="150" y2="250" stroke="#4caf50" stroke-width="1" stroke-dasharray="5,5"/>
+                            <line x1="250" y1="20" x2="250" y2="250" stroke="#0d47a1" stroke-width="2" stroke-dasharray="5,5"/>
+                            <line x1="350" y1="20" x2="350" y2="250" stroke="#4caf50" stroke-width="1" stroke-dasharray="5,5"/>
+                            
+                            <!-- Labels -->
+                            <text x="460" y="265" font-size="12" fill="#333">Score</text>
+                            <text x="15" y="25" font-size="12" fill="#333">P(Default)</text>
+                            
+                            <!-- Score labels -->
+                            <text x="145" y="270" font-size="11" fill="#4caf50" font-weight="bold">400</text>
+                            <text x="245" y="270" font-size="11" fill="#0d47a1" font-weight="bold">600</text>
+                            <text x="345" y="270" font-size="11" fill="#4caf50" font-weight="bold">800</text>
+                            
+                            <!-- Probability labels -->
+                            <text x="35" y="150" font-size="10" fill="#333">0.5</text>
+                            <text x="35" y="260" font-size="10" fill="#333">0</text>
+                            <text x="35" y="30" font-size="10" fill="#333">1</text>
+                            
+                            <!-- Inflection point marker -->
+                            <circle cx="250" cy="135" r="3" fill="#0d47a1"/>
+                            
+                            <!-- Annotations -->
+                            <text x="250" y="110" font-size="10" fill="#0d47a1" text-anchor="middle" font-weight="bold">Inflexión</text>
+                            <text x="250" y="125" font-size="10" fill="#0d47a1" text-anchor="middle" font-weight="bold">(50% riesgo)</text>
+                            
+                            <!-- Title -->
+                            <text x="250" y="15" font-size="14" font-weight="bold" fill="#ff9800" text-anchor="middle">
+                                Curva Logística (Regresión Logística)
+                            </text>
+                        </svg>
+                    </div>
+
+                    <div class="reference">
+                        <strong>Código Python:</strong> Consulta el archivo <code>codigo_probabilidades.md</code> para implementar modelos logísticos.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chi-Square Section -->
+            <div class="section" id="section-chi">
+                <div class="section-header">
+                    <h3>12.2.5 Pearson's Chi-Square Distribution — Probar si Algo Importa</h3>
+                    <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+                </div>
+                <div class="section-content">
+                    <div class="definition-box">
+                        <strong>Definición Conceptual:</strong>
+                        <p style="margin-top: 10px;">La χ² se usa para contrastar si las diferencias entre categorías son aleatorias o estadísticamente significativas. Compara las frecuencias observadas (O) con las esperadas (E):</p>
+                        <div class="formula-container">
+                            <p>$$\chi^2 = \sum \frac{(O - E)^2}{E}$$</p>
+                        </div>
+                    </div>
+
+                    <div class="analogy-box">
+                        <strong>Analogía Intuitiva:</strong>
+                        <p style="margin-top: 10px;">Como revisar si una ruleta está trucada: si las frecuencias observadas se alejan mucho de las esperadas por azar, hay evidencia de sesgo.</p>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Ejemplo Paso a Paso:</strong>
+                        <p style="margin-top: 10px;">Queremos saber si el estado civil influye en el incumplimiento.</p>
+
+                        <div class="table-container">
+                            <table>
+                                <tr>
+                                    <th>Estado Civil</th>
+                                    <th>Incumplen (O)</th>
+                                    <th>No Incumplen (O)</th>
+                                    <th>Total</th>
+                                </tr>
+                                <tr>
+                                    <td>Soltero</td>
+                                    <td>40</td>
+                                    <td>360</td>
+                                    <td>400</td>
+                                </tr>
+                                <tr>
+                                    <td>Casado</td>
+                                    <td>20</td>
+                                    <td>380</td>
+                                    <td>400</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total</strong></td>
+                                    <td><strong>60</strong></td>
+                                    <td><strong>740</strong></td>
+                                    <td><strong>800</strong></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <p><strong>1. Calcular frecuencias esperadas:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Para Solteros con default: $$E = 400 \times (60/800) = 30$$</li>
+                            <li>Para Casados con default: $$E = 400 \times (60/800) = 30$$</li>
+                        </ul>
+
+                        <p><strong>2. Sustituir en la fórmula:</strong></p>
+                        <div class="formula-container">
+                            <p>$$\chi^2 = \frac{(40 - 30)^2}{30} + \frac{(20 - 30)^2}{30} = \frac{100}{30} + \frac{100}{30} = 6.67$$</p>
+                        </div>
+
+                        <p><strong>3. Comparar con valor crítico:</strong></p>
+                        <p>Con 1 grado de libertad, el valor crítico a 95% es 3.84.</p>
+                    </div>
+
+                    <div class="interpretation-box">
+                        <strong>Interpretación:</strong>
+                        <p style="margin-top: 10px;">χ² calculado = 6.67 > 3.84 → se <strong>rechaza la hipótesis nula</strong>. El estado civil <strong>sí influye significativamente</strong> en el riesgo.</p>
+                    </div>
+
+                    <div class="svg-container">
+                        <svg viewBox="0 0 500 300" width="500" height="300" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Grid -->
+                            <defs>
+                                <pattern id="grid5" width="50" height="50" patternUnits="userSpaceOnUse">
+                                    <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#e0e0e0" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="500" height="300" fill="url(#grid5)" />
+                            
+                            <!-- Axes -->
+                            <line x1="50" y1="240" x2="450" y2="240" stroke="#333" stroke-width="2"/>
+                            <line x1="50" y1="240" x2="50" y2="20" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- Chi-square curve (df=1) -->
+                            <path d="M 50 240 L 70 230 Q 100 200 150 120 Q 200 70 250 50 Q 300 45 350 48 Q 400 60 450 80" 
+                                  stroke="#0d47a1" stroke-width="3" fill="none"/>
+                            
+                            <!-- Rejection region -->
+                            <path d="M 280 240 Q 320 60 450 80 L 450 240 Z" fill="#ff6b6b" opacity="0.3"/>
+                            
+                            <!-- Critical value line -->
+                            <line x1="280" y1="20" x2="280" y2="240" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,5"/>
+                            
+                            <!-- Test statistic line -->
+                            <line x1="320" y1="20" x2="320" y2="240" stroke="#ff9800" stroke-width="2" stroke-dasharray="5,5"/>
+                            
+                            <!-- Labels -->
+                            <text x="460" y="255" font-size="12" fill="#333">χ²</text>
+                            <text x="20" y="25" font-size="12" fill="#333">f(χ²)</text>
+                            
+                            <!-- Value labels -->
+                            <text x="275" y="260" font-size="10" fill="#ff6b6b" font-weight="bold">3.84</text>
+                            <text x="315" y="260" font-size="10" fill="#ff9800" font-weight="bold">6.67</text>
+                            
+                            <!-- Region labels -->
+                            <text x="365" y="140" font-size="12" fill="#ff6b6b" font-weight="bold">Rechazo</text>
+                            <text x="140" y="120" font-size="11" fill="#0d47a1">No rechazo</text>
+                            
+                            <!-- Title -->
+                            <text x="250" y="15" font-size="14" font-weight="bold" fill="#0d47a1" text-anchor="middle">
+                                Distribución Chi-Cuadrado: gl=1 (α=0.05)
+                            </text>
+                        </svg>
+                    </div>
+
+                    <div class="reference">
+                        <strong>Código Python:</strong> Consulta el archivo <code>codigo_probabilidades.md</code> para realizar pruebas chi-cuadrado.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="section" id="section-summary">
+                <div class="section-header">
+                    <h3>Síntesis Visual: Comparativa de Distribuciones</h3>
+                    <button class="toggle-btn" onclick="toggleSection(event)">▼</button>
+                </div>
+                <div class="section-content">
+                    <p>A continuación se presenta una tabla comparativa de las cinco distribuciones clave en modelos de crédito:</p>
+                    
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Distribución</th>
+                                <th>Tipo de Dato</th>
+                                <th>Uso en Crédito</th>
+                                <th>Interpretación</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Binomial</strong></td>
+                                <td>Discreta</td>
+                                <td>Defaults contables</td>
+                                <td>Riesgo observado en muestras pequeñas</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Normal</strong></td>
+                                <td>Continua</td>
+                                <td>Scores o ingresos</td>
+                                <td>Estandarizar y modelar la media</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Student's t</strong></td>
+                                <td>Continua</td>
+                                <td>Comparar grupos</td>
+                                <td>Diferencias significativas con varianza incierta</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Logística</strong></td>
+                                <td>Continua</td>
+                                <td>Probabilidad de default</td>
+                                <td>Curva de riesgo no lineal</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Chi-cuadrado</strong></td>
+                                <td>Categórica</td>
+                                <td>Pruebas de independencia</td>
+                                <td>Determinar poder predictivo por categoría</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <h3 style="margin-top: 30px;">Recomendaciones para la Práctica</h3>
+                    <div style="background: linear-gradient(135deg, #f0f4c3 0%, #fff9c4 100%); border-left: 5px solid #fbc02d; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                        <ul style="margin-left: 20px; color: #333;">
+                            <li><strong>Validación de supuestos:</strong> Antes de aplicar cualquier distribución, verifica que los datos cumplan con los supuestos teóricos.</li>
+                            <li><strong>Tamaño de muestra:</strong> Para muestras pequeñas (n < 30), prefiere la t de Student sobre la normal.</li>
+                            <li><strong>Significancia práctica:</strong> Un resultado estadísticamente significativo no siempre es económicamente relevante.</li>
+                            <li><strong>Modelos de scoring:</strong> La logística es fundamental en regresión logística para modelar probabilidades de default.</li>
+                            <li><strong>Pruebas de independencia:</strong> Usa chi-cuadrado para validar relaciones entre variables categóricas y default.</li>
+                        </ul>
+                    </div>
+
+                    <div class="reference">
+                        <strong>Próximo Paso:</strong> Consulta la sección <strong>12.3: Economics</strong> para aprender sobre curva de Lorenz, coeficiente de Gini e Índice de Gini Impureza.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" onclick="scrollToTop()">▲</button>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Credit Intelligence & Modelling</strong> | Raymond Anderson</p>
+        <p>Sección 12.2: Probability Distributions and Hypotheses</p>
+        <p style="margin-top: 15px; font-size: 0.9em;">Para consultar el código Python de los ejemplos, consulta: <code>codigo_probabilidades.md</code></p>
+    </footer>
+
+    <script>
+        // Toggle section functionality
+        function toggleSection(event) {
+            const button = event.target;
+            const section = button.closest('.section');
+            const content = section.querySelector('.section-content');
+            
+            content.classList.toggle('active');
+            button.textContent = content.classList.contains('active') ? '▲' : '▼';
+        }
+
+        // Smooth scroll to anchor
+        document.querySelectorAll('.toc-list a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                    // Expand the section if it's collapsed
+                    const content = targetElement.querySelector('.section-content');
+                    if (!content.classList.contains('active')) {
+                        content.classList.add('active');
+                        const button = targetElement.querySelector('.toggle-btn');
+                        button.textContent = '▲';
+                    }
+                }
+            });
+        });
+
+        // Back to top button functionality
+        window.addEventListener('scroll', function() {
+            const button = document.querySelector('.back-to-top');
+            if (window.scrollY > 300) {
+                button.classList.add('show');
+            } else {
+                button.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize all sections as collapsed except intro
+        window.addEventListener('load', function() {
+            const sections = document.querySelectorAll('.section-content');
+            sections.forEach((content, index) => {
+                if (index !== 0) {
+                    content.classList.remove('active');
+                    content.closest('.section').querySelector('.toggle-btn').textContent = '▼';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
