@@ -1,0 +1,24 @@
+[project]
+name = "learnings-over-time-python"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = [
+    "awswrangler>=3.14.0",
+    "boto3>=1.41.3",
+    "click>=8.3.1",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.10.7",
+    "notebook>=7.5.0",
+    "numpy>=2.3.5",
+    "pandas>=2.3.3",
+    "polars>=1.35.2",
+    "python-dotenv>=1.2.1",
+    "pyyaml>=6.0.3",
+    "requests>=2.32.5",
+    "sagemaker>=3.0.1",
+    "scikit-learn>=1.7.2",
+    "scipy>=1.16.3",
+    "seaborn>=0.13.2",
+    "statsmodels>=0.14.5",
+]
