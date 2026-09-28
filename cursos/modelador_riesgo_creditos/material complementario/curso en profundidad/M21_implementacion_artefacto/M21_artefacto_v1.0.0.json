@@ -1,0 +1,721 @@
+{
+  "formato": {
+    "nombre": "scorecard-artefacto",
+    "version_esquema": "1.0.0"
+  },
+  "modelo": {
+    "id": "sintetico-consumo-scorecard",
+    "version": "1.0.0",
+    "fecha_construccion": "2026-09-28",
+    "descripcion": "Scorecard de consumo, 8 variables (banco de pruebas M21)",
+    "target": "1 = malo (90+ DPD a 12 meses)"
+  },
+  "variables": [
+    {
+      "nombre": "uso_linea_prom_12m",
+      "tipo": "numerico",
+      "beta": -0.5125475410452052,
+      "bins": [
+        {
+          "id": 0,
+          "tipo": "intervalo",
+          "inf": null,
+          "sup": 0.19672000000000006,
+          "woe": 1.241170193469381,
+          "puntos": 86.68768511047028,
+          "n_dev": 2013,
+          "etiqueta_dev": "(-inf, 0.197]"
+        },
+        {
+          "id": 1,
+          "tipo": "intervalo",
+          "inf": 0.19672000000000006,
+          "sup": 0.31626000000000004,
+          "woe": 0.7855706157922852,
+          "puntos": 79.94982481791344,
+          "n_dev": 2013,
+          "etiqueta_dev": "(0.197, 0.316]"
+        },
+        {
+          "id": 2,
+          "tipo": "intervalo",
+          "inf": 0.31626000000000004,
+          "sup": 0.4488400000000001,
+          "woe": 0.3992914481108576,
+          "puntos": 74.23714378551958,
+          "n_dev": 2013,
+          "etiqueta_dev": "(0.316, 0.449]"
+        },
+        {
+          "id": 3,
+          "tipo": "intervalo",
+          "inf": 0.4488400000000001,
+          "sup": 0.60482,
+          "woe": -0.2436751555881461,
+          "puntos": 64.7283133107598,
+          "n_dev": 2013,
+          "etiqueta_dev": "(0.449, 0.605]"
+        },
+        {
+          "id": 4,
+          "tipo": "intervalo",
+          "inf": 0.60482,
+          "sup": null,
+          "woe": -0.993780855772756,
+          "puntos": 53.635003175875276,
+          "n_dev": 2013,
+          "etiqueta_dev": "(0.605, inf]"
+        }
+      ],
+      "no_visto": {
+        "woe": 0.0,
+        "accion": "revisar"
+      },
+      "reason_code": "RC01",
+      "tendencia_declarada": "decreciente",
+      "cierre": "derecha"
+    },
+    {
+      "nombre": "uso_tc_prom_3m",
+      "tipo": "numerico",
+      "beta": -0.33087658622610594,
+      "bins": [
+        {
+          "id": 0,
+          "tipo": "intervalo",
+          "inf": null,
+          "sup": 0.2036,
+          "woe": 1.131500509284957,
+          "puntos": 79.13455030165353,
+          "n_dev": 2014,
+          "etiqueta_dev": "(-inf, 0.204]"
+        },
+        {
+          "id": 1,
+          "tipo": "intervalo",
+          "inf": 0.2036,
+          "sup": 0.3263,
+          "woe": 0.6419027338831454,
+          "puntos": 74.46032107322382,
+          "n_dev": 2013,
+          "etiqueta_dev": "(0.204, 0.326]"
+        },
+        {
+          "id": 2,
+          "tipo": "intervalo",
+          "inf": 0.3263,
+          "sup": 0.4489800000000001,
+          "woe": 0.16314098127948118,
+          "puntos": 69.88954422351756,
+          "n_dev": 2012,
+          "etiqueta_dev": "(0.326, 0.449]"
+        },
+        {
+          "id": 3,
+          "tipo": "intervalo",
+          "inf": 0.4489800000000001,
+          "sup": 0.6079400000000001,
+          "woe": -0.14968094665513298,
+          "puntos": 66.90300818861488,
+          "n_dev": 2013,
+          "etiqueta_dev": "(0.449, 0.608]"
+        },
+        {
+          "id": 4,
+          "tipo": "intervalo",
+          "inf": 0.6079400000000001,
+          "sup": null,
+          "woe": -0.886667126295808,
+          "puntos": 59.86694202389829,
+          "n_dev": 2013,
+          "etiqueta_dev": "(0.608, inf]"
+        }
+      ],
+      "no_visto": {
+        "woe": 0.0,
+        "accion": "revisar"
+      },
+      "reason_code": "RC02",
+      "tendencia_declarada": "decreciente",
+      "cierre": "derecha"
+    },
+    {
+      "nombre": "meses_desde_mora_12m",
+      "tipo": "numerico",
+      "beta": -0.7380894463442795,
+      "bins": [
+        {
+          "id": 0,
+          "tipo": "intervalo",
+          "inf": null,
+          "sup": -9.0,
+          "woe": 0.21671124503596362,
+          "puntos": 72.94727149639586,
+          "n_dev": 2241,
+          "etiqueta_dev": "(-inf, -9.0]"
+        },
+        {
+          "id": 1,
+          "tipo": "intervalo",
+          "inf": -9.0,
+          "sup": 3.0,
+          "woe": -1.3964843286889566,
+          "puntos": 38.591433046795615,
+          "n_dev": 492,
+          "etiqueta_dev": "(-9.0, 3.0]"
+        },
+        {
+          "id": 2,
+          "tipo": "intervalo",
+          "inf": 3.0,
+          "sup": 8.0,
+          "woe": -0.9733447665528532,
+          "puntos": 47.602934612483295,
+          "n_dev": 838,
+          "etiqueta_dev": "(3.0, 8.0]"
+        },
+        {
+          "id": 3,
+          "tipo": "intervalo",
+          "inf": 8.0,
+          "sup": null,
+          "woe": -0.6825513819772537,
+          "puntos": 53.795891440168795,
+          "n_dev": 702,
+          "etiqueta_dev": "(8.0, inf]"
+        },
+        {
+          "id": 4,
+          "tipo": "valor",
+          "valor": 13.0,
+          "woe": 0.5179243813964185,
+          "puntos": 79.36213527376313,
+          "n_dev": 5792,
+          "etiqueta_dev": "= 13"
+        }
+      ],
+      "no_visto": {
+        "woe": 0.0,
+        "accion": "revisar"
+      },
+      "reason_code": "RC03",
+      "tendencia_declarada": null,
+      "cierre": "derecha"
+    },
+    {
+      "nombre": "antiguedad_meses",
+      "tipo": "numerico",
+      "beta": -1.1309712953332092,
+      "bins": [
+        {
+          "id": 0,
+          "tipo": "intervalo",
+          "inf": null,
+          "sup": 28.0,
+          "woe": -0.3167790534679567,
+          "puntos": 57.99459437862637,
+          "n_dev": 2032,
+          "etiqueta_dev": "(-inf, 28.0]"
+        },
+        {
+          "id": 1,
+          "tipo": "intervalo",
+          "inf": 28.0,
+          "sup": 46.0,
+          "woe": -0.13520714692164384,
+          "puntos": 63.9198183455453,
+          "n_dev": 2015,
+          "etiqueta_dev": "(28.0, 46.0]"
+        },
+        {
+          "id": 2,
+          "tipo": "intervalo",
+          "inf": 46.0,
+          "sup": 67.0,
+          "woe": -0.1370475331389496,
+          "puntos": 63.85976114434835,
+          "n_dev": 2051,
+          "etiqueta_dev": "(46.0, 67.0]"
+        },
+        {
+          "id": 3,
+          "tipo": "intervalo",
+          "inf": 67.0,
+          "sup": 98.0,
+          "woe": 0.24088564997154432,
+          "puntos": 76.19282960771817,
+          "n_dev": 1972,
+          "etiqueta_dev": "(67.0, 98.0]"
+        },
+        {
+          "id": 4,
+          "tipo": "intervalo",
+          "inf": 98.0,
+          "sup": null,
+          "woe": 0.5430376335582214,
+          "puntos": 86.05293522016447,
+          "n_dev": 1995,
+          "etiqueta_dev": "(98.0, inf]"
+        }
+      ],
+      "no_visto": {
+        "woe": 0.0,
+        "accion": "revisar"
+      },
+      "reason_code": "RC04",
+      "tendencia_declarada": "creciente",
+      "cierre": "derecha"
+    },
+    {
+      "nombre": "carga_financiera",
+      "tipo": "numerico",
+      "beta": -0.4982284540862879,
+      "bins": [
+        {
+          "id": 0,
+          "tipo": "intervalo",
+          "inf": null,
+          "sup": 1.491,
+          "woe": 0.5934409426333596,
+          "puntos": 76.86323290779245,
+          "n_dev": 2015,
+          "etiqueta_dev": "(-inf, 1.491]"
+        },
+        {
+          "id": 1,
+          "tipo": "intervalo",
+          "inf": 1.491,
+          "sup": 2.674,
+          "woe": 0.1693434459291638,
+          "puntos": 70.76647752622677,
+          "n_dev": 2013,
+          "etiqueta_dev": "(1.491, 2.674]"
+        },
+        {
+          "id": 2,
+          "tipo": "intervalo",
+          "inf": 2.674,
+          "sup": 4.3654,
+          "woe": 0.018857705572989544,
+          "puntos": 68.60311944348541,
+          "n_dev": 2011,
+          "etiqueta_dev": "(2.674, 4.365]"
+        },
+        {
+          "id": 3,
+          "tipo": "intervalo",
+          "inf": 4.3654,
+          "sup": 7.889400000000008,
+          "woe": -0.20174943581177052,
+          "puntos": 65.43170771174516,
+          "n_dev": 2013,
+          "etiqueta_dev": "(4.365, 7.889]"
+        },
+        {
+          "id": 4,
+          "tipo": "intervalo",
+          "inf": 7.889400000000008,
+          "sup": null,
+          "woe": -0.37375814607678387,
+          "puntos": 62.95893897782395,
+          "n_dev": 2013,
+          "etiqueta_dev": "(7.889, inf]"
+        }
+      ],
+      "no_visto": {
+        "woe": 0.0,
+        "accion": "revisar"
+      },
+      "reason_code": "RC05",
+      "tendencia_declarada": "decreciente",
+      "cierre": "derecha"
+    },
+    {
+      "nombre": "consultas_6m",
+      "tipo": "numerico",
+      "beta": -0.33844943118125487,
+      "bins": [
+        {
+          "id": 0,
+          "tipo": "intervalo",
+          "inf": null,
+          "sup": 1.0,
+          "woe": 0.38851430095460804,
+          "puntos": 72.12609413321844,
+          "n_dev": 6187,
+          "etiqueta_dev": "(-inf, 1.0]"
+        },
+        {
+          "id": 1,
+          "tipo": "intervalo",
+          "inf": 1.0,
+          "sup": 2.0,
+          "woe": -0.08814809849877371,
+          "puntos": 67.47120632626913,
+          "n_dev": 2093,
+          "etiqueta_dev": "(1.0, 2.0]"
+        },
+        {
+          "id": 2,
+          "tipo": "intervalo",
+          "inf": 2.0,
+          "sup": null,
+          "woe": -0.7847704695219129,
+          "puntos": 60.66828043020027,
+          "n_dev": 1785,
+          "etiqueta_dev": "(2.0, inf]"
+        }
+      ],
+      "no_visto": {
+        "woe": 0.0,
+        "accion": "revisar"
+      },
+      "reason_code": "RC06",
+      "tendencia_declarada": "decreciente",
+      "cierre": "derecha"
+    },
+    {
+      "nombre": "canal",
+      "tipo": "categorico",
+      "beta": -1.1867488879314705,
+      "bins": [
+        {
+          "id": 0,
+          "tipo": "categoria",
+          "valor": "app",
+          "woe": -0.164520912631535,
+          "puntos": 62.69844403423466,
+          "n_dev": 1459,
+          "etiqueta_dev": "app"
+        },
+        {
+          "id": 1,
+          "tipo": "categoria",
+          "valor": "fuerza_venta",
+          "woe": -0.15140516829798237,
+          "puntos": 63.14755774164853,
+          "n_dev": 1437,
+          "etiqueta_dev": "fuerza_venta"
+        },
+        {
+          "id": 2,
+          "tipo": "categoria",
+          "valor": "sucursal",
+          "woe": 0.025344029595438886,
+          "puntos": 69.19986293528284,
+          "n_dev": 4496,
+          "etiqueta_dev": "sucursal"
+        },
+        {
+          "id": 3,
+          "tipo": "categoria",
+          "valor": "web",
+          "woe": 0.14808616557252086,
+          "puntos": 73.40284023818303,
+          "n_dev": 2673,
+          "etiqueta_dev": "web"
+        }
+      ],
+      "no_visto": {
+        "woe": 0.0,
+        "accion": "revisar"
+      },
+      "reason_code": "RC07",
+      "tendencia_declarada": null
+    },
+    {
+      "nombre": "renta_mm",
+      "tipo": "numerico",
+      "beta": -0.2138911099437898,
+      "bins": [
+        {
+          "id": 0,
+          "tipo": "intervalo",
+          "inf": null,
+          "sup": 0.5126455142900015,
+          "woe": -0.10864736630355226,
+          "puntos": 67.66149687957284,
+          "n_dev": 1933,
+          "etiqueta_dev": "(-inf, 0.513]"
+        },
+        {
+          "id": 1,
+          "tipo": "intervalo",
+          "inf": 0.5126455142900015,
+          "sup": 0.703492695100934,
+          "woe": -0.06520678451818422,
+          "puntos": 67.92959446448029,
+          "n_dev": 1933,
+          "etiqueta_dev": "(0.513, 0.703]"
+        },
+        {
+          "id": 2,
+          "tipo": "intervalo",
+          "inf": 0.703492695100934,
+          "sup": 0.9197321672859478,
+          "woe": 0.030948287857500544,
+          "puntos": 68.52302442377251,
+          "n_dev": 1932,
+          "etiqueta_dev": "(0.703, 0.92]"
+        },
+        {
+          "id": 3,
+          "tipo": "intervalo",
+          "inf": 0.9197321672859478,
+          "sup": 1.262023506250378,
+          "woe": 0.020999142488686343,
+          "puntos": 68.46162234913064,
+          "n_dev": 1933,
+          "etiqueta_dev": "(0.92, 1.262]"
+        },
+        {
+          "id": 4,
+          "tipo": "intervalo",
+          "inf": 1.262023506250378,
+          "sup": null,
+          "woe": 0.15351772253338714,
+          "puntos": 69.27947307315834,
+          "n_dev": 1933,
+          "etiqueta_dev": "(1.262, inf]"
+        },
+        {
+          "id": 5,
+          "tipo": "missing",
+          "woe": -0.07416026162237278,
+          "puntos": 67.87433724900336,
+          "n_dev": 401,
+          "etiqueta_dev": "MISSING"
+        }
+      ],
+      "no_visto": {
+        "woe": 0.0,
+        "accion": "revisar"
+      },
+      "reason_code": "RC08",
+      "tendencia_declarada": "creciente",
+      "cierre": "derecha"
+    }
+  ],
+  "intercepto": -2.0632675526154585,
+  "escalado": {
+    "pdo": 20,
+    "score_base": 600,
+    "odds_base": 50,
+    "factor": 28.85390081777927,
+    "offset": 487.1228762045055,
+    "sentido": "mayor_es_mejor"
+  },
+  "calibracion": {
+    "metodo": "desplazamiento_logit",
+    "delta": 0.12482348230863494,
+    "tendencia_central": 0.12415944282487805,
+    "fuente": "media de PD en DEV = TC (brentq, xtol 1e-12)"
+  },
+  "master_scale": {
+    "cortes": [
+      490.0,
+      510.0,
+      530.0,
+      550.0,
+      570.0,
+      590.0,
+      610.0
+    ],
+    "etiquetas": [
+      "E",
+      "D",
+      "C2",
+      "C1",
+      "B2",
+      "B1",
+      "A2",
+      "A1"
+    ],
+    "cierre": "izquierda"
+  },
+  "politica": {
+    "cutoff": 530.0,
+    "regla": "aprobar si score >= cutoff y sin marcas",
+    "no_visto": "revisar"
+  },
+  "reason_codes": {
+    "RC01": "Uso alto de la línea de crédito",
+    "RC02": "Uso alto de la tarjeta en los últimos 3 meses",
+    "RC03": "Mora propia reciente o sin información de bureau",
+    "RC04": "Poca antigüedad como cliente",
+    "RC05": "Carga financiera alta respecto de la renta",
+    "RC06": "Muchas consultas de crédito recientes",
+    "RC07": "Canal de originación",
+    "RC08": "Renta baja o no informada"
+  },
+  "contrato_datos": {
+    "variables": {
+      "uso_linea_prom_12m": {
+        "pct_missing_dev": 0.0,
+        "pct_missing_max": 0.01,
+        "tipo": "numerico",
+        "dominio": {
+          "min": 0.0,
+          "max": 1.5
+        },
+        "rango_dev": {
+          "min": 0.0062,
+          "max": 0.9821,
+          "p005": 0.034696,
+          "p995": 0.9136920000000005
+        },
+        "fuera_p005_p995_dev": 0.010134128166915052,
+        "n_dev_observados": 10065
+      },
+      "uso_tc_prom_3m": {
+        "pct_missing_dev": 0.0,
+        "pct_missing_max": 0.01,
+        "tipo": "numerico",
+        "dominio": {
+          "min": 0.0,
+          "max": 1.5
+        },
+        "rango_dev": {
+          "min": 0.0,
+          "max": 1.0962,
+          "p005": 0.0,
+          "p995": 0.9759160000000011
+        },
+        "fuera_p005_p995_dev": 0.005067064083457526,
+        "n_dev_observados": 10065
+      },
+      "meses_desde_mora_12m": {
+        "pct_missing_dev": 0.0,
+        "pct_missing_max": 0.01,
+        "tipo": "numerico",
+        "dominio": {
+          "min": 1.0,
+          "max": 13.0,
+          "especiales": [
+            -99.0,
+            -9.0
+          ],
+          "entero": true
+        },
+        "rango_dev": {
+          "min": -99.0,
+          "max": 13.0,
+          "p005": -99.0,
+          "p995": 13.0
+        },
+        "fuera_p005_p995_dev": 0.0,
+        "n_dev_observados": 10065
+      },
+      "antiguedad_meses": {
+        "pct_missing_dev": 0.0,
+        "pct_missing_max": 0.01,
+        "tipo": "numerico",
+        "dominio": {
+          "min": 0.0,
+          "max": 600.0,
+          "entero": true
+        },
+        "rango_dev": {
+          "min": 6.0,
+          "max": 360.0,
+          "p005": 6.0,
+          "p995": 226.6800000000003
+        },
+        "fuera_p005_p995_dev": 0.005067064083457526,
+        "n_dev_observados": 10065
+      },
+      "carga_financiera": {
+        "pct_missing_dev": 0.0,
+        "pct_missing_max": 0.01,
+        "tipo": "numerico",
+        "dominio": {
+          "min": 0.0,
+          "max": 500.0
+        },
+        "rango_dev": {
+          "min": 0.016,
+          "max": 187.634,
+          "p005": 0.16,
+          "p995": 44.47168
+        },
+        "fuera_p005_p995_dev": 0.0100347739692002,
+        "n_dev_observados": 10065
+      },
+      "consultas_6m": {
+        "pct_missing_dev": 0.0,
+        "pct_missing_max": 0.01,
+        "tipo": "numerico",
+        "dominio": {
+          "min": 0.0,
+          "max": 100.0,
+          "entero": true
+        },
+        "rango_dev": {
+          "min": 0.0,
+          "max": 9.0,
+          "p005": 0.0,
+          "p995": 6.0
+        },
+        "fuera_p005_p995_dev": 0.0036761053154495777,
+        "n_dev_observados": 10065
+      },
+      "canal": {
+        "pct_missing_dev": 0.0,
+        "pct_missing_max": 0.01,
+        "tipo": "categorico",
+        "categorias": [
+          "app",
+          "fuerza_venta",
+          "sucursal",
+          "web"
+        ]
+      },
+      "renta_mm": {
+        "pct_missing_dev": 0.039841033283656235,
+        "pct_missing_max": 0.12952309985096871,
+        "tipo": "numerico",
+        "dominio": {
+          "min": 0.01,
+          "max": 100.0
+        },
+        "rango_dev": {
+          "min": 0.13979216440570708,
+          "max": 6.650043027381729,
+          "p005": 0.20943513867275912,
+          "p995": 3.3772160165207814
+        },
+        "fuera_p005_p995_dev": 0.010140728476821192,
+        "n_dev_observados": 9664
+      }
+    },
+    "reglas": [
+      {
+        "id": "antiguedad_vs_edad",
+        "expresion": "antiguedad_meses <= 12 * edad",
+        "columnas": [
+          "antiguedad_meses",
+          "edad"
+        ]
+      }
+    ],
+    "umbrales": {
+      "fuera_rango_aviso": 0.01,
+      "fuera_rango_bloqueo": 0.1,
+      "missing_bloqueo_abs": 0.25,
+      "missing_factor_bloqueo": 4.0,
+      "categoria_nueva_bloqueo": 0.1,
+      "fila_invalida_bloqueo": 0.01
+    }
+  },
+  "procedencia": {
+    "muestra_ajuste": "DEV (cohortes <= 2024-12, 70% al azar)",
+    "n_dev": 10065,
+    "hash_dev": "c7f48ce40f00988d52729cb9936f4e6b156aaa30595aca44798abfb57316559a",
+    "semilla_generador": 2026
+  },
+  "integridad": {
+    "algoritmo": "sha256",
+    "canonicalizacion": "json sort_keys, separators=(',',':'), UTF-8, allow_nan=False",
+    "hash": "22d768e27af26824653860214a0502e9adc39df9b3f042e1aff83c1b4f4375f7"
+  }
+}

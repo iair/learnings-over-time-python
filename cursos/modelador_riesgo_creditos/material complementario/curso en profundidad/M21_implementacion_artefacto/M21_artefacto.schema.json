@@ -1,0 +1,352 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ejemplo.invalid/serie2/M21/scorecard-artefacto-1.0.0.schema.json",
+  "title": "Artefacto congelado de scorecard (Serie 2 · M21)",
+  "type": "object",
+  "required": [
+    "formato",
+    "modelo",
+    "variables",
+    "intercepto",
+    "escalado",
+    "calibracion",
+    "master_scale",
+    "politica",
+    "reason_codes",
+    "contrato_datos",
+    "integridad"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "formato": {
+      "type": "object",
+      "required": [
+        "nombre",
+        "version_esquema"
+      ],
+      "properties": {
+        "nombre": {
+          "const": "scorecard-artefacto"
+        },
+        "version_esquema": {
+          "type": "string"
+        }
+      }
+    },
+    "modelo": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "fecha_construccion"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+        },
+        "fecha_construccion": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        }
+      }
+    },
+    "variables": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/variable"
+      }
+    },
+    "intercepto": {
+      "type": "number"
+    },
+    "escalado": {
+      "type": "object",
+      "required": [
+        "pdo",
+        "score_base",
+        "odds_base",
+        "factor",
+        "offset",
+        "sentido"
+      ],
+      "properties": {
+        "pdo": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "odds_base": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "factor": {
+          "type": "number"
+        },
+        "offset": {
+          "type": "number"
+        },
+        "sentido": {
+          "enum": [
+            "mayor_es_mejor",
+            "mayor_es_peor"
+          ]
+        }
+      }
+    },
+    "calibracion": {
+      "type": "object",
+      "required": [
+        "metodo",
+        "delta"
+      ],
+      "properties": {
+        "metodo": {
+          "enum": [
+            "desplazamiento_logit",
+            "ninguna"
+          ]
+        },
+        "delta": {
+          "type": "number"
+        }
+      }
+    },
+    "master_scale": {
+      "type": "object",
+      "required": [
+        "cortes",
+        "etiquetas",
+        "cierre"
+      ],
+      "properties": {
+        "cortes": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "etiquetas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "cierre": {
+          "enum": [
+            "izquierda",
+            "derecha"
+          ]
+        }
+      }
+    },
+    "politica": {
+      "type": "object",
+      "required": [
+        "cutoff",
+        "no_visto"
+      ],
+      "properties": {
+        "cutoff": {
+          "type": "number"
+        },
+        "no_visto": {
+          "enum": [
+            "revisar",
+            "rechazar",
+            "neutro"
+          ]
+        }
+      }
+    },
+    "reason_codes": {
+      "type": "object",
+      "patternProperties": {
+        "^RC\\d{2}$": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "contrato_datos": {
+      "type": "object",
+      "required": [
+        "variables",
+        "umbrales"
+      ]
+    },
+    "procedencia": {
+      "type": "object"
+    },
+    "integridad": {
+      "type": "object",
+      "required": [
+        "algoritmo",
+        "hash"
+      ],
+      "properties": {
+        "algoritmo": {
+          "const": "sha256"
+        },
+        "hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "borde": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "bin": {
+      "type": "object",
+      "required": [
+        "id",
+        "tipo",
+        "woe",
+        "puntos"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tipo": {
+          "enum": [
+            "intervalo",
+            "valor",
+            "categoria",
+            "missing"
+          ]
+        },
+        "inf": {
+          "$ref": "#/$defs/borde"
+        },
+        "sup": {
+          "$ref": "#/$defs/borde"
+        },
+        "woe": {
+          "type": "number"
+        },
+        "puntos": {
+          "type": "number"
+        },
+        "n_dev": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "const": "intervalo"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "inf",
+              "sup"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tipo": {
+                "enum": [
+                  "valor",
+                  "categoria"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "valor"
+            ]
+          }
+        }
+      ]
+    },
+    "variable": {
+      "type": "object",
+      "required": [
+        "nombre",
+        "tipo",
+        "beta",
+        "bins",
+        "no_visto",
+        "reason_code"
+      ],
+      "properties": {
+        "nombre": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "tipo": {
+          "enum": [
+            "numerico",
+            "categorico"
+          ]
+        },
+        "beta": {
+          "type": "number"
+        },
+        "cierre": {
+          "enum": [
+            "derecha",
+            "izquierda"
+          ]
+        },
+        "bins": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/bin"
+          }
+        },
+        "no_visto": {
+          "type": "object",
+          "required": [
+            "woe",
+            "accion"
+          ]
+        },
+        "reason_code": {
+          "type": "string",
+          "pattern": "^RC\\d{2}$"
+        },
+        "tendencia_declarada": {
+          "enum": [
+            "creciente",
+            "decreciente",
+            null
+          ]
+        }
+      },
+      "if": {
+        "properties": {
+          "tipo": {
+            "const": "numerico"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "cierre"
+        ]
+      }
+    }
+  }
+}
