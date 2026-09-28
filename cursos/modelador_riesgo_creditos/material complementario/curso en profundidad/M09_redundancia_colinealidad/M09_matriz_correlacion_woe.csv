@@ -1,0 +1,191 @@
+var_a,var_b,pearson_woe_dev,pearson_crudo_dev,spearman_crudo_dev,iv_a,iv_b,rol_a,rol_b,supera_070
+dias_mora_max_12m,n_meses_mora_12m,0.9858,0.9017,0.9932,0.4789,0.4758,proxy: otro agregador de la mora,proxy: otro agregador de la mora,True
+carga_financiera,ratio_deuda_renta,0.9759,0.9995,1.0,0.1025,0.1033,driver verdadero,proxy: ≈ carga_financiera,True
+uso_tc_prom_3m,uso_tc_prom_6m,0.9511,0.9839,0.9833,0.458,0.4547,driver verdadero (vía tendencia 3m−12m),proxy: promedio de 3m y 12m,True
+uso_tc_prom_12m,uso_tc_prom_6m,0.9502,0.9817,0.9813,0.4164,0.4547,driver verdadero (nivel),proxy: promedio de 3m y 12m,True
+uso_linea_prom_12m,uso_linea_prom_6m,0.9485,0.979,0.9788,0.607,0.5872,driver verdadero,proxy: otra ventana de uso_linea,True
+meses_desde_mora_12m,dias_mora_max_12m,0.9388,-0.1067,-0.4021,0.4452,0.4789,driver verdadero,proxy: otro agregador de la mora,True
+meses_desde_mora_12m,n_meses_mora_12m,0.9349,-0.1035,-0.4009,0.4452,0.4758,driver verdadero,proxy: otro agregador de la mora,True
+uso_linea_prom_12m,uso_linea_max_12m,0.9113,0.9483,0.9488,0.607,0.5587,driver verdadero,proxy: otro agregador de uso_linea,True
+uso_tc_prom_12m,uso_tc_prom_3m,0.9107,0.9494,0.948,0.4164,0.458,driver verdadero (nivel),driver verdadero (vía tendencia 3m−12m),True
+uso_linea_prom_12m,uso_linea_prom_3m,0.9005,0.933,0.9315,0.607,0.5955,driver verdadero,proxy: otra ventana de uso_linea,True
+uso_linea_prom_6m,uso_linea_max_12m,0.8951,0.9287,0.9292,0.5872,0.5587,proxy: otra ventana de uso_linea,proxy: otro agregador de uso_linea,True
+uso_linea_prom_6m,uso_linea_prom_3m,0.8806,0.9134,0.9118,0.5872,0.5955,proxy: otra ventana de uso_linea,proxy: otra ventana de uso_linea,True
+uso_linea_prom_3m,uso_linea_max_12m,0.8478,0.8824,0.8811,0.5955,0.5587,proxy: otra ventana de uso_linea,proxy: otro agregador de uso_linea,True
+uso_linea_prom_12m,uso_tc_prom_12m,0.7425,0.7948,0.7884,0.607,0.4164,driver verdadero,driver verdadero (nivel),True
+uso_linea_prom_12m,uso_tc_prom_6m,0.7373,0.7883,0.779,0.607,0.4547,driver verdadero,proxy: promedio de 3m y 12m,True
+uso_tc_prom_12m,uso_linea_prom_6m,0.73,0.7765,0.7706,0.4164,0.5872,driver verdadero (nivel),proxy: otra ventana de uso_linea,True
+uso_linea_prom_6m,uso_tc_prom_6m,0.7235,0.7698,0.7613,0.5872,0.4547,proxy: otra ventana de uso_linea,proxy: promedio de 3m y 12m,True
+uso_linea_prom_12m,uso_tc_prom_3m,0.7189,0.7692,0.7569,0.607,0.458,driver verdadero,driver verdadero (vía tendencia 3m−12m),True
+uso_tc_prom_12m,uso_linea_max_12m,0.7084,0.7545,0.7486,0.4164,0.5587,driver verdadero (nivel),proxy: otro agregador de uso_linea,True
+uso_tc_prom_3m,uso_linea_prom_6m,0.7057,0.7508,0.7395,0.458,0.5872,driver verdadero (vía tendencia 3m−12m),proxy: otra ventana de uso_linea,True
+uso_linea_max_12m,uso_tc_prom_6m,0.704,0.7487,0.74,0.5587,0.4547,proxy: otro agregador de uso_linea,proxy: promedio de 3m y 12m,True
+uso_tc_prom_12m,uso_linea_prom_3m,0.6996,0.7437,0.7351,0.4164,0.5955,driver verdadero (nivel),proxy: otra ventana de uso_linea,False
+uso_linea_prom_3m,uso_tc_prom_6m,0.6939,0.7372,0.7262,0.5955,0.4547,proxy: otra ventana de uso_linea,proxy: promedio de 3m y 12m,False
+carga_financiera,deuda_total_mm,0.6934,0.8021,0.8316,0.1025,0.1442,driver verdadero,proxy: identidad contable,False
+uso_tc_prom_3m,uso_linea_max_12m,0.6868,0.7311,0.72,0.458,0.5587,driver verdadero (vía tendencia 3m−12m),proxy: otro agregador de uso_linea,False
+deuda_total_mm,ratio_deuda_renta,0.6776,0.8045,0.832,0.1442,0.1033,proxy: identidad contable,proxy: ≈ carga_financiera,False
+uso_tc_prom_3m,uso_linea_prom_3m,0.6759,0.719,0.7058,0.458,0.5955,driver verdadero (vía tendencia 3m−12m),proxy: otra ventana de uso_linea,False
+deuda_otras_prom_12m,deuda_total_mm,0.6392,0.9926,0.9503,0.0148,0.1442,driver verdadero,proxy: identidad contable,False
+consultas_6m,consultas_3m,0.6389,0.7879,0.7629,0.2277,0.1407,driver verdadero,proxy: submuestra de consultas_6m,False
+deuda_otras_prom_12m,carga_financiera,0.5156,0.7963,0.7867,0.0148,0.1025,driver verdadero,driver verdadero,False
+deuda_otras_prom_12m,ratio_deuda_renta,0.5033,0.799,0.7877,0.0148,0.1033,driver verdadero,proxy: ≈ carga_financiera,False
+renta_mm,ratio_deuda_renta,0.4639,-0.2977,-0.5098,0.008,0.1033,indirecto (vía carga),proxy: ≈ carga_financiera,False
+carga_financiera,renta_mm,0.4418,-0.2981,-0.5093,0.1025,0.008,driver verdadero,indirecto (vía carga),False
+uso_linea_prom_12m,consultas_6m,0.437,0.4936,0.4631,0.607,0.2277,driver verdadero,driver verdadero,False
+consultas_6m,uso_linea_prom_6m,0.4254,0.479,0.4503,0.2277,0.5872,driver verdadero,proxy: otra ventana de uso_linea,False
+consultas_6m,uso_linea_prom_3m,0.4083,0.4625,0.4341,0.2277,0.5955,driver verdadero,proxy: otra ventana de uso_linea,False
+consultas_6m,uso_linea_max_12m,0.4071,0.4621,0.4368,0.2277,0.5587,driver verdadero,proxy: otro agregador de uso_linea,False
+consultas_6m,uso_tc_prom_6m,0.3394,0.3826,0.3563,0.2277,0.4547,driver verdadero,proxy: promedio de 3m y 12m,False
+uso_linea_prom_12m,consultas_3m,0.3387,0.387,0.3561,0.607,0.1407,driver verdadero,proxy: submuestra de consultas_6m,False
+uso_tc_prom_12m,consultas_6m,0.3377,0.3826,0.3574,0.4164,0.2277,driver verdadero (nivel),driver verdadero,False
+uso_tc_prom_3m,consultas_6m,0.3324,0.3759,0.3492,0.458,0.2277,driver verdadero (vía tendencia 3m−12m),driver verdadero,False
+uso_linea_prom_6m,consultas_3m,0.3317,0.3737,0.3456,0.5872,0.1407,proxy: otra ventana de uso_linea,proxy: submuestra de consultas_6m,False
+uso_linea_max_12m,consultas_3m,0.3171,0.36,0.3344,0.5587,0.1407,proxy: otro agregador de uso_linea,proxy: submuestra de consultas_6m,False
+uso_linea_prom_3m,consultas_3m,0.3168,0.3589,0.3317,0.5955,0.1407,proxy: otra ventana de uso_linea,proxy: submuestra de consultas_6m,False
+uso_linea_prom_12m,deuda_total_mm,0.3125,0.1148,0.2581,0.607,0.1442,driver verdadero,proxy: identidad contable,False
+uso_linea_prom_6m,deuda_total_mm,0.3057,0.1116,0.2509,0.5872,0.1442,proxy: otra ventana de uso_linea,proxy: identidad contable,False
+uso_linea_max_12m,deuda_total_mm,0.3019,0.1104,0.2475,0.5587,0.1442,proxy: otro agregador de uso_linea,proxy: identidad contable,False
+uso_linea_prom_12m,n_meses_mora_12m,0.2981,0.2846,0.3139,0.607,0.4758,driver verdadero,proxy: otro agregador de la mora,False
+uso_linea_prom_12m,dias_mora_max_12m,0.2968,0.2907,0.314,0.607,0.4789,driver verdadero,proxy: otro agregador de la mora,False
+uso_linea_prom_12m,meses_desde_mora_12m,0.2945,-0.0127,-0.1199,0.607,0.4452,driver verdadero,driver verdadero,False
+uso_linea_prom_6m,n_meses_mora_12m,0.2919,0.2764,0.3083,0.5872,0.4758,proxy: otra ventana de uso_linea,proxy: otro agregador de la mora,False
+uso_linea_prom_6m,dias_mora_max_12m,0.2913,0.2833,0.3085,0.5872,0.4789,proxy: otra ventana de uso_linea,proxy: otro agregador de la mora,False
+meses_desde_mora_12m,uso_linea_prom_6m,0.2899,-0.0091,-0.1171,0.4452,0.5872,driver verdadero,proxy: otra ventana de uso_linea,False
+uso_linea_prom_3m,deuda_total_mm,0.2892,0.1031,0.2371,0.5955,0.1442,proxy: otra ventana de uso_linea,proxy: identidad contable,False
+uso_linea_prom_3m,n_meses_mora_12m,0.2837,0.2602,0.2914,0.5955,0.4758,proxy: otra ventana de uso_linea,proxy: otro agregador de la mora,False
+uso_linea_prom_3m,dias_mora_max_12m,0.2821,0.267,0.2914,0.5955,0.4789,proxy: otra ventana de uso_linea,proxy: otro agregador de la mora,False
+uso_linea_max_12m,n_meses_mora_12m,0.2784,0.2671,0.2965,0.5587,0.4758,proxy: otro agregador de uso_linea,proxy: otro agregador de la mora,False
+uso_linea_max_12m,dias_mora_max_12m,0.2778,0.2742,0.2971,0.5587,0.4789,proxy: otro agregador de uso_linea,proxy: otro agregador de la mora,False
+meses_desde_mora_12m,uso_linea_max_12m,0.2773,-0.0086,-0.1133,0.4452,0.5587,driver verdadero,proxy: otro agregador de uso_linea,False
+meses_desde_mora_12m,uso_linea_prom_3m,0.2766,-0.0183,-0.1105,0.4452,0.5955,driver verdadero,proxy: otra ventana de uso_linea,False
+uso_tc_prom_6m,consultas_3m,0.2664,0.296,0.2735,0.4547,0.1407,proxy: promedio de 3m y 12m,proxy: submuestra de consultas_6m,False
+uso_tc_prom_12m,consultas_3m,0.2637,0.295,0.2739,0.4164,0.1407,driver verdadero (nivel),proxy: submuestra de consultas_6m,False
+uso_tc_prom_3m,consultas_3m,0.263,0.291,0.2684,0.458,0.1407,driver verdadero (vía tendencia 3m−12m),proxy: submuestra de consultas_6m,False
+uso_tc_prom_12m,deuda_total_mm,0.2383,0.083,0.192,0.4164,0.1442,driver verdadero (nivel),proxy: identidad contable,False
+uso_tc_prom_12m,n_meses_mora_12m,0.2354,0.2237,0.2464,0.4164,0.4758,driver verdadero (nivel),proxy: otro agregador de la mora,False
+uso_tc_prom_12m,dias_mora_max_12m,0.234,0.2294,0.2464,0.4164,0.4789,driver verdadero (nivel),proxy: otro agregador de la mora,False
+uso_linea_prom_12m,carga_financiera,0.2333,0.0913,0.231,0.607,0.1025,driver verdadero,driver verdadero,False
+uso_tc_prom_12m,meses_desde_mora_12m,0.233,-0.023,-0.1052,0.4164,0.4452,driver verdadero (nivel),driver verdadero,False
+uso_tc_prom_6m,n_meses_mora_12m,0.232,0.2231,0.2445,0.4547,0.4758,proxy: promedio de 3m y 12m,proxy: otro agregador de la mora,False
+uso_tc_prom_6m,deuda_total_mm,0.2318,0.0823,0.1908,0.4547,0.1442,proxy: promedio de 3m y 12m,proxy: identidad contable,False
+uso_tc_prom_6m,dias_mora_max_12m,0.231,0.2293,0.2446,0.4547,0.4789,proxy: promedio de 3m y 12m,proxy: otro agregador de la mora,False
+meses_desde_mora_12m,uso_tc_prom_6m,0.2293,-0.0209,-0.1024,0.4452,0.4547,driver verdadero,proxy: promedio de 3m y 12m,False
+uso_tc_prom_3m,deuda_total_mm,0.2292,0.0832,0.1893,0.458,0.1442,driver verdadero (vía tendencia 3m−12m),proxy: identidad contable,False
+carga_financiera,uso_linea_prom_6m,0.2287,0.0892,0.2231,0.1025,0.5872,driver verdadero,proxy: otra ventana de uso_linea,False
+uso_tc_prom_3m,n_meses_mora_12m,0.2286,0.219,0.2392,0.458,0.4758,driver verdadero (vía tendencia 3m−12m),proxy: otro agregador de la mora,False
+carga_financiera,uso_linea_max_12m,0.2285,0.0892,0.222,0.1025,0.5587,driver verdadero,proxy: otro agregador de uso_linea,False
+uso_tc_prom_3m,meses_desde_mora_12m,0.2282,-0.0204,-0.1008,0.458,0.4452,driver verdadero (vía tendencia 3m−12m),driver verdadero,False
+uso_tc_prom_3m,dias_mora_max_12m,0.2278,0.2251,0.2393,0.458,0.4789,driver verdadero (vía tendencia 3m−12m),proxy: otro agregador de la mora,False
+uso_linea_prom_12m,ratio_deuda_renta,0.2275,0.089,0.231,0.607,0.1033,driver verdadero,proxy: ≈ carga_financiera,False
+uso_linea_max_12m,ratio_deuda_renta,0.2226,0.0866,0.2212,0.5587,0.1033,proxy: otro agregador de uso_linea,proxy: ≈ carga_financiera,False
+uso_linea_prom_6m,ratio_deuda_renta,0.2226,0.087,0.2229,0.5872,0.1033,proxy: otra ventana de uso_linea,proxy: ≈ carga_financiera,False
+carga_financiera,uso_linea_prom_3m,0.217,0.0805,0.2104,0.1025,0.5955,driver verdadero,proxy: otra ventana de uso_linea,False
+uso_linea_prom_3m,ratio_deuda_renta,0.2104,0.0784,0.2107,0.5955,0.1033,proxy: otra ventana de uso_linea,proxy: ≈ carga_financiera,False
+uso_tc_prom_12m,carga_financiera,0.178,0.0664,0.1718,0.4164,0.1025,driver verdadero (nivel),driver verdadero,False
+uso_tc_prom_12m,ratio_deuda_renta,0.1754,0.0657,0.1732,0.4164,0.1033,driver verdadero (nivel),proxy: ≈ carga_financiera,False
+carga_financiera,uso_tc_prom_6m,0.1747,0.0653,0.1693,0.1025,0.4547,driver verdadero,proxy: promedio de 3m y 12m,False
+uso_tc_prom_3m,carga_financiera,0.174,0.0659,0.1668,0.458,0.1025,driver verdadero (vía tendencia 3m−12m),driver verdadero,False
+uso_tc_prom_6m,ratio_deuda_renta,0.1719,0.0642,0.1702,0.4547,0.1033,proxy: promedio de 3m y 12m,proxy: ≈ carga_financiera,False
+uso_tc_prom_3m,ratio_deuda_renta,0.1711,0.0644,0.1675,0.458,0.1033,driver verdadero (vía tendencia 3m−12m),proxy: ≈ carga_financiera,False
+consultas_6m,deuda_total_mm,0.1575,0.0519,0.121,0.2277,0.1442,driver verdadero,proxy: identidad contable,False
+consultas_6m,n_meses_mora_12m,0.1558,0.1514,0.1637,0.2277,0.4758,driver verdadero,proxy: otro agregador de la mora,False
+meses_desde_mora_12m,consultas_6m,0.1533,-0.0036,-0.0642,0.4452,0.2277,driver verdadero,driver verdadero,False
+consultas_6m,dias_mora_max_12m,0.1526,0.1551,0.1634,0.2277,0.4789,driver verdadero,proxy: otro agregador de la mora,False
+consultas_3m,deuda_total_mm,0.1175,0.0377,0.0851,0.1407,0.1442,proxy: submuestra de consultas_6m,proxy: identidad contable,False
+meses_desde_mora_12m,consultas_3m,0.1151,-0.0021,-0.0464,0.4452,0.1407,driver verdadero,proxy: submuestra de consultas_6m,False
+n_meses_mora_12m,consultas_3m,0.1144,0.1142,0.1177,0.4758,0.1407,proxy: otro agregador de la mora,proxy: submuestra de consultas_6m,False
+dias_mora_max_12m,consultas_3m,0.1131,0.1142,0.1172,0.4789,0.1407,proxy: otro agregador de la mora,proxy: submuestra de consultas_6m,False
+carga_financiera,consultas_6m,0.1043,0.0379,0.1017,0.1025,0.2277,driver verdadero,driver verdadero,False
+consultas_6m,ratio_deuda_renta,0.1012,0.0355,0.1013,0.2277,0.1033,driver verdadero,proxy: ≈ carga_financiera,False
+n_meses_mora_12m,deuda_total_mm,0.0963,0.0252,0.0784,0.4758,0.1442,proxy: otro agregador de la mora,proxy: identidad contable,False
+dias_mora_max_12m,deuda_total_mm,0.0954,0.0282,0.0787,0.4789,0.1442,proxy: otro agregador de la mora,proxy: identidad contable,False
+meses_desde_mora_12m,deuda_total_mm,0.0951,0.0156,-0.0331,0.4452,0.1442,driver verdadero,proxy: identidad contable,False
+meses_desde_mora_12m,ratio_deuda_renta,0.0791,0.0119,-0.032,0.4452,0.1033,driver verdadero,proxy: ≈ carga_financiera,False
+meses_desde_mora_12m,carga_financiera,0.0785,0.0139,-0.0279,0.4452,0.1025,driver verdadero,driver verdadero,False
+carga_financiera,consultas_3m,0.0755,0.0295,0.075,0.1025,0.1407,driver verdadero,proxy: submuestra de consultas_6m,False
+dias_mora_max_12m,ratio_deuda_renta,0.0726,0.0276,0.0751,0.4789,0.1033,proxy: otro agregador de la mora,proxy: ≈ carga_financiera,False
+carga_financiera,dias_mora_max_12m,0.0725,0.0304,0.0765,0.1025,0.4789,driver verdadero,proxy: otro agregador de la mora,False
+n_meses_mora_12m,ratio_deuda_renta,0.0721,0.0233,0.0745,0.4758,0.1033,proxy: otro agregador de la mora,proxy: ≈ carga_financiera,False
+carga_financiera,n_meses_mora_12m,0.0719,0.0257,0.076,0.1025,0.4758,driver verdadero,proxy: otro agregador de la mora,False
+consultas_3m,ratio_deuda_renta,0.0716,0.0269,0.0731,0.1407,0.1033,proxy: submuestra de consultas_6m,proxy: ≈ carga_financiera,False
+edad,n_meses_mora_12m,0.0207,0.0105,0.0066,0.006,0.4758,sin efecto directo,proxy: otro agregador de la mora,False
+edad,dias_mora_max_12m,0.0199,0.0021,0.0045,0.006,0.4789,sin efecto directo,proxy: otro agregador de la mora,False
+meses_desde_mora_12m,edad,0.0198,-0.0145,-0.0078,0.4452,0.006,driver verdadero,sin efecto directo,False
+meses_desde_mora_12m,renta_mm,0.0187,-0.0026,-0.0038,0.4452,0.008,driver verdadero,indirecto (vía carga),False
+renta_mm,dias_mora_max_12m,0.0179,-0.0223,-0.0143,0.008,0.4789,indirecto (vía carga),proxy: otro agregador de la mora,False
+renta_mm,n_meses_mora_12m,0.0177,-0.0204,-0.0137,0.008,0.4758,indirecto (vía carga),proxy: otro agregador de la mora,False
+renta_mm,uso_linea_max_12m,0.0177,-0.0203,-0.0089,0.008,0.5587,indirecto (vía carga),proxy: otro agregador de uso_linea,False
+consultas_6m,canal,-0.0174,,,0.2277,0.0134,driver verdadero,driver verdadero,False
+uso_tc_prom_12m,deuda_otras_prom_12m,-0.0172,-0.0134,-0.0213,0.4164,0.0148,driver verdadero (nivel),driver verdadero,False
+deuda_otras_prom_12m,uso_tc_prom_6m,-0.0165,-0.0133,-0.02,0.0148,0.4547,driver verdadero,proxy: promedio de 3m y 12m,False
+edad,ratio_deuda_renta,0.0163,0.0098,0.0099,0.006,0.1033,sin efecto directo,proxy: ≈ carga_financiera,False
+uso_tc_prom_3m,deuda_otras_prom_12m,-0.0154,-0.0101,-0.0159,0.458,0.0148,driver verdadero (vía tendencia 3m−12m),driver verdadero,False
+edad,uso_linea_prom_3m,0.015,0.0075,0.0087,0.006,0.5955,sin efecto directo,proxy: otra ventana de uso_linea,False
+carga_financiera,edad,0.0145,0.0068,0.0059,0.1025,0.006,driver verdadero,sin efecto directo,False
+edad,deuda_total_mm,0.0132,0.0081,0.0075,0.006,0.1442,sin efecto directo,proxy: identidad contable,False
+canal,consultas_3m,-0.0122,,,0.0134,0.1407,driver verdadero,proxy: submuestra de consultas_6m,False
+antiguedad_meses,canal,0.0121,,,0.0885,0.0134,driver verdadero,driver verdadero,False
+deuda_otras_prom_12m,consultas_3m,-0.0119,-0.0092,-0.0137,0.0148,0.1407,driver verdadero,proxy: submuestra de consultas_6m,False
+antiguedad_meses,uso_linea_prom_6m,-0.0119,0.0082,0.0084,0.0885,0.5872,driver verdadero,proxy: otra ventana de uso_linea,False
+canal,renta_mm,-0.0117,,,0.0134,0.008,driver verdadero,indirecto (vía carga),False
+antiguedad_meses,uso_tc_prom_6m,-0.0116,0.0052,0.0048,0.0885,0.4547,driver verdadero,proxy: promedio de 3m y 12m,False
+uso_linea_prom_12m,antiguedad_meses,-0.0114,0.0067,0.0071,0.607,0.0885,driver verdadero,driver verdadero,False
+antiguedad_meses,uso_linea_prom_3m,-0.0113,0.0066,0.0072,0.0885,0.5955,driver verdadero,proxy: otra ventana de uso_linea,False
+antiguedad_meses,edad,0.0106,0.0792,0.072,0.0885,0.006,driver verdadero,sin efecto directo,False
+uso_tc_prom_3m,antiguedad_meses,-0.0092,0.0058,0.0045,0.458,0.0885,driver verdadero (vía tendencia 3m−12m),driver verdadero,False
+deuda_otras_prom_12m,uso_linea_prom_6m,-0.0091,-0.0071,-0.0126,0.0148,0.5872,driver verdadero,proxy: otra ventana de uso_linea,False
+canal,deuda_total_mm,-0.009,,,0.0134,0.1442,driver verdadero,proxy: identidad contable,False
+uso_linea_prom_12m,deuda_otras_prom_12m,-0.0088,-0.0065,-0.0108,0.607,0.0148,driver verdadero,driver verdadero,False
+uso_linea_prom_12m,edad,0.0088,0.0069,0.0085,0.607,0.006,driver verdadero,sin efecto directo,False
+consultas_6m,renta_mm,-0.0087,0.0105,0.0051,0.2277,0.008,driver verdadero,indirecto (vía carga),False
+renta_mm,deuda_total_mm,-0.0087,-0.0176,0.0019,0.008,0.1442,indirecto (vía carga),proxy: identidad contable,False
+deuda_otras_prom_12m,renta_mm,-0.0084,-0.0156,0.0038,0.0148,0.008,driver verdadero,indirecto (vía carga),False
+antiguedad_meses,n_meses_mora_12m,-0.0083,0.0102,0.0058,0.0885,0.4758,driver verdadero,proxy: otro agregador de la mora,False
+deuda_otras_prom_12m,uso_linea_max_12m,-0.008,-0.0045,-0.0084,0.0148,0.5587,driver verdadero,proxy: otro agregador de uso_linea,False
+meses_desde_mora_12m,antiguedad_meses,-0.008,-0.0125,-0.0174,0.4452,0.0885,driver verdadero,driver verdadero,False
+antiguedad_meses,dias_mora_max_12m,-0.0079,0.0099,0.0059,0.0885,0.4789,driver verdadero,proxy: otro agregador de la mora,False
+renta_mm,uso_linea_prom_6m,0.0078,-0.0158,-0.005,0.008,0.5872,indirecto (vía carga),proxy: otra ventana de uso_linea,False
+uso_linea_prom_12m,renta_mm,0.0074,-0.0174,-0.0066,0.607,0.008,driver verdadero,indirecto (vía carga),False
+deuda_otras_prom_12m,n_meses_mora_12m,-0.0073,-0.0091,-0.0096,0.0148,0.4758,driver verdadero,proxy: otro agregador de la mora,False
+edad,renta_mm,-0.0072,-0.0005,0.0073,0.006,0.008,sin efecto directo,indirecto (vía carga),False
+antiguedad_meses,deuda_total_mm,0.007,-0.0051,-0.0061,0.0885,0.1442,driver verdadero,proxy: identidad contable,False
+carga_financiera,canal,-0.007,,,0.1025,0.0134,driver verdadero,driver verdadero,False
+edad,uso_linea_prom_6m,0.0067,0.0067,0.0076,0.006,0.5872,sin efecto directo,proxy: otra ventana de uso_linea,False
+antiguedad_meses,ratio_deuda_renta,0.0067,-0.0084,-0.0043,0.0885,0.1033,driver verdadero,proxy: ≈ carga_financiera,False
+canal,uso_linea_prom_3m,-0.0064,,,0.0134,0.5955,driver verdadero,proxy: otra ventana de uso_linea,False
+deuda_otras_prom_12m,dias_mora_max_12m,-0.0062,-0.0068,-0.0094,0.0148,0.4789,driver verdadero,proxy: otro agregador de la mora,False
+consultas_6m,edad,-0.0061,0.0073,0.0089,0.2277,0.006,driver verdadero,sin efecto directo,False
+renta_mm,consultas_3m,-0.006,0.0039,0.0017,0.008,0.1407,indirecto (vía carga),proxy: submuestra de consultas_6m,False
+renta_mm,uso_linea_prom_3m,0.0059,-0.0166,-0.0038,0.008,0.5955,indirecto (vía carga),proxy: otra ventana de uso_linea,False
+uso_tc_prom_12m,antiguedad_meses,-0.0054,0.0054,0.0055,0.4164,0.0885,driver verdadero (nivel),driver verdadero,False
+deuda_otras_prom_12m,uso_linea_prom_3m,-0.0054,-0.0101,-0.0146,0.0148,0.5955,driver verdadero,proxy: otra ventana de uso_linea,False
+uso_tc_prom_3m,canal,-0.0052,,,0.458,0.0134,driver verdadero (vía tendencia 3m−12m),driver verdadero,False
+canal,ratio_deuda_renta,-0.0052,,,0.0134,0.1033,driver verdadero,proxy: ≈ carga_financiera,False
+uso_linea_prom_12m,canal,-0.0051,,,0.607,0.0134,driver verdadero,driver verdadero,False
+deuda_otras_prom_12m,canal,-0.0049,,,0.0148,0.0134,driver verdadero,driver verdadero,False
+edad,consultas_3m,0.0048,0.005,0.008,0.006,0.1407,sin efecto directo,proxy: submuestra de consultas_6m,False
+antiguedad_meses,carga_financiera,0.0047,-0.0069,-0.0032,0.0885,0.1025,driver verdadero,driver verdadero,False
+antiguedad_meses,deuda_otras_prom_12m,0.0046,-0.0059,-0.0086,0.0885,0.0148,driver verdadero,driver verdadero,False
+meses_desde_mora_12m,deuda_otras_prom_12m,-0.0045,0.0172,-0.0011,0.4452,0.0148,driver verdadero,driver verdadero,False
+edad,uso_linea_max_12m,0.0043,0.0042,0.006,0.006,0.5587,sin efecto directo,proxy: otro agregador de uso_linea,False
+uso_tc_prom_12m,canal,-0.004,,,0.4164,0.0134,driver verdadero (nivel),driver verdadero,False
+canal,uso_linea_max_12m,-0.0038,,,0.0134,0.5587,driver verdadero,proxy: otro agregador de uso_linea,False
+edad,uso_tc_prom_6m,0.0035,-0.0001,-0.0012,0.006,0.4547,sin efecto directo,proxy: promedio de 3m y 12m,False
+canal,edad,0.0034,,,0.0134,0.006,driver verdadero,sin efecto directo,False
+antiguedad_meses,uso_linea_max_12m,-0.0032,0.005,0.0054,0.0885,0.5587,driver verdadero,proxy: otro agregador de uso_linea,False
+antiguedad_meses,consultas_6m,0.0028,0.0032,-0.0056,0.0885,0.2277,driver verdadero,driver verdadero,False
+canal,n_meses_mora_12m,0.0028,,,0.0134,0.4758,driver verdadero,proxy: otro agregador de la mora,False
+canal,uso_tc_prom_6m,-0.0025,,,0.0134,0.4547,driver verdadero,proxy: promedio de 3m y 12m,False
+uso_tc_prom_12m,renta_mm,0.0025,-0.0118,-0.0013,0.4164,0.008,driver verdadero (nivel),indirecto (vía carga),False
+deuda_otras_prom_12m,edad,-0.0025,0.0073,0.007,0.0148,0.006,driver verdadero,sin efecto directo,False
+uso_tc_prom_12m,edad,0.0023,0.0045,0.0036,0.4164,0.006,driver verdadero (nivel),sin efecto directo,False
+canal,dias_mora_max_12m,0.002,,,0.0134,0.4789,driver verdadero,proxy: otro agregador de la mora,False
+renta_mm,uso_tc_prom_6m,0.0017,-0.0114,-0.0005,0.008,0.4547,indirecto (vía carga),proxy: promedio de 3m y 12m,False
+antiguedad_meses,renta_mm,-0.0017,0.0126,0.0015,0.0885,0.008,driver verdadero,indirecto (vía carga),False
+canal,uso_linea_prom_6m,-0.0016,,,0.0134,0.5872,driver verdadero,proxy: otra ventana de uso_linea,False
+deuda_otras_prom_12m,consultas_6m,0.0015,-0.008,-0.0063,0.0148,0.2277,driver verdadero,driver verdadero,False
+uso_tc_prom_3m,renta_mm,-0.0013,-0.0074,0.0014,0.458,0.008,driver verdadero (vía tendencia 3m−12m),indirecto (vía carga),False
+meses_desde_mora_12m,canal,0.0012,,,0.4452,0.0134,driver verdadero,driver verdadero,False
+antiguedad_meses,consultas_3m,0.0008,-0.0023,-0.0084,0.0885,0.1407,driver verdadero,proxy: submuestra de consultas_6m,False
+uso_tc_prom_3m,edad,-0.0006,-0.0003,-0.0013,0.458,0.006,driver verdadero (vía tendencia 3m−12m),sin efecto directo,False

@@ -1,0 +1,100 @@
+variable,familia,agregador,ventana,ancla_exacta,fuente,lag_meses,notas_missing_y_tratamiento
+mora_propia_max_3m,mora_propia,max,3m,"[t0-3, t0-1]",core interno,1,
+mora_propia_max_6m,mora_propia,max,6m,"[t0-6, t0-1]",core interno,1,
+mora_propia_max_12m,mora_propia,max,12m,"[t0-12, t0-1]",core interno,1,
+mora_propia_prom_3m,mora_propia,prom,3m,"[t0-3, t0-1]",core interno,1,
+mora_propia_prom_6m,mora_propia,prom,6m,"[t0-6, t0-1]",core interno,1,
+mora_propia_prom_12m,mora_propia,prom,12m,"[t0-12, t0-1]",core interno,1,
+mora_propia_recencia_3m,mora_propia,recencia,3m,"[t0-3, t0-1]",core interno,1,censura: sin evento en la ventana -> 13
+mora_propia_recencia_6m,mora_propia,recencia,6m,"[t0-6, t0-1]",core interno,1,censura: sin evento en la ventana -> 13
+mora_propia_recencia_12m,mora_propia,recencia,12m,"[t0-12, t0-1]",core interno,1,censura: sin evento en la ventana -> 13
+mora_propia_racha_al_dia_3m,mora_propia,racha_al_dia,3m,"[t0-3, t0-1]",core interno,1,
+mora_propia_racha_al_dia_6m,mora_propia,racha_al_dia,6m,"[t0-6, t0-1]",core interno,1,
+mora_propia_racha_al_dia_12m,mora_propia,racha_al_dia,12m,"[t0-12, t0-1]",core interno,1,
+uso_linea_prom_3m,uso_linea,prom,3m,"[t0-3, t0-1]",core interno,1,
+uso_linea_prom_6m,uso_linea,prom,6m,"[t0-6, t0-1]",core interno,1,
+uso_linea_prom_12m,uso_linea,prom,12m,"[t0-12, t0-1]",core interno,1,
+uso_linea_max_3m,uso_linea,max,3m,"[t0-3, t0-1]",core interno,1,
+uso_linea_max_6m,uso_linea,max,6m,"[t0-6, t0-1]",core interno,1,
+uso_linea_max_12m,uso_linea,max,12m,"[t0-12, t0-1]",core interno,1,
+uso_linea_delta_3m,uso_linea,delta,3m,"[t0-3, t0-1]",core interno,1,
+uso_linea_delta_6m,uso_linea,delta,6m,"[t0-6, t0-1]",core interno,1,
+uso_linea_delta_12m,uso_linea,delta,12m,"[t0-12, t0-1]",core interno,1,"estructural: historia < ventana -> bin propio, nunca imputar"
+uso_linea_volatilidad_3m,uso_linea,volatilidad,3m,"[t0-3, t0-1]",core interno,1,exige >=4 meses de historia en la ventana
+uso_linea_volatilidad_6m,uso_linea,volatilidad,6m,"[t0-6, t0-1]",core interno,1,exige >=4 meses de historia en la ventana
+uso_linea_volatilidad_12m,uso_linea,volatilidad,12m,"[t0-12, t0-1]",core interno,1,exige >=4 meses de historia en la ventana
+uso_tc_prom_3m,uso_tc,prom,3m,"[t0-3, t0-1]",core interno,1,
+uso_tc_prom_6m,uso_tc,prom,6m,"[t0-6, t0-1]",core interno,1,
+uso_tc_prom_12m,uso_tc,prom,12m,"[t0-12, t0-1]",core interno,1,
+uso_tc_max_3m,uso_tc,max,3m,"[t0-3, t0-1]",core interno,1,
+uso_tc_max_6m,uso_tc,max,6m,"[t0-6, t0-1]",core interno,1,
+uso_tc_max_12m,uso_tc,max,12m,"[t0-12, t0-1]",core interno,1,
+uso_tc_delta_3m,uso_tc,delta,3m,"[t0-3, t0-1]",core interno,1,
+uso_tc_delta_6m,uso_tc,delta,6m,"[t0-6, t0-1]",core interno,1,
+uso_tc_delta_12m,uso_tc,delta,12m,"[t0-12, t0-1]",core interno,1,"estructural: historia < ventana -> bin propio, nunca imputar"
+uso_tc_volatilidad_3m,uso_tc,volatilidad,3m,"[t0-3, t0-1]",core interno,1,exige >=4 meses de historia en la ventana
+uso_tc_volatilidad_6m,uso_tc,volatilidad,6m,"[t0-6, t0-1]",core interno,1,exige >=4 meses de historia en la ventana
+uso_tc_volatilidad_12m,uso_tc,volatilidad,12m,"[t0-12, t0-1]",core interno,1,exige >=4 meses de historia en la ventana
+deuda_total_prom_3m,deuda_total,prom,3m,"[t0-3, t0-1]",core interno,1,
+deuda_total_prom_6m,deuda_total,prom,6m,"[t0-6, t0-1]",core interno,1,
+deuda_total_prom_12m,deuda_total,prom,12m,"[t0-12, t0-1]",core interno,1,
+deuda_total_max_3m,deuda_total,max,3m,"[t0-3, t0-1]",core interno,1,
+deuda_total_max_6m,deuda_total,max,6m,"[t0-6, t0-1]",core interno,1,
+deuda_total_max_12m,deuda_total,max,12m,"[t0-12, t0-1]",core interno,1,
+deuda_total_delta_3m,deuda_total,delta,3m,"[t0-3, t0-1]",core interno,1,
+deuda_total_delta_6m,deuda_total,delta,6m,"[t0-6, t0-1]",core interno,1,
+deuda_total_delta_12m,deuda_total,delta,12m,"[t0-12, t0-1]",core interno,1,"estructural: historia < ventana -> bin propio, nunca imputar"
+pagos_suma_3m,pagos,suma,3m,"[t0-3, t0-1]",core interno,1,
+pagos_suma_6m,pagos,suma,6m,"[t0-6, t0-1]",core interno,1,
+pagos_suma_12m,pagos,suma,12m,"[t0-12, t0-1]",core interno,1,
+pagos_prom_3m,pagos,prom,3m,"[t0-3, t0-1]",core interno,1,
+pagos_prom_6m,pagos,prom,6m,"[t0-6, t0-1]",core interno,1,
+pagos_prom_12m,pagos,prom,12m,"[t0-12, t0-1]",core interno,1,
+pagos_delta_3m,pagos,delta,3m,"[t0-3, t0-1]",core interno,1,
+pagos_delta_6m,pagos,delta,6m,"[t0-6, t0-1]",core interno,1,
+pagos_delta_12m,pagos,delta,12m,"[t0-12, t0-1]",core interno,1,"estructural: historia < ventana -> bin propio, nunca imputar"
+pagos_volatilidad_3m,pagos,volatilidad,3m,"[t0-3, t0-1]",core interno,1,exige >=4 meses de historia en la ventana
+pagos_volatilidad_6m,pagos,volatilidad,6m,"[t0-6, t0-1]",core interno,1,exige >=4 meses de historia en la ventana
+pagos_volatilidad_12m,pagos,volatilidad,12m,"[t0-12, t0-1]",core interno,1,exige >=4 meses de historia en la ventana
+saldo_ahorro_prom_3m,saldo_ahorro,prom,3m,"[t0-3, t0-1]",core interno,1,
+saldo_ahorro_prom_6m,saldo_ahorro,prom,6m,"[t0-6, t0-1]",core interno,1,
+saldo_ahorro_prom_12m,saldo_ahorro,prom,12m,"[t0-12, t0-1]",core interno,1,
+saldo_ahorro_min_3m,saldo_ahorro,min,3m,"[t0-3, t0-1]",core interno,1,
+saldo_ahorro_min_6m,saldo_ahorro,min,6m,"[t0-6, t0-1]",core interno,1,
+saldo_ahorro_min_12m,saldo_ahorro,min,12m,"[t0-12, t0-1]",core interno,1,
+saldo_ahorro_delta_3m,saldo_ahorro,delta,3m,"[t0-3, t0-1]",core interno,1,
+saldo_ahorro_delta_6m,saldo_ahorro,delta,6m,"[t0-6, t0-1]",core interno,1,
+saldo_ahorro_delta_12m,saldo_ahorro,delta,12m,"[t0-12, t0-1]",core interno,1,"estructural: historia < ventana -> bin propio, nunca imputar"
+consultas_suma_3m,consultas,suma,3m,"[t0-4, t0-2]",bureau externo,2,
+consultas_suma_6m,consultas,suma,6m,"[t0-7, t0-2]",bureau externo,2,
+consultas_suma_12m,consultas,suma,12m,"[t0-13, t0-2]",bureau externo,2,
+consultas_recencia_3m,consultas,recencia,3m,"[t0-4, t0-2]",bureau externo,2,censura: sin evento en la ventana -> 13
+consultas_recencia_6m,consultas,recencia,6m,"[t0-7, t0-2]",bureau externo,2,censura: sin evento en la ventana -> 13
+consultas_recencia_12m,consultas,recencia,12m,"[t0-13, t0-2]",bureau externo,2,censura: sin evento en la ventana -> 13
+deuda_sistema_prom_3m,deuda_sistema,prom,3m,"[t0-4, t0-2]",bureau externo,2,
+deuda_sistema_prom_6m,deuda_sistema,prom,6m,"[t0-7, t0-2]",bureau externo,2,
+deuda_sistema_prom_12m,deuda_sistema,prom,12m,"[t0-13, t0-2]",bureau externo,2,
+deuda_sistema_delta_3m,deuda_sistema,delta,3m,"[t0-4, t0-2]",bureau externo,2,
+deuda_sistema_delta_6m,deuda_sistema,delta,6m,"[t0-7, t0-2]",bureau externo,2,
+deuda_sistema_delta_12m,deuda_sistema,delta,12m,"[t0-13, t0-2]",bureau externo,2,"estructural: historia < ventana -> bin propio, nunca imputar"
+saldo_ahorro_ult,saldo_ahorro,foto,1m,"[t0-1, t0-1]",core interno,1,
+deuda_total_ult,deuda_total,foto,1m,"[t0-1, t0-1]",core interno,1,
+n_productos_ult,n_productos,foto,1m,"[t0-1, t0-1]",core interno,1,
+cupo_linea_ult,cupo_linea,foto,1m,"[t0-1, t0-1]",core interno,1,
+utilizacion_ult,ratio_negocio,ratio,-,insumos anclados a t0-1,derivada,1,"formula: saldo/cupo al ultimo cierre; denominador acotado max(den,1)"
+carga_financiera_6m,ratio_negocio,ratio,-,insumos anclados a t0-1,derivada,1,"formula: deuda total / abonos prom 6m; denominador acotado max(den,1)"
+pago_sobre_facturacion_6m,ratio_negocio,ratio,-,insumos anclados a t0-1,derivada,1,"formula: pagos 6m / facturado 6m; denominador acotado max(den,1)"
+deuda_interna_sobre_sistema,ratio_negocio,ratio,-,insumos anclados a t0-2,derivada,2,"formula: deuda propia / deuda sistema (bureau); denominador acotado max(den,1)"
+cuota_sobre_ingreso,ratio_negocio,ratio,-,insumos anclados a t0-1,derivada,1,"formula: (monto/plazo) / abonos prom 6m; denominador acotado max(den,1)"
+ahorro_sobre_ingreso,ratio_negocio,ratio,-,insumos anclados a t0-1,derivada,1,"formula: saldo ahorro / abonos prom 6m; denominador acotado max(den,1)"
+uso_corto_sobre_largo,ratio_negocio,ratio,-,insumos anclados a t0-1,derivada,1,"formula: uso_prom_3m / uso_prom_12m (aceleracion); denominador acotado max(den,1)"
+edad,demografia_solicitud,foto,-,t0 (dato de la solicitud),formulario,0,
+antiguedad_cliente_meses,demografia_solicitud,foto,-,t0 (dato de la solicitud),formulario,0,
+region,demografia_solicitud,foto,-,t0 (dato de la solicitud),formulario,0,
+tipo_empleo,demografia_solicitud,foto,-,t0 (dato de la solicitud),formulario,0,
+renta_declarada,demografia_solicitud,foto,-,t0 (dato de la solicitud),formulario,0,MNAR: 36% missing en independientes -> bin propio con su WoE
+monto_solicitado,demografia_solicitud,foto,-,t0 (dato de la solicitud),formulario,0,
+plazo_solicitado,demografia_solicitud,foto,-,t0 (dato de la solicitud),formulario,0,
+canal,demografia_solicitud,foto,-,t0 (dato de la solicitud),formulario,0,ruido esperado / revisar equidad antes de usar
+sexo,demografia_solicitud,foto,-,t0 (dato de la solicitud),formulario,0,ruido esperado / revisar equidad antes de usar
+n_dependientes,demografia_solicitud,foto,-,t0 (dato de la solicitud),formulario,0,ruido esperado / revisar equidad antes de usar
